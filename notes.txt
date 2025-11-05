@@ -1,14 +1,26 @@
+Estrutura feita em 2 pastas, assets que contém css e js. Pages que contem as páginas.
+html root fora das pastas(index.html)
+
 Para linkar CSS: <link rel="stylesheet" href="assets/css/style.css">
 Para imagens: <img src="assets/images/logo.png">
 Para outras páginas: <a href="pages/sobre.html">Sobre</a>
+
+
+Extensão do VScode que facilita ver as pastas:
+
+Material Icon Theme
+
+
+Para utilizar BootStrap:
 
 https://nodejs.org/en/download
 
 npm i 
 
-https://nodejs.org/en/download
+npm install bootstrap
 
-assets/css/style.css
+
+assets/css/style.css:
 
 root = Seletor de mais alto nível do CSS, equivalente ao html, no código
 é utilizado para definir as variaveis globais
@@ -20,5 +32,3 @@ Como funciona o clamp:
 clamp(mínimo, valor-ideal, máximo)
 
 é utilizado para deixar a página mais responsiva
-
-Material Icon Theme

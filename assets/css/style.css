@@ -2,9 +2,9 @@
     --grid-size: clamp(3.0rem, 6vw, 3.4rem);    /* Tamanho base dos quadrados */
     --gap-size: clamp(0.15rem, 0.5vw, 0.25rem);   /* Espaçamento entre elementos */
     --border-width: clamp(0.1rem, 0.2vw, 0.15rem); /* Largura da borda */
-    --font-size-title: clamp(1.5rem, 2.1vw, 2.5rem); 
+    --font-size-title: clamp(1.5rem, 2.1vw, 2.5rem); /* Tamanho do título */
     --font-size-letter: clamp(1.5rem, 4vw, 2rem); /* Tamanho das letras */
-    --margin-size: clamp(0.3rem, 1vw, 0.5rem); 
+    --margin-size: clamp(0.3rem, 1vw, 0.5rem); /* Tamanho da margem */
 }
 
 * {
@@ -62,7 +62,6 @@ h1 {
     border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
 }
 
-/* Hover effect nos blocos */
 @media (hover: hover) {
     [class*="letter"]:hover {
         border-color: #878a8c;
@@ -70,7 +69,6 @@ h1 {
     }
 }
 
-/* Estados dos blocos */
 .correct {
     background-color: #6aaa64;
     border-color: #6aaa64;
@@ -89,7 +87,6 @@ h1 {
     color: white;
 }
 
-/* Animação quando uma letra é digitada */
 .typed {
     animation: pop 0.1s ease-in-out;
 }
@@ -100,7 +97,6 @@ h1 {
     100% { transform: scale(1); }
 }
 
-/* Ajustes específicos para dispositivos muito pequenos */
 @media (max-width: 280px) {
     :root {
         --grid-size: 2.8rem;
@@ -109,7 +105,6 @@ h1 {
     }
 }
 
-/* Ajustes para dispositivos muito grandes */
 @media (min-width: 1200px) {
     .main-container {
         width: min(95%, 35rem);
