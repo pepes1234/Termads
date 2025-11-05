@@ -1,0 +1,24 @@
+Para linkar CSS: <link rel="stylesheet" href="assets/css/style.css">
+Para imagens: <img src="assets/images/logo.png">
+Para outras páginas: <a href="pages/sobre.html">Sobre</a>
+
+https://nodejs.org/en/download
+
+npm i 
+
+https://nodejs.org/en/download
+
+assets/css/style.css
+
+root = Seletor de mais alto nível do CSS, equivalente ao html, no código
+é utilizado para definir as variaveis globais
+
+Variaveis CSS começam com -- e são acessadas utilizando var(--nome-da-variavel)
+
+Como funciona o clamp:
+
+clamp(mínimo, valor-ideal, máximo)
+
+é utilizado para deixar a página mais responsiva
+
+Material Icon Theme
