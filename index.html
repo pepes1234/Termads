@@ -3,54 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Document</title>
 </head>
 <body>
     <div class="main-container">
-        <h1>Termo</h1>
-        <div class="line-1">
-            <div class="line-1-letter-1">t</div>
-            <div class="line-1-letter-2">e</div>
-            <div class="line-1-letter-3">r</div>
-            <div class="line-1-letter-4">m</div>
-            <div class="line-1-letter-5">o</div>
+        <h1>Termads</h1>
+        
+        <!-- Grid de jogo -->
+        <div class="game-grid">
+            <div class="row line-1">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="row line-2">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="row line-3">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="row line-4">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="row line-5">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="row line-6">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
         </div>
-        <div class="line-2">
-            <div class="line-2-letter-1"></div>
-            <div class="line-2-letter-2"></div>
-            <div class="line-2-letter-3"></div>
-            <div class="line-2-letter-4"></div>
-            <div class="line-2-letter-5"></div>
-        </div>
-        <div class="line-3">
-            <div class="line-3-letter-1"></div>
-            <div class="line-3-letter-2"></div>
-            <div class="line-3-letter-3"></div>
-            <div class="line-3-letter-4"></div>
-            <div class="line-3-letter-5"></div>
-        </div>
-        <div class="line-4">
-            <div class="line-4-letter-1"></div>
-            <div class="line-4-letter-2"></div>
-            <div class="line-4-letter-3"></div>
-            <div class="line-4-letter-4"></div>
-            <div class="line-4-letter-5"></div>
-        </div>
-        <div class="line-5">
-            <div class="line-5-letter-1"></div>
-            <div class="line-5-letter-2"></div>
-            <div class="line-5-letter-3"></div>
-            <div class="line-5-letter-4"></div>
-            <div class="line-5-letter-5"></div>
-        </div>
-        <div class="line-6">
-            <div class="line-6-letter-1"></div>
-            <div class="line-6-letter-2"></div>
-            <div class="line-6-letter-3"></div>
-            <div class="line-6-letter-4"></div>
-            <div class="line-6-letter-5"></div>
+
+        <!-- Teclado virtual -->
+        <div class="keyboard">
+            <div class="keyboard-row">
+                <button class="key" data-key="q">Q</button>
+                <button class="key" data-key="w">W</button>
+                <button class="key" data-key="e">E</button>
+                <button class="key" data-key="r">R</button>
+                <button class="key" data-key="t">T</button>
+                <button class="key" data-key="y">Y</button>
+                <button class="key" data-key="u">U</button>
+                <button class="key" data-key="i">I</button>
+                <button class="key" data-key="o">O</button>
+                <button class="key" data-key="p">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-key="a">A</button>
+                <button class="key" data-key="s">S</button>
+                <button class="key" data-key="d">D</button>
+                <button class="key" data-key="f">F</button>
+                <button class="key" data-key="g">G</button>
+                <button class="key" data-key="h">H</button>
+                <button class="key" data-key="j">J</button>
+                <button class="key" data-key="k">K</button>
+                <button class="key" data-key="l">L</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key key--lg" data-key="enter">ENTER</button>
+                <button class="key" data-key="z">Z</button>
+                <button class="key" data-key="x">X</button>
+                <button class="key" data-key="c">C</button>
+                <button class="key" data-key="v">V</button>
+                <button class="key" data-key="b">B</button>
+                <button class="key" data-key="n">N</button>
+                <button class="key" data-key="m">M</button>
+                <button class="key key--lg" data-key="backspace">⌫</button>
+            </div>
         </div>
     </div>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

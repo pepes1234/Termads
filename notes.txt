@@ -32,3 +32,10 @@ Como funciona o clamp:
 clamp(mínimo, valor-ideal, máximo)
 
 é utilizado para deixar a página mais responsiva
+
+uso de IA no style para colocar as cores(sou daltonico)
+
+commit para o github
+
+git add .
+git commit -m "Mensagem das alterações"
