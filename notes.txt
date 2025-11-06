@@ -40,3 +40,4 @@ commit para o github
 git add .
 git commit -m "Mensagem das alterações"
 
+Start-Process "index.html"
