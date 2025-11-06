@@ -1,4 +1,4 @@
-Estrutura feita em 2 pastas, assets que contém css e js. Pages que contem as páginas.
+Estrutura feita em 2 pastas, assets que contém css, images e js. Pages que contem as páginas.
 html root fora das pastas(index.html)
 
 Para linkar CSS: <link rel="stylesheet" href="assets/css/style.css">
