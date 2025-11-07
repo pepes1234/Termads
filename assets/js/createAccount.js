@@ -1,9 +1,20 @@
-if (document.getElementById("name").value == ''){
-    let aviso = document.createElement("p");
-    aviso.className = "erros";
+document.getElementById("signup").addEventListener("click", () => {
+    const nameInput = document.getElementById("name");
     const div = document.getElementById("semnome");
-    div.appendChild(aviso);
-    aviso.textContent = "Por favor preencha seu nome."
-} else {
-    aviso.remove();
-}
+    let aviso = div.querySelector(".erros");
+
+    if (nameInput.value.trim() === '') {
+        if (!aviso) {
+            aviso = document.createElement("p");
+            aviso.className = "erros";
+            aviso.textContent = "Por favor preencha seu nome.";
+            div.appendChild(aviso);
+        } else {
+            aviso.textContent = "Por favor preencha seu nome.";
+        }
+    } else {
+        if (nameInput.value.trim() === '') {
+            aviso.remove();
+        }
+    }
+});
