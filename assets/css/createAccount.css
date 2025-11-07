@@ -4,11 +4,14 @@
   --font-size-title: clamp(1.5rem, 2.0vw, 2.2rem);
   --font-size-body: clamp(0.95rem, 1.2vw, 1.05rem);
   --font-size-button: clamp(0.9rem, 1.2vw, 1rem);
+  --font-size-error: clamp(0.9rem, 1.2vw, 1rem);
 
   /* --- Core colors --- */
   --color-bg: #000000; /* página deve permanecer preta */
   --color-text: #f4ecec; /* texto principal claro */
   --color-muted: #bdb3b3; /* texto secundário */
+  --color-error-text: rgb(211, 34, 34);
+  --color-error-box: rgb(194, 65, 97);
 
   /* card / subtle whites used as translucency */
   --card-grad-start: rgba(255,255,255,0.04);
@@ -213,4 +216,23 @@ body{
 @media (max-width:380px){
   .main-container{padding:1.6rem}
   .item-social-media{width:40px;height:40px}
+}
+
+/*Erros*/
+.erro{
+  border-radius: 8px;
+  background: var(--color-error-box);
+  padding: 4px 10px;
+  width: 100%;
+  color: var(--color-error-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h3 {
+  font-size: var(--font-size-error);
+}
+
+.erros{
+  color: red;
 }
