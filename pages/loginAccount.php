@@ -60,21 +60,6 @@ function tratarForm($dado){
         <div class="title">
             <h2>Login</h2>  
         </div>
-        <div class="social-media">
-            <ul class="list-social-media">
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="sr-only">Instagram</span></a>
-                </li>
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-google"></i></a>
-                </li>
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                </li>
-            </ul>
-        </div>
-    
-        <p class="description description-primary">or use your email for registration</p>
             <form class="form" action="#" method="post" novalidate>
                
 

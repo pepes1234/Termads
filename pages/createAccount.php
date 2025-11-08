@@ -95,45 +95,30 @@ function tratarForm($dado){
         <div class="title">
             <h2>Create Account</h2>  
         </div>
-        <div class="social-media">
-            <ul class="list-social-media">
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="sr-only">Instagram</span></a>
-                </li>
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-google"></i></a>
-                </li>
-                <li class="item-social-media">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                </li>
-            </ul>
-        </div>
-    
-        <p class="description description-primary">or use your email for registration</p>
             <form class="form" action="#" method="post" novalidate>
-                <label class="label-input <?php if(isset($erros["nome"])){ echo 'input-erro'; } ?>" for="name">
-                    <i class="fa-solid fa-user icon-modify" aria-hidden="true"></i>
-                    <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome"; } ?>" required>
-                </label>
-               
+            <label class="label-input <?php if(isset($erros["nome"])){ echo 'input-erro'; } ?>" for="name">
+                <i class="fa-solid fa-user icon-modify" aria-hidden="true"></i>
+                <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome"; } ?>" required>
+            </label>
+            
 
-                <label class="label-input <?php if(isset($erros["email"])){ echo 'input-erro'; } ?>" for="email">
-                    <i class="fa-solid fa-envelope icon-modify" aria-hidden="true"></i>
-                    <input id="email" name="email" type="email" placeholder="<?php if(isset($erros["email"])){ echo $erros["email"] ; } else { echo "Email"; } ?>" required>
-                </label>
+            <label class="label-input <?php if(isset($erros["email"])){ echo 'input-erro'; } ?>" for="email">
+                <i class="fa-solid fa-envelope icon-modify" aria-hidden="true"></i>
+                <input id="email" name="email" type="email" placeholder="<?php if(isset($erros["email"])){ echo $erros["email"] ; } else { echo "Email"; } ?>" required>
+            </label>
 
-                <label class="label-input <?php if(isset($erros["senha"])){ echo 'input-erro'; } ?>" for="password">
-                    <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
-                    <input id="password" name="senha" type="password" placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } else { echo "Senha"; } ?>" required>
-                </label>    
+            <label class="label-input <?php if(isset($erros["senha"])){ echo 'input-erro'; } ?>" for="password">
+                <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
+                <input id="password" name="senha" type="password" placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } else { echo "Senha"; } ?>" required>
+            </label>    
 
-                <label class="label-input <?php if(isset($erros["confirmaSenha"])){ echo 'input-erro'; } ?>" for="confirm-password">
-                    <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
-                    <input id="confirm-password" name="confirmaSenha" type="password" placeholder="<?php if(isset($erros["confirmaSenha"])){ echo $erros["confirmaSenha"]; } else { echo "Confirme sua senha"; } ?>" required>
-                </label>
+            <label class="label-input <?php if(isset($erros["confirmaSenha"])){ echo 'input-erro'; } ?>" for="confirm-password">
+                <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
+                <input id="confirm-password" name="confirmaSenha" type="password" placeholder="<?php if(isset($erros["confirmaSenha"])){ echo $erros["confirmaSenha"]; } else { echo "Confirme sua senha"; } ?>" required>
+            </label>
 
-                <button type="submit" class="btn btn-primary">Sign Up</button>
-            </form>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
               
     <p class="description">Already have an account?</p>
     <button class="btn btn-secondary" onclick="location.href='loginAccount.php'">Login</button>
