@@ -10,8 +10,8 @@
   --color-bg: #000000; /* página deve permanecer preta */
   --color-text: #f4ecec; /* texto principal claro */
   --color-muted: #bdb3b3; /* texto secundário */
-  --color-error-text: rgb(211, 34, 34);
-  --color-error-box: rgb(194, 65, 97);
+  --color-error-text: rgb(150, 0, 0);
+  --color-error-box: rgb(197, 74, 105);
 
   /* card / subtle whites used as translucency */
   --card-grad-start: rgba(255,255,255,0.04);
@@ -224,15 +224,24 @@ body{
   background: var(--color-error-box);
   padding: 4px 10px;
   width: 100%;
-  color: var(--color-error-text);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  position: relative;
+  color: var(--color-error-text);
 }
+
 h3 {
   font-size: var(--font-size-error);
 }
 
-.erros{
-  color: red;
+.erro:after{
+  content: "";
+  position:absolute;
+  bottom:100%;
+  left: 8%;
+  z-index: 10;
+  border: solid 6px;
+  border-color: transparent transparent var(--color-error-box);
 }
+
