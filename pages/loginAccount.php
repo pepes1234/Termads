@@ -1,3 +1,47 @@
+<?php 
+
+$erros = [];
+if(isset($_POST["email"],$_POST["senha"])){
+
+
+    if(empty($_POST["email"])){
+        $erros["email"] = "Insira seu email!";
+    }
+    elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        $erros["email"] = "Email inválido!";
+    }
+    else {
+        $email = tratarForm($_POST["email"]);
+    }
+
+
+    if(empty($_POST["senha"])){
+        $erros["senha"] = "Insira sua senha!";
+    }
+    elseif (strlen($_POST["senha"]) < 7) {
+        $erros["senha"] = "Senha de no mínimo 8 caracteres!";
+    }
+    else {
+        $senha = tratarForm($_POST["senha"]);
+    }
+
+
+    
+}
+
+
+function tratarForm($dado){
+    $dado = trim($dado);
+    $dado = htmlspecialchars($dado);
+    $dado = stripslashes($dado);
+    return $dado;
+}
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +58,7 @@
     
     <div class="main-container">
         <div class="title">
-            <h2>Create Account</h2>  
+            <h2>Login</h2>  
         </div>
         <div class="social-media">
             <ul class="list-social-media">
@@ -32,46 +76,23 @@
     
         <p class="description description-primary">or use your email for registration</p>
             <form class="form" action="#" method="post" novalidate>
-                <label class="label-input" for="name">
-                    <i class="fa-solid fa-user icon-modify" aria-hidden="true"></i>
-                    <input id="name" name="name" type="text" placeholder="Name" required>
-                </label>
-
-                    <div id="semnome"></div>
-
-                    <div class="erro">
-                        <h3>Insira seu nome</h3>
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                    </div>
                
 
-                <label class="label-input" for="email">
+                <label class="label-input <?php if(isset($erros["email"])){ echo 'input-erro'; } ?>" for="email">
                     <i class="fa-solid fa-envelope icon-modify" aria-hidden="true"></i>
-                    <input id="email" name="email" type="email" placeholder="Email" required>
+                    <input id="email" name="email" type="email" placeholder="<?php if(isset($erros["email"])){ echo $erros["email"] ; } else { echo "Email"; } ?>" required>
                 </label>
 
-                <label class="label-input" for="password">
+                <label class="label-input <?php if(isset($erros["senha"])){ echo 'input-erro'; } ?>" for="password">
                     <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
-                    <input id="password" name="password" type="password" placeholder="Password" required>
-                </label>
-                
-                <label class="label-input" for="confirm-password">
-                    <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
-                    <input id="confirm-password" name="confirmPassword" type="password" placeholder="Confirm Password" required>
-                </label>
+                    <input id="password" name="senha" type="password" placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } else { echo "Senha"; } ?>" required>
+                </label>    
 
                 <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
               
-    <p class="description">Already have an account?</p>
-    <button class="btn btn-secondary" onclick="location.href='../index.html'">Login</button>
-        
-       
-
-
-
-    
-
+    <p class="description">Doesn't have an account?</p>
+    <button class="btn btn-secondary" onclick="location.href='createAccount.php'">Sign Up</button>
 
 
 
