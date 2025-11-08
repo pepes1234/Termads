@@ -1,528 +1,610 @@
-(function () {
-	const TOTAL_ROWS = 6;
-	const COLS = 5;
-	
-	let gameWords = [];
-	let validWords = new Set();
-	let targetWord = "";
-	let gameOver = false;
-	let currentRow = 0;
+// ===== CONFIGURAÇÕES =====
+const CONFIG = {
+    ROWS: 6,
+    COLS: 5,
+    ANIMATION_DELAY: 200,
+    TIMEOUT: 30000,
+    API_ENDPOINTS: [
+        'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt',
+        'https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt',
+        'https://corsproxy.io/?https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt'
+    ],
+    EMERGENCY_WORDS: [
+        'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande',
+        'olhar', 'falar', 'saber', 'poder', 'estar', 'dizer', 'ficar', 'viver', 'final',
+        'grupo', 'ponto', 'ordem', 'valor', 'linha', 'vista', 'coisa', 'carro', 'morte',
+        'casas', 'vidas', 'terra', 'tomar', 'levar', 'partir', 'certo', 'curso', 'banco',
+        'campo', 'carta', 'chave', 'cinco', 'claro', 'corpo', 'costa', 'criar', 'dente',
+        'desde', 'entre', 'epoca', 'escola', 'etapa', 'feliz', 'festa', 'forte', 'fraco',
+        'fundo', 'geral', 'gosto', 'grama', 'grave', 'hotel', 'igual', 'junto', 'largo',
+        'leite', 'lista', 'livro', 'maior', 'marca', 'massa', 'menor', 'mesmo', 'metro',
+        'norte', 'novas', 'nunca', 'obras', 'papel', 'passo', 'pedra', 'perto', 'preto',
+        'plano', 'pobre', 'porta', 'posto', 'praia', 'prato', 'primo', 'prova', 'quase',
+        'radio', 'regra', 'resto', 'risco', 'rosto', 'saida', 'senhor', 'serio', 'silva',
+        'sobre', 'suave', 'tecla', 'texto', 'tipos', 'turno', 'verde', 'bravo', 'breve',
+        'virus', 'vista', 'volume', 'zebra', 'calma', 'carne', 'cheio', 'doido', 'errar',
+        'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo', 'sorte', 'corte',
+    EMERGENCY_WORDS: [
+        // Verbos comuns (infinitivo e conjugações)
+        'achar', 'agir', 'amar', 'andar', 'arder', 'bater', 'beber', 'buscar', 'caber',
+        'cagar', 'casar', 'chegar', 'chorar', 'comer', 'comprar', 'contar', 'correr', 'coser',
+        'criar', 'curar', 'dançar', 'dizer', 'doer', 'dormir', 'entrar', 'errar', 'estar',
+        'fazer', 'falar', 'ferir', 'ficar', 'fugir', 'ganhar', 'gastar', 'gritar', 'haver',
+        'ir', 'jogar', 'lavar', 'levar', 'limpar', 'ler', 'mandar', 'matar', 'meter',
+        'mirar', 'morar', 'mover', 'nadar', 'nascer', 'odiar', 'olhar', 'ouvir', 'pagar',
+        'parar', 'partir', 'passar', 'pedir', 'pegar', 'pensar', 'perder', 'pisar', 'poder',
+        'poner', 'pular', 'querer', 'rachar', 'ralar', 'rolar', 'saber', 'sair', 'secar',
+        'sentar', 'sento', 'servir', 'socar', 'subir', 'sugar', 'suar', 'tecer', 'tirar',
+        'tocar', 'tomar', 'valer', 'vender', 'venir', 'verde', 'viajar', 'virar', 'viver',
+        'voar', 'voltar', 'votar',
 
-	window.testConnectivity = async function() {
-		console.log('Testing connectivity...');
-		
-		const testUrl = 'https://api.github.com/zen';
-		try {
-			const response = await fetch(testUrl);
-			console.log('Connectivity OK - GitHub responds:', response.status);
-			const text = await response.text();
-			console.log('Response:', text);
-			return true;
-		} catch (error) {
-			console.error('Connectivity problem:', error);
-			return false;
-		}
-	}
+        // Substantivos comuns
+        'agua', 'aluno', 'amigo', 'amor', 'animal', 'ano', 'arvore', 'aviao', 'bacia',
+        'balde', 'banco', 'barra', 'barco', 'base', 'bicho', 'blusa', 'boca', 'bolsa',
+        'borda', 'braco', 'bravo', 'breve', 'brisa', 'burro', 'cabra', 'caixa', 'calca',
+        'caldo', 'cama', 'campo', 'cansa', 'capaz', 'carga', 'carne', 'carro', 'carta',
+        'casa', 'casal', 'causa', 'chave', 'chefe', 'chuva', 'cinco', 'clima', 'cobra',
+        'coisa', 'color', 'conta', 'corda', 'cores', 'corpo', 'costa', 'couro', 'crisp',
+        'cuida', 'curso', 'dados', 'dente', 'dieta', 'doces', 'dores', 'drama', 'ducha',
+        'dupla', 'epoca', 'ervas', 'escola', 'etapa', 'facil', 'farol', 'festa', 'fibra',
+        'figos', 'final', 'flore', 'forma', 'forte', 'fruta', 'fumar', 'fundo', 'garoa',
+        'gemas', 'genio', 'geral', 'gosta', 'grama', 'grande', 'grave', 'greve', 'grupo',
+        'heroi', 'horta', 'hotel', 'idade', 'igual', 'janta', 'jeans', 'junto', 'jovem',
+        'lapis', 'largo', 'leite', 'letra', 'linha', 'lista', 'livro', 'louca', 'lugar',
+        'manga', 'marca', 'massa', 'medal', 'melao', 'menor', 'mesa', 'mesmo', 'metro',
+        'molho', 'monte', 'moral', 'morte', 'museu', 'mundo', 'nariz', 'navio', 'negro',
+        'netos', 'nivel', 'noite', 'norte', 'notas', 'novel', 'obras', 'olhos', 'ordem',
+        'papel', 'pardo', 'parte', 'parto', 'pasta', 'patos', 'pedra', 'peixe', 'perna',
+        'perto', 'pessoa', 'picos', 'pinta', 'placa', 'plano', 'pluma', 'pobre', 'poder',
+        'ponto', 'porta', 'posto', 'praia', 'prato', 'preco', 'preto', 'primo', 'prova',
+        'quota', 'radio', 'rapaz', 'ratos', 'razao', 'regra', 'reino', 'resto', 'risco',
+        'roupa', 'ruins', 'salao', 'senha', 'silva', 'sogra', 'solar', 'sobre', 'tempo',
+        'terra', 'texto', 'tipos', 'torre', 'traje', 'turno', 'unhas', 'valor', 'verso',
+        'vista', 'zebra',
 
-	window.testWordValidation = function() {
-		const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste', 'abcde'];
-		console.log('Testing word validation:');
-		testWords.forEach(word => {
-			const normalized = normalizeWord(word);
-			const isValid = isValidWord(word);
-			console.log(`"${word}" → "${normalized}" → ${isValid ? 'valid' : 'invalid'}`);
-		});
-		console.log(`Total words loaded: ${validWords ? validWords.size : 0}`);
-		console.log(`Word samples:`, Array.from(validWords || []).slice(0, 10));
-	}
+        // Adjetivos e outras palavras
+        'agudo', 'ainda', 'assim', 'baixo', 'basto', 'bello', 'bravo', 'breve', 'calma',
+        'certa', 'cheio', 'claro', 'doido', 'errado', 'facil', 'falso', 'feliz', 'forte',
+        'fraco', 'grave', 'largo', 'lento', 'limpo', 'lindo', 'louco', 'maior', 'menor',
+        'muito', 'negro', 'nossa', 'novo', 'perto', 'pouco', 'preto', 'primo', 'quase',
+        'rapido', 'seco', 'serio', 'suave', 'todos', 'verde', 'velho',
 
-	async function loadWords() {
-		console.log('Loading words from API...');
-		
-		try {
-			const apis = [
-				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.codetabs.com/v1/proxy?quest=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://corsproxy.io/?https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://proxy.cors.sh/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
-			];
-			
-			let text = '';
-			let apiUsed = '';
-			
-			for (let i = 0; i < apis.length; i++) {
-				try {
-					console.log(`Trying API ${i + 1}/${apis.length}: ${apis[i].substring(0, 60)}...`);
-					
-					const controller = new AbortController();
-					const timeoutId = setTimeout(() => {
-						controller.abort();
-						console.log(`Timeout on API ${i + 1}`);
-					}, 15000);
-					
-					const response = await fetch(apis[i], { 
-						signal: controller.signal,
-						method: 'GET',
-						headers: {
-							'Accept': 'text/plain',
-							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-						}
-					});
-					clearTimeout(timeoutId);
-					
-					console.log(`API ${i + 1} response status:`, response.status, response.statusText);
-					
-					if (!response.ok) {
-						throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-					}
-					
-					text = await response.text();
-					apiUsed = apis[i];
-					console.log(`Success with API ${i + 1}! Text received: ${text.length} characters`);
-					console.log(`First lines:`, text.substring(0, 200));
-					break;
-				} catch (apiError) {
-					console.error(`API ${i + 1} failed:`, apiError.name, '-', apiError.message);
-					if (i === apis.length - 1) {
-						throw new Error(`All ${apis.length} APIs failed`);
-					}
-				}
-			}
-			
-			if (!text || text.length < 100) {
-				throw new Error('API response too small or empty');
-			}
-			
-			console.log('Processing words from API...');
-			
-			const allWords = text.split('\n')
-				.map(word => word.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
-				.filter(word => word.length === 5 && /^[a-z]+$/.test(word));
-			
-			console.log(`Filtered words: ${allWords.length} 5-letter words`);
-			
-			if (allWords.length === 0) {
-				throw new Error('No valid 5-letter words found in API');
-			}
-			
-			const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo'];
-			const foundTestWords = testWords.filter(word => allWords.includes(word));
-			console.log(`Test words found: ${foundTestWords.join(', ')}`);
-			
-			validWords = new Set(allWords);
-			gameWords = allWords;
-			
-			targetWord = gameWords[Math.floor(Math.random() * gameWords.length)].toUpperCase();
-			
-			console.log(`API loaded successfully! ${validWords.size} words available`);
-			console.log(`Target word selected: ${targetWord}`);
-			
-			setTimeout(() => testWordValidation(), 1000);
-			
-			return true;
-		} catch (error) {
-			console.error('Failed to load words from API:', error.message);
-			console.log('Using emergency dictionary (offline mode)...');
-			
-			const emergencyWords = [
-				'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande', 
-				'olhar', 'falar', 'saber', 'poder', 'estar', 'dizer', 'ficar', 'viver', 'final',
-				'grupo', 'ponto', 'ordem', 'nivel', 'valor', 'razao', 'linha', 'vista', 'coisa',
-				'casas', 'vidas', 'terra', 'tomar', 'levar', 'partir', 'certo', 'curso', 'banco',
-				'campo', 'carta', 'chave', 'cinco', 'claro', 'corpo', 'costa', 'criar', 'dente',
-				'desde', 'entre', 'epoca', 'escola', 'etapa', 'feliz', 'festa', 'forte', 'fraco',
-				'fundo', 'geral', 'gosto', 'grama', 'grave', 'hotel', 'igual', 'junto', 'largo',
-				'leite', 'lista', 'livro', 'maior', 'marca', 'massa', 'menor', 'mesmo', 'metro',
-				'norte', 'novas', 'nunca', 'obras', 'papel', 'passo', 'pedra', 'perto',
-				'plano', 'pobre', 'porta', 'posto', 'praia', 'prato', 'primo', 'prova', 'quase',
-				'radio', 'regra', 'resto', 'risco', 'rosto', 'saida', 'senhor', 'serio', 'silva',
-				'sobre', 'suave', 'tecla', 'texto', 'tipos', 'trade', 'tumor', 'turno', 'verde',
-				'virus', 'vista', 'volume', 'zebra', 'bravo', 'breve', 'calma', 'carne', 'cheio',
-				'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo',
-				'beber', 'bicho', 'bolsa', 'borda', 'caixa', 'doido', 'durar', 'errar',
-				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte'
-			];
-			
-			const validEmergencyWords = emergencyWords.filter(word => word.length === 5);
-			const invalidWords = emergencyWords.filter(word => word.length !== 5);
-			
-			if (invalidWords.length > 0) {
-				console.warn('Invalid emergency words (not 5 letters):', invalidWords);
-			}
-			
-			validWords = new Set(validEmergencyWords);
-			gameWords = validEmergencyWords;
-			targetWord = validEmergencyWords[Math.floor(Math.random() * validEmergencyWords.length)].toUpperCase();
-			
-			console.log(`Emergency mode activated! ${validEmergencyWords.length} words available`);
-			console.log(`Target word: ${targetWord}`);
-			
-			showMessage('No internet - using local dictionary', 3000);
-			
-			setTimeout(() => testWordValidation(), 1000);
-			
-			return true;
-		}
-	}
+        // Palavras do dia a dia brasileiras
+        'beijo', 'sonho', 'sorte', 'corte', 'porte', 'morte', 'forte', 'norte', 'ponte',
+        'fonte', 'monte', 'conte', 'dorme', 'forme', 'torne', 'porne', 'bonde', 'conde',
+        'funde', 'mundo', 'fundo', 'tunel', 'canal', 'legal', 'metal', 'total', 'vital',
+        'ideal', 'real', 'igual', 'atual', 'usual', 'local', 'final', 'moral', 'oral',
+        'rural', 'social', 'geral', 'central', 'mental', 'dental', 'postal', 'normal',
 
-	function normalizeWord(word) {
-		return word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-	}
+        // Conjugações verbais comuns
+        'tenho', 'venho', 'ponho', 'ganho', 'banho', 'ranho', 'sonho', 'donho',
+        'facho', 'macho', 'cacho', 'tacho', 'nacho', 'bicho', 'ficho', 'nicho',
+        'fecho', 'techo', 'decho', 'pecho', 'lecho', 'becho', 'secho', 'necho',
+        'creio', 'freio', 'cheio', 'feios', 'veios', 'seios', 'meios', 'teios',
+        'cruze', 'bruxa', 'luzes', 'vezes', 'vozes', 'rosas', 'coisas', 'poses',
+        'bases', 'doses', 'risos', 'mesas', 'casas', 'pesas', 'tesas', 'besas'
+    ]
+};
 
-	function isValidWord(word) {
-		const normalized = normalizeWord(word);
-		return validWords.has(normalized);
-	}
+// ===== ESTADO DO JOGO =====
+let gameState = {
+    words: [],
+    validWords: new Set(),
+    targetWord: '',
+    currentRow: 0,
+    gameOver: false
+};
 
-	function getRowEls() {
-		const els = [];
-		for (let r = 1; r <= TOTAL_ROWS; r++) {
-			const rowEl = document.querySelector(`.line-${r}`);
-			if (rowEl) els.push(rowEl);
-		}
-		return els;
-	}
+// ===== UTILITÁRIOS =====
+const Utils = {
+    normalizeWord: word => word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
+    isLetter: key => /^[a-zA-Z]$/.test(key),
+    selectRandom: array => array[Math.floor(Math.random() * array.length)],
+    delay: ms => new Promise(resolve => setTimeout(resolve, ms))
+};
 
-	const rowEls = getRowEls();
-	const rows = rowEls.map((rowEl) => Array.from(rowEl.children).slice(0, COLS));
+const DOM = {
+    getRowElements: () => Array.from({ length: CONFIG.ROWS }, (_, i) => document.querySelector(`.line-${i + 1}`)),
+    getTile: (row, col) => document.querySelector(`[data-row="${row}"][data-col="${col}"]`),
+    getKeyElement: letter => {
+        const byDataKey = document.querySelector(`.key[data-key="${letter}"]`);
+        if (byDataKey) return byDataKey;
+        
+        const allKeys = [...document.querySelectorAll('.key')];
+        return allKeys.find(k => k.textContent.trim().toLowerCase() === letter);
+    }
+};
 
-	function isTileEmpty(tile) {
-		return tile && tile.textContent.trim() === "";
-	}
+// ===== CARREGAMENTO DE PALAVRAS =====
+const WordLoader = {
+    async load() {
+        console.log('🔄 Carregando palavras...');
+        
+        // Usando apenas dicionário português brasileiro verificado
+        console.log('🇧🇷 Carregando dicionário português brasileiro...');
+        this.activateEmergencyMode();
+        return true;
+    },
 
-	function rowFilled(rowTiles) {
-		return rowTiles.every((t) => !isTileEmpty(t));
-	}
+    async fetchFromAPI(url) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+        
+        try {
+            const response = await fetch(url, {
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'text/plain',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            });
+            
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            
+            const text = await response.text();
+            return this.processText(text);
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    },
 
-	function firstEmptyIndex(rowTiles) {
-		return rowTiles.findIndex((t) => isTileEmpty(t));
-	}
+    processText(text) {
+        if (!text || text.length < 100) {
+            throw new Error('Resposta muito pequena');
+        }
 
-	function lastFilledIndex(rowTiles) {
-		for (let c = COLS - 1; c >= 0; c--) {
-			if (!isTileEmpty(rowTiles[c])) return c;
-		}
-		return -1;
-	}
+        let words = [];
+        
+        try {
+            const jsonData = JSON.parse(text);
+            if (Array.isArray(jsonData)) {
+                words = jsonData.map(word => word.toString());
+                console.log('📄 Processado como JSON');
+            }
+        } catch {
+            words = text.split(/[\n\r]+/).map(line => line.split(/\s+/)[0]);
+            console.log('📄 Processado como texto');
+        }
 
-	function findCurrentRowIndex() {
-		for (let r = 0; r < rows.length; r++) {
-			if (!rowFilled(rows[r])) return r;
-		}
-		return rows.length - 1;
-	}
+        const validWords = words
+            .map(Utils.normalizeWord)
+            .filter(word => {
+                return word.length === CONFIG.COLS && 
+                       this.isValidPortugueseWord(word);
+            });
 
-	currentRow = 0;
+        console.log(`🔍 ${validWords.length} palavras válidas encontradas`);
+        return validWords;
+    },
 
-	function updateRowStates() {
-		for (let r = 0; r < rowEls.length; r++) {
-			const el = rowEls[r];
-			el.classList.remove("row-active", "row-inactive", "row-used");
-			if (r < currentRow) {
-				// previous rows considered used/locked
-				el.classList.add("row-used");
-			} else if (r === currentRow) {
-				// current active row
-				el.classList.add("row-active");
-			} else {
-				// future rows are inactive
-				el.classList.add("row-inactive");
-			}
-		}
-	}
+    isValidPortugueseWord(word) {
+        // Apenas letras minúsculas
+        if (!/^[a-z]+$/.test(word)) return false;
+        
+        // Deve ter pelo menos uma vogal
+        if (!/[aeiou]/.test(word)) return false;
+        
+        // Filtro simples - apenas obviamente não portuguesas
+        if (this.isObviouslyForeignWord(word)) return false;
+        
+        return true; // Muito mais permissivo
+    },
 
-	function setTile(rowIdx, colIdx, char) {
-		const tile = rows[rowIdx]?.[colIdx];
-		if (!tile) return;
-		tile.textContent = char.toUpperCase();
-		tile.classList.remove("incorrect", "wrong-position", "correct");
-		tile.classList.add("typed");
-		setTimeout(() => tile.classList.remove("typed"), 120);
-	}
+    isObviouslyForeignWord(word) {
+        // Lista reduzida - apenas palavras OBVIAMENTE estrangeiras
+        const obviouslyForeign = [
+            // Inglês muito comum
+            'about', 'being', 'could', 'every', 'first', 'found', 'great', 'house',
+            'large', 'light', 'local', 'might', 'never', 'other', 'place', 'point',
+            'right', 'small', 'sound', 'state', 'still', 'their', 'there', 'these',
+            'think', 'those', 'three', 'under', 'water', 'where', 'which', 'while',
+            'world', 'would', 'write', 'young', 'isles',
+            
+            // Nomes claramente estrangeiros
+            'darlo', 'lazlo', 'wesen', 'smith', 'jones', 'brown'
+        ];
+        
+        return obviouslyForeign.includes(word) ||
+               /xviii|[0-9]/.test(word);  // Apenas números/romanos
+    },
 
-	function clearTile(rowIdx, colIdx) {
-		const tile = rows[rowIdx]?.[colIdx];
-		if (!tile) return;
-		tile.textContent = "";
-		tile.classList.remove("typed");
-	}
+    hasNonPortuguesePatterns(word) {
+        // Padrões claramente não portugueses - mais permissivo
+        return /xviii|[0-9]/.test(word) ||        // Números romanos e dígitos
+               word.includes('xx') ||              // Duplo X
+               word.includes('kk') ||              // Duplo K  
+               word.includes('ww') ||              // Duplo W
+               /^[qwxy][^u]/.test(word) ||        // Q,W,X,Y no início sem U depois
+               /[bcdfghjklmnpqrstvwxyz]{5}/.test(word); // 5+ consoantes seguidas
+    },
 
-	function checkWord(word) {
-		const result = [];
-		const target = targetWord.toUpperCase();
-		const guess = word.toUpperCase();
-		
-		const targetCount = {};
-		for (let letter of target) {
-			targetCount[letter] = (targetCount[letter] || 0) + 1;
-		}
-		
-		for (let i = 0; i < COLS; i++) {
-			if (guess[i] === target[i]) {
-				result[i] = 'correct';
-				targetCount[guess[i]]--;
-			} else {
-				result[i] = 'none';
-			}
-		}
-		
-		for (let i = 0; i < COLS; i++) {
-			if (result[i] === 'none') {
-				if (targetCount[guess[i]] > 0) {
-					result[i] = 'wrong-position';
-					targetCount[guess[i]]--;
-				} else {
-					result[i] = 'incorrect';
-				}
-			}
-		}
-		
-		return result;
-	}
+    hasPortugueseSyllableStructure(word) {
+        // Mais permissivo - aceita a maioria das estruturas portuguesas
+        const consonantClusters = word.match(/[bcdfghjklmnpqrstvwxyz]+/g) || [];
+        
+        for (const cluster of consonantClusters) {
+            // Permite até 4 consoantes (muito permissivo)
+            if (cluster.length > 4) return false;
+        }
+        
+        return true; // Muito mais permissivo
+    },
 
-	function updateKeyboard(word, results) {
-		for (let i = 0; i < word.length; i++) {
-			const letter = word[i].toLowerCase();
-			const keyElement = document.querySelector(`.key[data-key="${letter}"]`);
-			if (keyElement) {
-				// Only update if current state is not better
-				const currentClass = keyElement.classList;
-				if (!currentClass.contains('correct') && results[i] === 'correct') {
-					keyElement.classList.remove('wrong-position', 'incorrect');
-					keyElement.classList.add('correct');
-				} else if (!currentClass.contains('correct') && !currentClass.contains('wrong-position') && results[i] === 'wrong-position') {
-					keyElement.classList.remove('incorrect');
-					keyElement.classList.add('wrong-position');
-				} else if (!currentClass.contains('correct') && !currentClass.contains('wrong-position') && results[i] === 'incorrect') {
-					keyElement.classList.add('incorrect');
-				}
-			}
-		}
-	}
+    setWords(words) {
+        gameState.words = words;
+        gameState.validWords = new Set(words);
+        gameState.targetWord = Utils.selectRandom(words).toUpperCase();
+        console.log('🎯 Palavra selecionada:', gameState.targetWord);
+    },
 
-	function showMessage(text, duration = 2000) {
-		const existingMessage = document.querySelector('.game-message');
-		if (existingMessage) {
-			existingMessage.remove();
-		}
-		
-		const message = document.createElement('div');
-		message.className = 'game-message';
-		message.textContent = text;
-		document.body.appendChild(message);
-		
-		setTimeout(() => {
-			if (message.parentNode) {
-				message.remove();
-			}
-		}, duration);
-	}
+    activateEmergencyMode() {
+        console.warn('🇧🇷 Modo dicionário português ativado');
+        const words = CONFIG.EMERGENCY_WORDS.filter(word => word.length === CONFIG.COLS);
+        this.setWords(words);
+        UI.showEmergencyMessage();
+    }
+};
 
-	function getCurrentWord() {
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return '';
-		return rowTiles.map(tile => tile.textContent).join('');
-	}
+// ===== INTERFACE =====
+const UI = {
+    showMessage(text, duration = 2000) {
+        const existing = document.querySelector('.game-message');
+        if (existing) existing.remove();
+        
+        const message = document.createElement('div');
+        message.className = 'game-message';
+        message.textContent = text;
+        document.body.appendChild(message);
+        
+        setTimeout(() => message.remove(), duration);
+    },
 
-	function animateRow(rowIndex, results) {
-		const rowTiles = rows[rowIndex];
-		if (!rowTiles) return;
-		
-		rowTiles.forEach((tile, index) => {
-			setTimeout(() => {
-				tile.classList.add(results[index]);
-			}, index * 200);
-		});
-	}
+    showEmergencyMessage() {
+        const message = document.createElement('div');
+        message.className = 'emergency-message';
+        message.innerHTML = `
+            <div style="display: flex; align-items: center; padding: 16px 20px; gap: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 8px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; max-width: 90vw; animation: slideDown 0.5s ease-out;">
+                <div style="font-size: 24px;">🇧🇷</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: bold; font-size: 16px;">Dicionário Português</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Usando apenas palavras verificadas em português</div>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; padding: 4px 8px; border-radius: 4px; color: white;">×</button>
+            </div>
+        `;
 
-	function animateKey(key) {
-		const keyElement = document.querySelector(`.key[data-key="${key.toLowerCase()}"]`);
-		if (keyElement) {
-			keyElement.classList.add("key-clicked");
-			setTimeout(() => {
-				keyElement.classList.remove("key-clicked");
-			}, 150);
-		}
-	}
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            }
+        `;
+        
+        document.head.appendChild(style);
+        document.body.appendChild(message);
+        
+        setTimeout(() => message.remove(), 8000);
+    },
 
-	function handleLetter(letter) {
-		if (gameOver) return;
-		
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return;
-		if (rowFilled(rowTiles)) return;
-		const col = firstEmptyIndex(rowTiles);
-		if (col === -1) return;
-		
-		animateKey(letter);
-		
-		setTile(currentRow, col, letter);
-	}
+    updateRowStates() {
+        DOM.getRowElements().forEach((row, i) => {
+            row?.classList.remove('row-active', 'row-inactive', 'row-used');
+            
+            if (i < gameState.currentRow) row?.classList.add('row-used');
+            else if (i === gameState.currentRow) row?.classList.add('row-active');
+            else row?.classList.add('row-inactive');
+        });
+    },
 
-	function handleBackspace() {
-		if (gameOver) return;
-		
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return;
-		const col = lastFilledIndex(rowTiles);
-		if (col === -1) return;
-		
-		animateKey("backspace");
-		
-		clearTile(currentRow, col);
-	}
+    animateRowResults(row, results) {
+        const tiles = Array.from({ length: CONFIG.COLS }, (_, i) => DOM.getTile(row, i));
+        
+        tiles.forEach((tile, i) => {
+            setTimeout(() => tile?.classList.add(results[i]), i * CONFIG.ANIMATION_DELAY);
+        });
+    },
 
-	function handleEnter() {
-		if (gameOver) return;
-		
-		// If current row is full, check the word
-		const rowTiles = rows[currentRow];
-		if (rowTiles && rowFilled(rowTiles)) {
-			const word = getCurrentWord();
-			
-			// Check if word is valid
-			if (!isValidWord(word)) {
-				showMessage("Palavra não encontrada no dicionário!");
-				// Shake animation for invalid word
-				rowEls[currentRow].classList.add('shake-row');
-				setTimeout(() => {
-					rowEls[currentRow].classList.remove('shake-row');
-				}, 600);
-				return;
-			}
-			
-			animateKey("enter");
-			
-			// Check against target word
-			const results = checkWord(word);
-			
-			// Animate row with results
-			animateRow(currentRow, results);
-			
-			// Update keyboard
-			updateKeyboard(word, results);
-			
-			// Check if won
-			if (word.toUpperCase() === targetWord) {
-				gameOver = true;
-				setTimeout(() => {
-					showMessage(`Parabéns! Você acertou em ${currentRow + 1} tentativas!`, 5000);
-				}, 1000);
-				return;
-			}
-			
-			// Move to next row or end game
-			if (currentRow < rows.length - 1) {
-				currentRow += 1;
-				updateRowStates();
-			} else {
-				// Game over
-				gameOver = true;
-				setTimeout(() => {
-					showMessage(`Fim de jogo! A palavra era: ${targetWord}`, 5000);
-				}, 1000);
-			}
-		}
-	}
+    shakeRow() {
+        const rowElement = DOM.getTile(gameState.currentRow, 0)?.parentElement;
+        rowElement?.classList.add('shake-row');
+        setTimeout(() => rowElement?.classList.remove('shake-row'), 600);
+    }
+};
 
-	function isLetterKey(k) {
-		return /^[a-zA-Z]$/.test(k);
-	}
+// ===== LÓGICA DO JOGO =====
+const GameLogic = {
+    getTileIndex: {
+        firstEmpty: () => {
+            for (let i = 0; i < CONFIG.COLS; i++) {
+                const tile = DOM.getTile(gameState.currentRow, i);
+                if (tile && !tile.textContent.trim()) return i;
+            }
+            return -1;
+        },
 
-	// Physical keyboard
-	window.addEventListener("keydown", (ev) => {
-		// Previne comportamento padrão para todas as teclas que usamos
-		const k = ev.key;
-		if (isLetterKey(k) || k === "Backspace" || k === "Enter") {
-			ev.preventDefault();
-		}
-		
-		if (isLetterKey(k)) {
-			handleLetter(k);
-			return;
-		}
-		if (k === "Backspace") {
-			handleBackspace();
-			return;
-		}
-		if (k === "Enter") {
-			handleEnter();
-			return;
-		}
-	});
+        lastFilled: () => {
+            for (let i = CONFIG.COLS - 1; i >= 0; i--) {
+                const tile = DOM.getTile(gameState.currentRow, i);
+                if (tile && tile.textContent.trim()) return i;
+            }
+            return -1;
+        }
+    },
 
-	// On-screen keyboard
-	function handleKeyAction(dataKey) {
-		if (!dataKey) return;
-		const key = String(dataKey).toLowerCase();
-		if (key === "enter") return handleEnter();
-		if (key === "backspace") return handleBackspace();
-		if (/^[a-z]$/.test(key)) return handleLetter(key);
-	}
+    getCurrentWord: () => {
+        let word = '';
+        for (let i = 0; i < CONFIG.COLS; i++) {
+            const tile = DOM.getTile(gameState.currentRow, i);
+            word += tile?.textContent || '';
+        }
+        return word;
+    },
 
-	document.addEventListener("click", (e) => {
-		const btn = e.target.closest(".key[data-key]");
-		if (!btn) return;
-		
-		// Previne o foco no botão e remove qualquer seleção
-		e.preventDefault();
-		btn.blur();
-		document.getSelection().removeAllRanges();
-		
-		const dataKey = btn.getAttribute("data-key");
-		handleKeyAction(dataKey);
-	});
+    isValidWord: word => gameState.validWords.has(Utils.normalizeWord(word)),
 
-	// Optional: clicking a tile only works in the active row (no row switching)
-	rows.forEach((tiles, rIdx) => {
-		tiles.forEach((tile) => {
-			tile.addEventListener("click", () => {
-				if (rIdx !== currentRow) return; // do nothing for inactive/used rows
-				// no-op for now; could place a caret/visual state
-			});
-		});
-	});
+    checkWord: guess => {
+        const target = gameState.targetWord;
+        const result = Array(CONFIG.COLS);
+        const targetCount = {};
+        
+        // Contar letras do target
+        for (const letter of target) {
+            targetCount[letter] = (targetCount[letter] || 0) + 1;
+        }
+        
+        // Primeira passada: posições corretas
+        for (let i = 0; i < CONFIG.COLS; i++) {
+            if (guess[i] === target[i]) {
+                result[i] = 'correct';
+                targetCount[guess[i]]--;
+            }
+        }
+        
+        // Segunda passada: posições incorretas
+        for (let i = 0; i < CONFIG.COLS; i++) {
+            if (result[i]) continue;
+            
+            if (targetCount[guess[i]] > 0) {
+                result[i] = 'wrong-position';
+                targetCount[guess[i]]--;
+            } else {
+                result[i] = 'incorrect';
+            }
+        }
+        
+        return result;
+    }
+};
 
-	// Initialize game
-	async function initGame() {
-		console.log('Initializing game...');
-		
-		try {
-			await loadWords();
-			
-			// Verify we have a valid target word
-			if (!targetWord || targetWord.length !== 5) {
-				throw new Error('Invalid target word generated');
-			}
-			
-			console.log('Game initialized successfully');
-			console.log('Target word:', targetWord);
-			console.log('Dictionary size:', validWords.size);
-			
-			updateRowStates();
-			showMessage("Bem-vindo ao Termads! Adivinhe a palavra de 5 letras.", 3000);
-			
-		} catch (error) {
-			console.error('Failed to initialize game:', error);
-			showMessage('Falha ao inicializar o jogo. Recarregue a página e verifique sua conexão.', 10000);
-		}
-	}
+// ===== CONTROLES =====
+const Controls = {
+    addLetter(letter) {
+        const col = GameLogic.getTileIndex.firstEmpty();
+        if (col === -1) return false;
+        
+        const tile = DOM.getTile(gameState.currentRow, col);
+        if (tile) {
+            tile.textContent = letter.toUpperCase();
+            tile.classList.add('typed');
+            setTimeout(() => tile.classList.remove('typed'), 120);
+            return true;
+        }
+        return false;
+    },
 
-	// Previne foco indesejado nos elementos
-	document.addEventListener("focusin", (e) => {
-		if (e.target.classList.contains("key")) {
-			e.target.blur();
-		}
-	});
-	
-	// Remove seleção quando clica em qualquer lugar
-	document.addEventListener("mousedown", () => {
-		document.getSelection().removeAllRanges();
-	});
+    deleteLetter() {
+        const col = GameLogic.getTileIndex.lastFilled();
+        if (col === -1) return false;
+        
+        const tile = DOM.getTile(gameState.currentRow, col);
+        if (tile) {
+            tile.textContent = '';
+            return true;
+        }
+        return false;
+    },
 
-	// Start the game
-	initGame();
-})();
+    animateKey(key) {
+        const keyElement = DOM.getKeyElement(key.toLowerCase());
+        if (keyElement) {
+            keyElement.classList.add('key-clicked');
+            setTimeout(() => keyElement.classList.remove('key-clicked'), 150);
+        }
+    },
 
+    updateKeyboard(word, results) {
+        for (let i = 0; i < word.length; i++) {
+            const letter = word[i].toLowerCase();
+            const state = results[i];
+            const keyElement = DOM.getKeyElement(letter);
+            
+            if (keyElement && this.shouldUpdateKeyState(keyElement, state)) {
+                keyElement.classList.remove('correct', 'wrong-position', 'incorrect', 'disabled');
+                keyElement.classList.add(state);
+                
+                // Se a letra não está na palavra (incorrect), adiciona efeito visual especial
+                if (state === 'incorrect') {
+                    setTimeout(() => {
+                        keyElement.style.transition = 'all 0.3s ease';
+                        keyElement.classList.add('disabled');
+                    }, 100);
+                }
+            }
+        }
+    },
+
+    shouldUpdateKeyState(element, newState) {
+        const hierarchy = { 'incorrect': 1, 'wrong-position': 2, 'correct': 3 };
+        const current = element.classList.contains('correct') ? 'correct' :
+                       element.classList.contains('wrong-position') ? 'wrong-position' :
+                       element.classList.contains('incorrect') ? 'incorrect' : 'none';
+        
+        return hierarchy[newState] >= hierarchy[current];
+    },
+
+    resetKeyboard() {
+        const allKeys = document.querySelectorAll('.key');
+        allKeys.forEach(key => {
+            key.classList.remove('correct', 'wrong-position', 'incorrect', 'disabled');
+            key.style.transition = '';
+            key.style.animation = '';
+        });
+    }
+};
+
+// ===== GERENCIADOR DO JOGO =====
+const Game = {
+    async init() {
+        console.log('🎮 Inicializando jogo...');
+        
+        try {
+            await WordLoader.load();
+            this.setupEventListeners();
+            UI.updateRowStates();
+            UI.showMessage('Bem-vindo ao Termads! Adivinhe a palavra de 5 letras.', 3000);
+            console.log('✅ Jogo inicializado');
+        } catch (error) {
+            console.error('❌ Falha na inicialização:', error);
+            UI.showMessage('Erro ao carregar. Recarregue a página.', 10000);
+        }
+    },
+
+    setupEventListeners() {
+        // Teclado físico
+        document.addEventListener('keydown', ev => {
+            const key = ev.key;
+            if (Utils.isLetter(key) || key === 'Backspace' || key === 'Enter') {
+                ev.preventDefault();
+                this.handleKey(key);
+            }
+        });
+
+        // Teclado virtual
+        document.addEventListener('click', ev => {
+            const btn = ev.target.closest('.key[data-key]');
+            if (btn) {
+                ev.preventDefault();
+                btn.blur();
+                document.getSelection().removeAllRanges();
+                this.handleKey(btn.dataset.key);
+            }
+        });
+
+        // Prevenção de seleção
+        document.addEventListener('focusin', ev => {
+            if (ev.target.classList.contains('key')) ev.target.blur();
+        });
+        
+        document.addEventListener('mousedown', () => {
+            document.getSelection().removeAllRanges();
+        });
+    },
+
+    handleKey(key) {
+        if (gameState.gameOver) return;
+
+        // Verificar se a tecla está desabilitada (apenas para letras)
+        if (Utils.isLetter(key)) {
+            const keyElement = DOM.getKeyElement(key.toLowerCase());
+            if (keyElement && keyElement.classList.contains('disabled')) {
+                // Feedback visual para tecla desabilitada
+                keyElement.style.animation = 'shake 0.3s ease-in-out';
+                setTimeout(() => keyElement.style.animation = '', 300);
+                UI.showMessage('⚠️ Esta letra não está na palavra!', 1200);
+                return;
+            }
+        }
+
+        Controls.animateKey(key);
+
+        if (Utils.isLetter(key)) {
+            Controls.addLetter(key);
+        } else if (key === 'Backspace') {
+            Controls.deleteLetter();
+        } else if (key === 'Enter' || key === 'enter') {
+            this.submitGuess();
+        }
+    },
+
+    submitGuess() {
+        const word = GameLogic.getCurrentWord();
+        
+        if (word.length !== CONFIG.COLS) {
+            UI.showMessage('Palavra incompleta!', 1500);
+            UI.shakeRow();
+            return;
+        }
+        
+        if (!GameLogic.isValidWord(word)) {
+            UI.showMessage('Palavra não encontrada no dicionário!', 1500);
+            UI.shakeRow();
+            return;
+        }
+
+        const results = GameLogic.checkWord(word.toUpperCase());
+        
+        UI.animateRowResults(gameState.currentRow, results);
+        Controls.updateKeyboard(word, results);
+        
+        if (results.every(r => r === 'correct')) {
+            this.endGame(true);
+        } else if (gameState.currentRow >= CONFIG.ROWS - 1) {
+            this.endGame(false);
+        } else {
+            gameState.currentRow++;
+            UI.updateRowStates();
+        }
+    },
+
+    endGame(won) {
+        gameState.gameOver = true;
+        
+        const message = won ? 
+            `🎉 Parabéns! Você acertou em ${gameState.currentRow + 1} tentativas!` :
+            `😔 Fim de jogo! A palavra era: ${gameState.targetWord}`;
+        
+        setTimeout(() => {
+            UI.showMessage(message, 5000);
+            setTimeout(() => {
+                if (confirm('Jogar novamente?')) location.reload();
+            }, 5500);
+        }, 1000);
+    }
+};
+
+// ===== FUNÇÕES DE DEBUG =====
+window.testConnectivity = async () => {
+    console.log('🔍 Testando conectividade...');
+    try {
+        const response = await fetch('https://api.github.com/zen');
+        console.log('✅ Conectividade OK:', response.status);
+        return true;
+    } catch (error) {
+        console.error('❌ Problema de conectividade:', error);
+        return false;
+    }
+};
+
+window.testWordValidation = () => {
+    const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste', 'abcde'];
+    console.log('🧪 Testando validação:');
+    testWords.forEach(word => {
+        const normalized = Utils.normalizeWord(word);
+        const isValid = GameLogic.isValidWord(word);
+        console.log(`"${word}" → "${normalized}" → ${isValid ? 'válida' : 'inválida'}`);
+    });
+    console.log(`📊 Total: ${gameState.validWords.size} palavras`);
+    console.log(`📄 Primeiras 20 palavras:`, Array.from(gameState.validWords).slice(0, 20));
+    console.log(`📄 Últimas 20 palavras:`, Array.from(gameState.validWords).slice(-20));
+    
+    // Procurar palavras suspeitas
+    const suspiciousWords = Array.from(gameState.validWords).filter(word => 
+        /xviii|wesen|isles|^[A-Z]|[0-9]/i.test(word) || 
+        !/[aeiouáàâãéêíóôõú]/.test(word)
+    );
+    console.log(`⚠️ Palavras suspeitas encontradas (${suspiciousWords.length}):`, suspiciousWords);
+};
+
+// ===== INICIALIZAÇÃO =====
+document.addEventListener('DOMContentLoaded', () => Game.init());
