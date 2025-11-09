@@ -5,7 +5,7 @@ require 'db_functions.php';
 $conn = connect();
 
 // Create database if it doesn't exist
-$sql = "CREATE DATABASE IF NOT EXISTS termads_db";
+$sql = "CREATE DATABASE IF NOT EXISTS $dbname";
 if (mysqli_query($conn, $sql)) {
     echo "Database created successfully or already exists.<br>";
 } else {
@@ -13,7 +13,7 @@ if (mysqli_query($conn, $sql)) {
 }
 
 // Select the database
-$sql = "USE termads_db";
+$sql = "USE $dbname";
 if (mysqli_query($conn, $sql)) {
     echo "Database selected successfully.<br>";
 } else {
