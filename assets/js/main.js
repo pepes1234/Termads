@@ -240,13 +240,10 @@
 			const el = rowEls[r];
 			el.classList.remove("row-active", "row-inactive", "row-used");
 			if (r < currentRow) {
-				// previous rows considered used/locked
 				el.classList.add("row-used");
 			} else if (r === currentRow) {
-				// current active row
 				el.classList.add("row-active");
 			} else {
-				// future rows are inactive
 				el.classList.add("row-inactive");
 			}
 		}
@@ -306,7 +303,6 @@
 			const letter = word[i].toLowerCase();
 			const keyElement = document.querySelector(`.key[data-key="${letter}"]`);
 			if (keyElement) {
-				// Only update if current state is not better
 				const currentClass = keyElement.classList;
 				if (!currentClass.contains('correct') && results[i] === 'correct') {
 					keyElement.classList.remove('wrong-position', 'incorrect');
@@ -447,9 +443,7 @@
 		return /^[a-zA-Z]$/.test(k);
 	}
 
-	// Physical keyboard
 	window.addEventListener("keydown", (ev) => {
-		// Previne comportamento padrão para todas as teclas que usamos
 		const k = ev.key;
 		if (isLetterKey(k) || k === "Backspace" || k === "Enter") {
 			ev.preventDefault();
@@ -469,7 +463,6 @@
 		}
 	});
 
-	// On-screen keyboard
 	function handleKeyAction(dataKey) {
 		if (!dataKey) return;
 		const key = String(dataKey).toLowerCase();
@@ -482,7 +475,6 @@
 		const btn = e.target.closest(".key[data-key]");
 		if (!btn) return;
 		
-		// Previne o foco no botão e remove qualquer seleção
 		e.preventDefault();
 		btn.blur();
 		document.getSelection().removeAllRanges();
@@ -491,17 +483,14 @@
 		handleKeyAction(dataKey);
 	});
 
-	// Optional: clicking a tile only works in the active row (no row switching)
 	rows.forEach((tiles, rIdx) => {
 		tiles.forEach((tile) => {
 			tile.addEventListener("click", () => {
-				if (rIdx !== currentRow) return; // do nothing for inactive/used rows
-				// no-op for now; could place a caret/visual state
+				if (rIdx !== currentRow) return;
 			});
 		});
 	});
 
-	// Initialize game
 	async function initGame() {
 		console.log('Initializing game...');
 		
@@ -529,19 +518,15 @@
 		}
 	}
 
-	// Previne foco indesejado nos elementos
 	document.addEventListener("focusin", (e) => {
 		if (e.target.classList.contains("key")) {
 			e.target.blur();
 		}
 	});
 	
-	// Remove seleção quando clica em qualquer lugar
 	document.addEventListener("mousedown", () => {
 		document.getSelection().removeAllRanges();
 	});
 
-	// Start the game
 	initGame();
 })();
-

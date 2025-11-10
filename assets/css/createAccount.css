@@ -1,0 +1,255 @@
+:root{
+  /* --- Typography --- */
+  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-size-title: clamp(1.5rem, 2.0vw, 2.2rem);
+  --font-size-body: clamp(0.95rem, 1.2vw, 1.05rem);
+  --font-size-button: clamp(0.9rem, 1.2vw, 1rem);
+  --font-size-error: clamp(0.9rem, 1.2vw, 1rem);
+
+  /* --- Core colors --- */
+  --color-bg: #000000; /* página deve permanecer preta */
+  --color-text: #f4ecec; /* texto principal claro */
+  --color-muted: #bdb3b3; /* texto secundário */
+  --color-error-text: rgb(231, 231, 231);
+  --color-error-box: rgb(179, 11, 11);
+
+  /* card / subtle whites used as translucency */
+  --card-grad-start: rgba(255,255,255,0.04);
+  --card-grad-end: rgba(255,255,255,0.02);
+  --card-surface: rgba(255,255,255,0.06);
+  --card-border-weak: rgba(255,255,255,0.06);
+  --card-border-xweak: rgba(255,255,255,0.03);
+
+  /* accents and buttons */
+  --color-accent: linear-gradient(135deg,#f6d365 0%,#fda085 100%);
+  --color-button-gradient: linear-gradient(135deg,#bbbcbc 0%,#e8e8e8 100%);
+
+  /* focus / ring colors (useful for a11y glow) */
+  --color-focus: rgba(126,232,250,0.18);
+  --accent-ring: rgba(126,232,250,0.06);
+
+  /* reusable shadow presets (avoid repeating rgba(...) inline) */
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.6);
+  --shadow-md: 0 8px 18px rgba(0,0,0,0.6);
+  --btn-shadow: 0 10px 24px rgba(46,120,166,0.12);
+
+  --color-input-bg: rgba(255,255,255,0.06);
+  --radius: 16px;
+}
+
+/* Basic reset: use border-box for predictable sizing */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--color-bg);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-family-base);
+  color:var(--color-text);
+  padding:2rem;
+}
+
+.main-container{
+  /* Card: centered translucent panel */
+  width:clamp(320px, 85vw, 420px);
+  background: linear-gradient(180deg, var(--card-grad-start), var(--card-grad-end));
+  border-radius:var(--radius);
+  padding:2.5rem 1.8rem;
+  /* use shadow presets defined in :root */
+  box-shadow: var(--shadow-lg), inset 0 1px 0 var(--card-grad-end);
+  backdrop-filter: blur(6px) saturate(1.05);
+  text-align:center;
+  border: 1px solid var(--card-border-weak);
+}
+
+.title{
+  font-weight:800;
+  font-size:var(--font-size-title);
+  letter-spacing:0.6px;
+  margin-bottom:1rem;
+}
+
+.list-social-media{display:flex;
+  justify-content:center;
+  gap:1rem;
+  list-style:none;
+  margin:0.4rem 0 1rem
+}
+
+.item-social-media{
+  width:44px;height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:1px solid var(--card-border-weak);
+  transition: 0.25s ease;
+}
+
+.item-social-media a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--color-text);
+  width:100%;
+  height:100%;
+  font-size:1.05rem
+}
+
+.item-social-media:hover{
+  transform:translateY(-4px);
+  transform: scale(1.10);
+  /* combine shadow presets with a subtle accent ring */
+  box-shadow: var(--shadow-md), 0 0 0 6px var(--accent-ring);
+  background:snow;
+}
+
+.item-social-media a:hover{
+  color:var(--color-bg);
+  transform: scale(1.15);
+}
+
+.description{
+  color:var(--color-muted);
+  font-size:var(--font-size-body);
+  margin:0.6rem 0 0.9rem
+}
+
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:0.8rem;
+  align-items:center;
+  padding:0 0.2rem;
+  margin-top:.4rem
+}
+
+.form .label-input{
+  width:100%;
+  display:flex;
+  align-items:center;
+  background:var(--color-input-bg);
+  padding:0.4rem 0.6rem;
+  border-radius:10px;
+  border:1px solid var(--card-border-xweak);
+  transition:all .18s ease;
+}
+
+.form .label-input i{
+  color:var(--color-muted);
+  margin-right:0.6rem;
+  font-size:1.05rem
+}
+.form .label-input:hover{
+  border-color: rgba(126,232,250,0.25);
+}
+.form input{
+  flex:1;
+  background:transparent;
+  border:none;
+  color:var(--color-text);
+  font-size:var(--font-size-body);
+  outline:none;
+  padding:0.45rem 0
+}
+
+.form .label-input:focus-within{
+  /* highlight the input group when any child has focus */
+  box-shadow: var(--shadow-lg), 0 0 0 6px var(--color-focus);
+  border-color: rgba(126,232,250,0.25);
+}
+
+.btn{
+  display:inline-block;
+  border-radius:999px;
+  padding:0.55rem 1.3rem;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  transition:0.25s ease;
+  font-size:var(--font-size-button)
+}
+
+.btn-primary{
+  background:var(--color-button-gradient);
+  color:#022;
+  box-shadow: var(--btn-shadow);
+  margin:1rem 0;
+}
+
+.btn-primary:hover{
+  transform: scale(1.15);
+  filter:brightness(1.03);
+  background: var(--color-text);
+}
+
+.btn-secondary{
+  background:transparent;
+  color:var(--color-text);
+  border:1px solid var(--card-border-weak);
+  padding:0.45rem 1.1rem;
+  margin-top:0.4rem;
+}
+
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.02);
+  transform:translateY(-2px);
+  transform:scale(1.10);
+}
+
+.sr-only{
+  /* visually hide an element while keeping it available for screen readers */
+  position:absolute!important;
+  height:1px;
+  width:1px;
+  overflow:hidden;
+  clip:rect(1px,1px,1px,1px);
+  white-space:nowrap;
+}
+
+/* Small screens tweaks */
+@media (max-width:380px){
+  .main-container{padding:1.6rem}
+  .item-social-media{width:40px;height:40px}
+}
+
+/*Erros*/
+.erro{
+  border-radius: 8px;
+  background: var(--color-error-box);
+  padding: 4px 10px;
+  width: 100%;
+  color: var(--color-error-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h3 {
+  font-size: var(--font-size-error);
+}
+input-erro {
+    /* Define a cor da borda para a cor de erro */
+    border-color: var(--color-error-box);
+
+    /* Adiciona um "brilho" vermelho suave para destacar o erro,
+       similar ao brilho azul que você já tem para :focus-within */
+    box-shadow: 0 0 0 4px rgba(179, 11, 11, 0.25);
+}
+/* Coloque isso no seu createAccount.css, acima da classe .erro */
+
+/* Nova classe para a borda vermelha do input */
+.label-input.input-erro {
+    border: 1px solid var(--color-error-box);
+}
+
+/* Opcional: Deixa o ícone vermelho também */
+.label-input.input-erro i {
+    color: var(--color-error-box);
+}
