@@ -4,85 +4,12 @@ const CONFIG = {
     COLS: 5,
     ANIMATION_DELAY: 200,
     TIMEOUT: 30000,
-    API_ENDPOINTS: [
-        'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt',
-        'https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt',
-        'https://corsproxy.io/?https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/pt/pt_50k.txt'
-    ],
-    EMERGENCY_WORDS: [
-        'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande',
-        'olhar', 'falar', 'saber', 'poder', 'estar', 'dizer', 'ficar', 'viver', 'final',
-        'grupo', 'ponto', 'ordem', 'valor', 'linha', 'vista', 'coisa', 'carro', 'morte',
-        'casas', 'vidas', 'terra', 'tomar', 'levar', 'partir', 'certo', 'curso', 'banco',
-        'campo', 'carta', 'chave', 'cinco', 'claro', 'corpo', 'costa', 'criar', 'dente',
-        'desde', 'entre', 'epoca', 'escola', 'etapa', 'feliz', 'festa', 'forte', 'fraco',
-        'fundo', 'geral', 'gosto', 'grama', 'grave', 'hotel', 'igual', 'junto', 'largo',
-        'leite', 'lista', 'livro', 'maior', 'marca', 'massa', 'menor', 'mesmo', 'metro',
-        'norte', 'novas', 'nunca', 'obras', 'papel', 'passo', 'pedra', 'perto', 'preto',
-        'plano', 'pobre', 'porta', 'posto', 'praia', 'prato', 'primo', 'prova', 'quase',
-        'radio', 'regra', 'resto', 'risco', 'rosto', 'saida', 'senhor', 'serio', 'silva',
-        'sobre', 'suave', 'tecla', 'texto', 'tipos', 'turno', 'verde', 'bravo', 'breve',
-        'virus', 'vista', 'volume', 'zebra', 'calma', 'carne', 'cheio', 'doido', 'errar',
-        'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo', 'sorte', 'corte',
-    EMERGENCY_WORDS: [
-        // Verbos comuns (infinitivo e conjugações)
-        'achar', 'agir', 'amar', 'andar', 'arder', 'bater', 'beber', 'buscar', 'caber',
-        'cagar', 'casar', 'chegar', 'chorar', 'comer', 'comprar', 'contar', 'correr', 'coser',
-        'criar', 'curar', 'dançar', 'dizer', 'doer', 'dormir', 'entrar', 'errar', 'estar',
-        'fazer', 'falar', 'ferir', 'ficar', 'fugir', 'ganhar', 'gastar', 'gritar', 'haver',
-        'ir', 'jogar', 'lavar', 'levar', 'limpar', 'ler', 'mandar', 'matar', 'meter',
-        'mirar', 'morar', 'mover', 'nadar', 'nascer', 'odiar', 'olhar', 'ouvir', 'pagar',
-        'parar', 'partir', 'passar', 'pedir', 'pegar', 'pensar', 'perder', 'pisar', 'poder',
-        'poner', 'pular', 'querer', 'rachar', 'ralar', 'rolar', 'saber', 'sair', 'secar',
-        'sentar', 'sento', 'servir', 'socar', 'subir', 'sugar', 'suar', 'tecer', 'tirar',
-        'tocar', 'tomar', 'valer', 'vender', 'venir', 'verde', 'viajar', 'virar', 'viver',
-        'voar', 'voltar', 'votar',
-
-        // Substantivos comuns
-        'agua', 'aluno', 'amigo', 'amor', 'animal', 'ano', 'arvore', 'aviao', 'bacia',
-        'balde', 'banco', 'barra', 'barco', 'base', 'bicho', 'blusa', 'boca', 'bolsa',
-        'borda', 'braco', 'bravo', 'breve', 'brisa', 'burro', 'cabra', 'caixa', 'calca',
-        'caldo', 'cama', 'campo', 'cansa', 'capaz', 'carga', 'carne', 'carro', 'carta',
-        'casa', 'casal', 'causa', 'chave', 'chefe', 'chuva', 'cinco', 'clima', 'cobra',
-        'coisa', 'color', 'conta', 'corda', 'cores', 'corpo', 'costa', 'couro', 'crisp',
-        'cuida', 'curso', 'dados', 'dente', 'dieta', 'doces', 'dores', 'drama', 'ducha',
-        'dupla', 'epoca', 'ervas', 'escola', 'etapa', 'facil', 'farol', 'festa', 'fibra',
-        'figos', 'final', 'flore', 'forma', 'forte', 'fruta', 'fumar', 'fundo', 'garoa',
-        'gemas', 'genio', 'geral', 'gosta', 'grama', 'grande', 'grave', 'greve', 'grupo',
-        'heroi', 'horta', 'hotel', 'idade', 'igual', 'janta', 'jeans', 'junto', 'jovem',
-        'lapis', 'largo', 'leite', 'letra', 'linha', 'lista', 'livro', 'louca', 'lugar',
-        'manga', 'marca', 'massa', 'medal', 'melao', 'menor', 'mesa', 'mesmo', 'metro',
-        'molho', 'monte', 'moral', 'morte', 'museu', 'mundo', 'nariz', 'navio', 'negro',
-        'netos', 'nivel', 'noite', 'norte', 'notas', 'novel', 'obras', 'olhos', 'ordem',
-        'papel', 'pardo', 'parte', 'parto', 'pasta', 'patos', 'pedra', 'peixe', 'perna',
-        'perto', 'pessoa', 'picos', 'pinta', 'placa', 'plano', 'pluma', 'pobre', 'poder',
-        'ponto', 'porta', 'posto', 'praia', 'prato', 'preco', 'preto', 'primo', 'prova',
-        'quota', 'radio', 'rapaz', 'ratos', 'razao', 'regra', 'reino', 'resto', 'risco',
-        'roupa', 'ruins', 'salao', 'senha', 'silva', 'sogra', 'solar', 'sobre', 'tempo',
-        'terra', 'texto', 'tipos', 'torre', 'traje', 'turno', 'unhas', 'valor', 'verso',
-        'vista', 'zebra',
-
-        // Adjetivos e outras palavras
-        'agudo', 'ainda', 'assim', 'baixo', 'basto', 'bello', 'bravo', 'breve', 'calma',
-        'certa', 'cheio', 'claro', 'doido', 'errado', 'facil', 'falso', 'feliz', 'forte',
-        'fraco', 'grave', 'largo', 'lento', 'limpo', 'lindo', 'louco', 'maior', 'menor',
-        'muito', 'negro', 'nossa', 'novo', 'perto', 'pouco', 'preto', 'primo', 'quase',
-        'rapido', 'seco', 'serio', 'suave', 'todos', 'verde', 'velho',
-
-        // Palavras do dia a dia brasileiras
-        'beijo', 'sonho', 'sorte', 'corte', 'porte', 'morte', 'forte', 'norte', 'ponte',
-        'fonte', 'monte', 'conte', 'dorme', 'forme', 'torne', 'porne', 'bonde', 'conde',
-        'funde', 'mundo', 'fundo', 'tunel', 'canal', 'legal', 'metal', 'total', 'vital',
-        'ideal', 'real', 'igual', 'atual', 'usual', 'local', 'final', 'moral', 'oral',
-        'rural', 'social', 'geral', 'central', 'mental', 'dental', 'postal', 'normal',
-
-        // Conjugações verbais comuns
-        'tenho', 'venho', 'ponho', 'ganho', 'banho', 'ranho', 'sonho', 'donho',
-        'facho', 'macho', 'cacho', 'tacho', 'nacho', 'bicho', 'ficho', 'nicho',
-        'fecho', 'techo', 'decho', 'pecho', 'lecho', 'becho', 'secho', 'necho',
-        'creio', 'freio', 'cheio', 'feios', 'veios', 'seios', 'meios', 'teios',
-        'cruze', 'bruxa', 'luzes', 'vezes', 'vozes', 'rosas', 'coisas', 'poses',
-        'bases', 'doses', 'risos', 'mesas', 'casas', 'pesas', 'tesas', 'besas'
+    // API do dicionário brasileiro open source
+    DICTIONARY_API: 'https://api.dicionario-aberto.net/word',
+    // Backup com lista mínima apenas se API falhar completamente
+    FALLBACK_WORDS: [
+        'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande', 'olhar',
+        'falar', 'saber', 'poder', 'estar', 'dizer', 'ficar', 'viver', 'final', 'grupo', 'ponto'
     ]
 };
 
@@ -118,130 +45,185 @@ const DOM = {
 // ===== CARREGAMENTO DE PALAVRAS =====
 const WordLoader = {
     async load() {
-        console.log('🔄 Carregando palavras...');
+        console.log('🇧🇷 Carregando dicionário brasileiro...');
         
-        // Usando apenas dicionário português brasileiro verificado
-        console.log('🇧🇷 Carregando dicionário português brasileiro...');
-        this.activateEmergencyMode();
+        try {
+            // Tenta carregar da API principal do dicionário brasileiro
+            const words = await this.loadFromBrazilianAPI();
+            if (words && words.length > 100) {
+                this.setWords(words);
+                console.log(`✅ ${words.length} palavras carregadas da API brasileira`);
+                return true;
+            }
+        } catch (error) {
+            console.warn('⚠️ API brasileira indisponível:', error.message);
+        }
+        
+        // Se API falhar, usa lista mínima apenas para funcionar
+        console.log('🛡️ Usando lista mínima de emergência');
+        this.setWords(CONFIG.FALLBACK_WORDS);
+        console.log(`✅ ${CONFIG.FALLBACK_WORDS.length} palavras de emergência carregadas`);
         return true;
     },
 
-    async fetchFromAPI(url) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+    async loadFromBrazilianAPI() {
+        console.log('🌐 Conectando com dicionário brasileiro...');
         
-        try {
-            const response = await fetch(url, {
-                signal: controller.signal,
-                headers: {
-                    'Accept': 'text/plain',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        // Primeiro, tenta buscar uma lista de palavras com 5 letras
+        const searchQueries = [
+            'https://significado.herokuapp.com/v2/words/5letters',
+            'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
+            'https://api.github.com/repos/hermitdave/FrequencyWords/contents/content/2018/pt_br/pt_br_50k.txt'
+        ];
+        
+        for (const url of searchQueries) {
+            try {
+                console.log(`🔍 Tentando: ${url}`);
+                const response = await fetch(url, {
+                    signal: AbortSignal.timeout(CONFIG.TIMEOUT),
+                    headers: {
+                        'Accept': 'application/json, text/plain',
+                        'User-Agent': 'TermadsBR/1.0'
+                    }
+                });
+                
+                if (!response.ok) continue;
+                
+                const text = await response.text();
+                const words = this.extractBrazilianWords(text);
+                
+                if (words.length > 100) {
+                    console.log(`✅ Encontradas ${words.length} palavras brasileiras`);
+                    return words;
                 }
-            });
-            
-            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            
-            const text = await response.text();
-            return this.processText(text);
-        } finally {
-            clearTimeout(timeoutId);
+            } catch (error) {
+                console.warn(`❌ Falha em ${url}:`, error.message);
+                continue;
+            }
         }
+        
+        throw new Error('Nenhuma API brasileira disponível');
     },
 
-    processText(text) {
-        if (!text || text.length < 100) {
-            throw new Error('Resposta muito pequena');
-        }
-
-        let words = [];
+    extractBrazilianWords(text) {
+        console.log('🔍 Extraindo palavras do português brasileiro...');
         
+        let rawWords = [];
+        
+        // Tenta JSON primeiro
         try {
-            const jsonData = JSON.parse(text);
-            if (Array.isArray(jsonData)) {
-                words = jsonData.map(word => word.toString());
-                console.log('📄 Processado como JSON');
+            const json = JSON.parse(text);
+            if (Array.isArray(json)) {
+                rawWords = json.map(item => 
+                    typeof item === 'string' ? item : 
+                    item.word || item.palavra || item.text || item.toString()
+                );
+            } else if (json.words) {
+                rawWords = json.words;
+            } else if (json.content) {
+                // GitHub API retorna base64
+                const decoded = atob(json.content);
+                rawWords = decoded.split(/[\n\r]+/);
             }
         } catch {
-            words = text.split(/[\n\r]+/).map(line => line.split(/\s+/)[0]);
-            console.log('📄 Processado como texto');
+            // Se não é JSON, processa como texto
+            rawWords = text.split(/[\n\r,;]+/)
+                .map(line => line.split(/\s+/)[0])
+                .filter(word => word && word.length > 0);
         }
 
-        const validWords = words
-            .map(Utils.normalizeWord)
-            .filter(word => {
-                return word.length === CONFIG.COLS && 
-                       this.isValidPortugueseWord(word);
-            });
+        // Filtra rigorosamente para português brasileiro com 5 letras
+        const brazilianWords = rawWords
+            .map(word => this.normalizeWord(word))
+            .filter(word => word.length === CONFIG.COLS)
+            .filter(word => this.isBrazilianPortuguese(word))
+            .filter((word, index, arr) => arr.indexOf(word) === index); // Remove duplicatas
 
-        console.log(`🔍 ${validWords.length} palavras válidas encontradas`);
-        return validWords;
+        console.log(`📊 ${rawWords.length} → ${brazilianWords.length} palavras brasileiras válidas`);
+        return brazilianWords;
     },
 
-    isValidPortugueseWord(word) {
+    normalizeWord(word) {
+        return word.toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')  // Remove acentos
+            .replace(/[^a-z]/g, '')           // Apenas letras
+            .trim();
+    },
+
+    isBrazilianPortuguese(word) {
+        // Deve ter exatamente 5 letras
+        if (word.length !== CONFIG.COLS) return false;
+        
         // Apenas letras minúsculas
-        if (!/^[a-z]+$/.test(word)) return false;
+        if (!/^[a-z]{5}$/.test(word)) return false;
         
         // Deve ter pelo menos uma vogal
         if (!/[aeiou]/.test(word)) return false;
         
-        // Filtro simples - apenas obviamente não portuguesas
-        if (this.isObviouslyForeignWord(word)) return false;
+        // Bloqueia palavras claramente estrangeiras
+        if (this.isObviouslyForeign(word)) return false;
         
-        return true; // Muito mais permissivo
+        // Bloqueia padrões não portugueses
+        if (this.hasNonPortuguesePattern(word)) return false;
+        
+        return true;
     },
 
-    isObviouslyForeignWord(word) {
-        // Lista reduzida - apenas palavras OBVIAMENTE estrangeiras
-        const obviouslyForeign = [
-            // Inglês muito comum
+    isObviouslyForeign(word) {
+        // Lista mínima mas efetiva de palavras estrangeiras óbvias
+        const obviousForeign = [
             'about', 'being', 'could', 'every', 'first', 'found', 'great', 'house',
             'large', 'light', 'local', 'might', 'never', 'other', 'place', 'point',
             'right', 'small', 'sound', 'state', 'still', 'their', 'there', 'these',
             'think', 'those', 'three', 'under', 'water', 'where', 'which', 'while',
-            'world', 'would', 'write', 'young', 'isles',
-            
-            // Nomes claramente estrangeiros
-            'darlo', 'lazlo', 'wesen', 'smith', 'jones', 'brown'
+            'world', 'would', 'write', 'young', 'wesen', 'darlo', 'lazlo', 'evers',
+            'smith', 'jones', 'brown', 'white', 'isles'
         ];
         
-        return obviouslyForeign.includes(word) ||
-               /xviii|[0-9]/.test(word);  // Apenas números/romanos
+        return obviousForeign.includes(word) || 
+               /^(word|test|item|data)\d*$/.test(word) ||
+               /xviii|[0-9]/.test(word);
     },
 
-    hasNonPortuguesePatterns(word) {
-        // Padrões claramente não portugueses - mais permissivo
-        return /xviii|[0-9]/.test(word) ||        // Números romanos e dígitos
-               word.includes('xx') ||              // Duplo X
-               word.includes('kk') ||              // Duplo K  
-               word.includes('ww') ||              // Duplo W
-               /^[qwxy][^u]/.test(word) ||        // Q,W,X,Y no início sem U depois
-               /[bcdfghjklmnpqrstvwxyz]{5}/.test(word); // 5+ consoantes seguidas
-    },
-
-    hasPortugueseSyllableStructure(word) {
-        // Mais permissivo - aceita a maioria das estruturas portuguesas
-        const consonantClusters = word.match(/[bcdfghjklmnpqrstvwxyz]+/g) || [];
-        
-        for (const cluster of consonantClusters) {
-            // Permite até 4 consoantes (muito permissivo)
-            if (cluster.length > 4) return false;
-        }
-        
-        return true; // Muito mais permissivo
+    hasNonPortuguesePattern(word) {
+        // Padrões que definitivamente não são portugueses
+        return (
+            // Letras raras em português (exceto qu)
+            (/[qwxy]/.test(word) && !/qu/.test(word)) ||
+            
+            // Combinações impossíveis em português
+            /kk|ww|xx|yy|zz/.test(word) ||
+            
+            // Muitas consoantes seguidas
+            /[bcdfghjklmnpqrstvwxyz]{4}/.test(word) ||
+            
+            // Termina com muitas consoantes
+            /[bcdfghjklmnpqrstvwxyz]{3}$/.test(word) ||
+            
+            // Sem vogais suficientes (estrutura silábica ruim)
+            !/[aeiou].*[aeiou]/.test(word) && word.length === 5
+        );
     },
 
     setWords(words) {
-        gameState.words = words;
-        gameState.validWords = new Set(words);
-        gameState.targetWord = Utils.selectRandom(words).toUpperCase();
+        // Garante que todas as palavras são válidas e únicas
+        const validWords = [...new Set(words)]
+            .filter(word => word && word.length === CONFIG.COLS)
+            .filter(word => /^[a-z]{5}$/.test(word))
+            .sort();
+            
+        gameState.words = validWords;
+        gameState.validWords = new Set(validWords);
+        gameState.targetWord = Utils.selectRandom(validWords).toUpperCase();
+        
         console.log('🎯 Palavra selecionada:', gameState.targetWord);
-    },
-
-    activateEmergencyMode() {
-        console.warn('🇧🇷 Modo dicionário português ativado');
-        const words = CONFIG.EMERGENCY_WORDS.filter(word => word.length === CONFIG.COLS);
-        this.setWords(words);
-        UI.showEmergencyMessage();
+        console.log('📝 Exemplos:', validWords.slice(0, 5).join(', '));
+        
+        // Log para debug
+        if (validWords.length < 50) {
+            console.warn('⚠️ Poucas palavras carregadas. Considere verificar a API.');
+        }
     }
 };
 
@@ -257,34 +239,6 @@ const UI = {
         document.body.appendChild(message);
         
         setTimeout(() => message.remove(), duration);
-    },
-
-    showEmergencyMessage() {
-        const message = document.createElement('div');
-        message.className = 'emergency-message';
-        message.innerHTML = `
-            <div style="display: flex; align-items: center; padding: 16px 20px; gap: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 8px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; max-width: 90vw; animation: slideDown 0.5s ease-out;">
-                <div style="font-size: 24px;">🇧🇷</div>
-                <div style="flex: 1;">
-                    <div style="font-weight: bold; font-size: 16px;">Dicionário Português</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Usando apenas palavras verificadas em português</div>
-                </div>
-                <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; padding: 4px 8px; border-radius: 4px; color: white;">×</button>
-            </div>
-        `;
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideDown {
-                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
-                to { transform: translateX(-50%) translateY(0); opacity: 1; }
-            }
-        `;
-        
-        document.head.appendChild(style);
-        document.body.appendChild(message);
-        
-        setTimeout(() => message.remove(), 8000);
     },
 
     updateRowStates() {
