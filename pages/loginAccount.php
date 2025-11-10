@@ -1,8 +1,9 @@
 <?php 
 require '../db_functions.php';
+require '../authenticate.php';
 
 $erros = [];
-if($_SERVER["REQUEST_METHOD"] === "POST"){
+if(!$login && $_SERVER["REQUEST_METHOD"] === "POST"){
     if(isset($_POST["email"],$_POST["senha"])){
         $conn = connect();
 
@@ -41,6 +42,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             }
         }
     }
+}
+
+if ($login) {
+    header("Location: ../index.php");
+    exit();
 }
 
 function tratarForm($dado, $conn){
