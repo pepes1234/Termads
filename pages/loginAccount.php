@@ -3,6 +3,8 @@ require '../db_functions.php';
 require '../authenticate.php';
 
 $erros = [];
+$login = isLoggedIn();
+
 if(!$login && $_SERVER["REQUEST_METHOD"] === "POST"){
     if(isset($_POST["email"],$_POST["senha"])){
         $conn = connect();
@@ -34,8 +36,13 @@ if(!$login && $_SERVER["REQUEST_METHOD"] === "POST"){
             $result = mysqli_query($conn, $sql);
 
             if (mysqli_num_rows($result) === 1) {
+                $user = mysqli_fetch_assoc($result);
+                session_start();
+                $_SESSION["user_id"] = $user["id"];
+                $_SESSION["user_name"] = $user["name"];
+                $_SESSION["user_email"] = $user["email"];
                 close($conn);
-                header("Location: ../index.php");
+                header("Location: ./game.php");
                 exit();
             } else {
                 $erros["login"] = "Email ou senha incorretos!";
@@ -45,7 +52,7 @@ if(!$login && $_SERVER["REQUEST_METHOD"] === "POST"){
 }
 
 if ($login) {
-    header("Location: ../index.php");
+    header("Location: ./game.php");
     exit();
 }
 

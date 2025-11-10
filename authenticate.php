@@ -8,3 +8,7 @@ if (isset($_SESSION["user_id"]) && isset($_SESSION["user_name"])) {
 } else {
     $login = false;
 }
+
+function isLoggedIn() {
+    return isset($_SESSION["user_id"]) && isset($_SESSION["user_name"]);
+}

@@ -2,6 +2,6 @@
 require "authenticate.php";
 
 if (!$login) {
-    header("Location: ./pages/loginAccount.php");
+    header("Location: ./loginAccount.php");
     exit();
 }
