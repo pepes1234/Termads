@@ -1,17 +1,13 @@
-/* ===== VARIÁVEIS CSS ===== */
 :root {
-    /* Dimensões */
     --tile-size: clamp(2.8rem, 6vw, 4rem);
     --gap: clamp(0.15rem, 0.5vw, 0.3rem);
     --border-width: clamp(0.1rem, 0.2vw, 0.15rem);
     --key-height: clamp(3.2rem, 7vh, 4.2rem);
     
-    /* Tipografia */
     --font-title: clamp(1.5rem, 2vw, 2.5rem);
     --font-tile: clamp(1.4rem, 3.5vw, 2.2rem);
     --font-key: clamp(0.9rem, 2.2vw, 1.3rem);
     
-    /* Paleta de cores */
     --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
     --bg-tertiary: #2a2a2a;
@@ -22,13 +18,11 @@
     --border-active: #5a5a5a;
     --border-color: #3a3a3a;
     
-    /* Estados do jogo */
     --color-correct: #6aaa64;
     --color-partial: #c9b458;
     --color-wrong: #3a3a3a;
 }
 
-/* ===== RESET & BASE ===== */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -48,7 +42,6 @@ body {
     -webkit-user-select: none;
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
 .game-container {
     display: flex;
     flex-direction: column;
@@ -107,7 +100,6 @@ h1 {
     text-align: center;
 }
 
-/* ===== TABULEIRO DE JOGO ===== */
 .game-board {
     flex-shrink: 0;
 }
@@ -145,7 +137,6 @@ h1 {
     transform: scale(1.05);
 }
 
-/* Estados dos tiles */
 .tile.correct {
     background: var(--color-correct);
     border-color: var(--color-correct);
@@ -164,7 +155,6 @@ h1 {
     color: var(--text-secondary);
 }
 
-/* Estados das linhas */
 .row-active .tile {
     border-color: var(--border-active);
     opacity: 1;
@@ -176,7 +166,6 @@ h1 {
     pointer-events: none;
 }
 
-/* ===== TECLADO VIRTUAL ===== */
 .keyboard {
     display: grid;
     gap: clamp(0.2rem, 0.6vw, 0.4rem);
@@ -232,7 +221,6 @@ h1 {
     transform: scale(0.95);
 }
 
-/* Estados do teclado */
 .key.correct,
 .key.wrong-position,
 .key.incorrect {
@@ -270,7 +258,6 @@ h1 {
     pointer-events: none;
 }
 
-/* ===== ANIMAÇÕES ===== */
 @keyframes pop {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -301,7 +288,6 @@ h1 {
     animation: shake 0.6s ease-in-out;
 }
 
-/* ===== MENSAGENS ===== */
 .game-message {
     position: fixed;
     top: 20%;
@@ -321,7 +307,6 @@ h1 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 480px) {
     :root {
         --tile-size: 2.5rem;

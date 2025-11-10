@@ -10,35 +10,25 @@
 	let gameGuesses = [];
 
 	window.testConnectivity = async function() {
-		console.log('Testing connectivity...');
-		
 		const testUrl = 'https://api.github.com/zen';
 		try {
 			const response = await fetch(testUrl);
-			console.log('Connectivity OK - GitHub responds:', response.status);
 			const text = await response.text();
-			console.log('Response:', text);
 			return true;
 		} catch (error) {
-			console.error('Connectivity problem:', error);
 			return false;
 		}
 	}
 
 	window.testWordValidation = function() {
 		const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste', 'abcde'];
-		console.log('Testing word validation:');
 		testWords.forEach(word => {
 			const normalized = normalizeWord(word);
 			const isValid = isValidWord(word);
-			console.log(`"${word}" → "${normalized}" → ${isValid ? 'valid' : 'invalid'}`);
 		});
-		console.log(`Total words loaded: ${validWords ? validWords.size : 0}`);
-		console.log(`Word samples:`, Array.from(validWords || []).slice(0, 10));
 	}
 
 	async function loadWords() {
-		console.log('Loading words from API...');
 		
 		try {
 			const apis = [
@@ -55,12 +45,9 @@
 			
 			for (let i = 0; i < apis.length; i++) {
 				try {
-					console.log(`Trying API ${i + 1}/${apis.length}: ${apis[i].substring(0, 60)}...`);
-					
 					const controller = new AbortController();
 					const timeoutId = setTimeout(() => {
 						controller.abort();
-						console.log(`Timeout on API ${i + 1}`);
 					}, 15000);
 					
 					const response = await fetch(apis[i], { 
@@ -73,19 +60,14 @@
 					});
 					clearTimeout(timeoutId);
 					
-					console.log(`API ${i + 1} response status:`, response.status, response.statusText);
-					
 					if (!response.ok) {
 						throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
 					}
 					
 					text = await response.text();
 					apiUsed = apis[i];
-					console.log(`Success with API ${i + 1}! Text received: ${text.length} characters`);
-					console.log(`First lines:`, text.substring(0, 200));
 					break;
 				} catch (apiError) {
-					console.error(`API ${i + 1} failed:`, apiError.name, '-', apiError.message);
 					if (i === apis.length - 1) {
 						throw new Error(`All ${apis.length} APIs failed`);
 					}
@@ -96,13 +78,9 @@
 				throw new Error('API response too small or empty');
 			}
 			
-			console.log('Processing words from API...');
-			
 			const allWords = text.split('\n')
 				.map(word => word.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
 				.filter(word => word.length === 5 && /^[a-z]+$/.test(word));
-			
-			console.log(`Filtered words: ${allWords.length} 5-letter words`);
 			
 			if (allWords.length === 0) {
 				throw new Error('No valid 5-letter words found in API');
@@ -110,22 +88,16 @@
 			
 			const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo'];
 			const foundTestWords = testWords.filter(word => allWords.includes(word));
-			console.log(`Test words found: ${foundTestWords.join(', ')}`);
 			
 			validWords = new Set(allWords);
 			gameWords = allWords;
 			
 			targetWord = gameWords[Math.floor(Math.random() * gameWords.length)].toUpperCase();
 			
-			console.log(`API loaded successfully! ${validWords.size} words available`);
-			console.log(`Target word selected: ${targetWord}`);
-			
 			setTimeout(() => testWordValidation(), 1000);
 			
 			return true;
 		} catch (error) {
-			console.error('Failed to load words from API:', error.message);
-			console.log('Using emergency dictionary (offline mode)...');
 			
 			const emergencyWords = [
 				'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande', 
@@ -149,16 +121,9 @@
 			const validEmergencyWords = emergencyWords.filter(word => word.length === 5);
 			const invalidWords = emergencyWords.filter(word => word.length !== 5);
 			
-			if (invalidWords.length > 0) {
-				console.warn('Invalid emergency words (not 5 letters):', invalidWords);
-			}
-			
 			validWords = new Set(validEmergencyWords);
 			gameWords = validEmergencyWords;
 			targetWord = validEmergencyWords[Math.floor(Math.random() * validEmergencyWords.length)].toUpperCase();
-			
-			console.log(`Emergency mode activated! ${validEmergencyWords.length} words available`);
-			console.log(`Target word: ${targetWord}`);
 			
 			showMessage('No internet - using local dictionary', 3000);
 			
@@ -492,8 +457,6 @@
 	});
 
 	async function initGame() {
-		console.log('Initializing game...');
-		
 		gameGuesses = [];
 		gameOver = false;
 		currentRow = 0;
@@ -505,15 +468,10 @@
 				throw new Error('Invalid target word generated');
 			}
 			
-			console.log('Game initialized successfully');
-			console.log('Target word:', targetWord);
-			console.log('Dictionary size:', validWords.size);
-			
 			updateRowStates();
 			showMessage("Bem-vindo ao Termads! Adivinhe a palavra de 5 letras.", 3000);
 			
 		} catch (error) {
-			console.error('Failed to initialize game:', error);
 			showMessage('Falha ao inicializar o jogo. Recarregue a página e verifique sua conexão.', 10000);
 		}
 	}
