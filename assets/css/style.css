@@ -55,6 +55,41 @@ body {
     padding: clamp(0.5rem, 2vh, 1rem) 0;
 }
 
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 1rem;
+}
+
+.header-section h1 {
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.history-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: 1px solid var(--color-border);
+    transition: all 0.2s ease;
+}
+
+.history-button:hover {
+    background: var(--color-bg-tertiary);
+    transform: translateY(-1px);
+}
+
 h1 {
     color: var(--color-text);
     font-size: var(--font-size-title);

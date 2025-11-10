@@ -7,6 +7,7 @@
 	let targetWord = "";
 	let gameOver = false;
 	let currentRow = 0;
+	let gameGuesses = [];
 
 	window.testConnectivity = async function() {
 		console.log('Testing connectivity...');
@@ -165,6 +166,24 @@
 			
 			return true;
 		}
+	}
+
+	function saveGameToHistory(won, attempts) {
+		const gameData = {
+			targetWord: targetWord,
+			won: won,
+			attempts: attempts,
+			guesses: gameGuesses.map(guess => ({
+				word: guess.word,
+				result: guess.result
+			}))
+		};
+
+		const history = JSON.parse(localStorage.getItem('termads-history') || '[]');
+		gameData.id = Date.now();
+		gameData.date = new Date().toISOString();
+		history.unshift(gameData);
+		localStorage.setItem('termads-history', JSON.stringify(history));
 	}
 
 	function normalizeWord(word) {
@@ -377,15 +396,12 @@
 	function handleEnter() {
 		if (gameOver) return;
 		
-		// If current row is full, check the word
 		const rowTiles = rows[currentRow];
 		if (rowTiles && rowFilled(rowTiles)) {
 			const word = getCurrentWord();
 			
-			// Check if word is valid
 			if (!isValidWord(word)) {
 				showMessage("Palavra não encontrada no dicionário!");
-				// Shake animation for invalid word
 				rowEls[currentRow].classList.add('shake-row');
 				setTimeout(() => {
 					rowEls[currentRow].classList.remove('shake-row');
@@ -395,33 +411,33 @@
 			
 			animateKey("enter");
 			
-			// Check against target word
 			const results = checkWord(word);
 			
-			// Animate row with results
-			animateRow(currentRow, results);
+			gameGuesses.push({
+				word: word.toUpperCase(),
+				result: results
+			});
 			
-			// Update keyboard
+			animateRow(currentRow, results);
 			updateKeyboard(word, results);
 			
-			// Check if won
 			if (word.toUpperCase() === targetWord) {
 				gameOver = true;
 				setTimeout(() => {
 					showMessage(`Parabéns! Você acertou em ${currentRow + 1} tentativas!`, 5000);
+					saveGameToHistory(true, currentRow + 1);
 				}, 1000);
 				return;
 			}
 			
-			// Move to next row or end game
 			if (currentRow < rows.length - 1) {
 				currentRow += 1;
 				updateRowStates();
 			} else {
-				// Game over
 				gameOver = true;
 				setTimeout(() => {
 					showMessage(`Fim de jogo! A palavra era: ${targetWord}`, 5000);
+					saveGameToHistory(false, 6);
 				}, 1000);
 			}
 		}
@@ -489,10 +505,13 @@
 	async function initGame() {
 		console.log('Initializing game...');
 		
+		gameGuesses = [];
+		gameOver = false;
+		currentRow = 0;
+		
 		try {
 			await loadWords();
 			
-			// Verify we have a valid target word
 			if (!targetWord || targetWord.length !== 5) {
 				throw new Error('Invalid target word generated');
 			}

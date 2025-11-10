@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/historico.css">
+    <title>Histórico - Termads</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <a href="../index.html" class="back-button">← Voltar</a>
+            <h1 class="page-title">Histórico de Partidas</h1>
+        </div>
+
+        <div class="stats-summary">
+            <div class="stat-item">
+                <span class="stat-number" id="total-games">0</span>
+                <span class="stat-label">Jogos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="win-rate">0%</span>
+                <span class="stat-label">Taxa de Vitória</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="current-streak">0</span>
+                <span class="stat-label">Sequência Atual</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="max-streak">0</span>
+                <span class="stat-label">Melhor Sequência</span>
+            </div>
+        </div>
+
+        <div class="games-section">
+            <h2 class="section-title">Partidas Recentes</h2>
+            <div class="games-list" id="games-list">
+                <!-- Jogos serão carregados aqui -->
+            </div>
+
+            <div class="no-games" id="no-games" style="display: none;">
+                <p>Nenhuma partida registrada ainda.</p>
+                <a href="../index.html" class="play-button">Jogar Agora</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar detalhes do jogo -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Detalhes da Partida</h2>
+                <button class="close-button" id="close-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="game-info">
+                    <div class="info-item">
+                        <span class="info-value" id="game-date"></span>
+                        <span class="info-label">Data</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-value" id="target-word"></span>
+                        <span class="info-label">Palavra</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-value" id="game-result"></span>
+                        <span class="info-label">Resultado</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-value" id="attempts-count"></span>
+                        <span class="info-label">Tentativas</span>
+                    </div>
+                </div>
+                
+                <div class="attempts-grid" id="attempts-grid">
+                    <!-- Grid das tentativas será recriado aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/historico.js"></script>
+</body>
+</html>
