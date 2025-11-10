@@ -1,8 +1,8 @@
 <?php
-session_start();
 require 'db_functions.php';
 require 'authenticate.php';
 
+session_start();
 $login = isLoggedIn();
 
 if ($login) {
