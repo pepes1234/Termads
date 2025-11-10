@@ -29,50 +29,27 @@
 	}
 
 	async function loadWords() {
-		
 		try {
 			const apis = [
-				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.codetabs.com/v1/proxy?quest=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://corsproxy.io/?https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://proxy.cors.sh/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
+				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
 			];
 			
 			let text = '';
-			let apiUsed = '';
 			
-			for (let i = 0; i < apis.length; i++) {
-				try {
-					const controller = new AbortController();
-					const timeoutId = setTimeout(() => {
-						controller.abort();
-					}, 15000);
-					
-					const response = await fetch(apis[i], { 
-						signal: controller.signal,
-						method: 'GET',
-						headers: {
-							'Accept': 'text/plain',
-							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-						}
-					});
-					clearTimeout(timeoutId);
-					
-					if (!response.ok) {
-						throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-					}
-					
-					text = await response.text();
-					apiUsed = apis[i];
-					break;
-				} catch (apiError) {
-					if (i === apis.length - 1) {
-						throw new Error(`All ${apis.length} APIs failed`);
-					}
+			const response = await fetch(apis[0], { 
+				signal: AbortSignal.timeout(5000),
+				method: 'GET',
+				headers: {
+					'Accept': 'text/plain',
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
 				}
+			});
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
+			
+			text = await response.text();
 			
 			if (!text || text.length < 100) {
 				throw new Error('API response too small or empty');
@@ -86,12 +63,8 @@
 				throw new Error('No valid 5-letter words found in API');
 			}
 			
-			const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo'];
-			const foundTestWords = testWords.filter(word => allWords.includes(word));
-			
 			validWords = new Set(allWords);
 			gameWords = allWords;
-			
 			targetWord = gameWords[Math.floor(Math.random() * gameWords.length)].toUpperCase();
 			
 			setTimeout(() => testWordValidation(), 1000);
@@ -115,7 +88,61 @@
 				'virus', 'vista', 'volume', 'zebra', 'bravo', 'breve', 'calma', 'carne', 'cheio',
 				'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo',
 				'beber', 'bicho', 'bolsa', 'borda', 'caixa', 'doido', 'durar', 'errar',
-				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte'
+				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte', 'abrir', 'abril',
+				'acima', 'acres', 'actor', 'actos', 'achar', 'agora', 'agudo', 'ajuda',
+				'ajudar', 'aldeia', 'alegre', 'alem', 'algo', 'aluno', 'altar', 'alto',
+				'amado', 'amar', 'amor', 'amplo', 'andar', 'animal', 'animo', 'anos',
+				'antigo', 'apoio', 'apos', 'aquele', 'aqui', 'area', 'arma', 'armas',
+				'arte', 'asa', 'asas', 'assim', 'ato', 'atraves', 'atriz', 'atual',
+				'audio', 'autor', 'aviao', 'baixa', 'banda', 'banha', 'barco', 'base',
+				'bater', 'beijo', 'bela', 'bem', 'bens', 'besta', 'bicho', 'bilhao',
+				'bloco', 'boca', 'bode', 'bola', 'bom', 'bomba', 'bonito', 'borda',
+				'braco', 'branco', 'brasil', 'bravo', 'breve', 'brilho', 'cabeca',
+				'cada', 'cair', 'calma', 'calor', 'cama', 'canja', 'canto', 'cao',
+				'carta', 'casa', 'casal', 'caso', 'causa', 'cedo', 'centro', 'cerca',
+				'certo', 'chao', 'chefe', 'chegar', 'cheiro', 'china', 'cinco', 'cinema',
+				'classe', 'clima', 'coisa', 'comer', 'como', 'conta', 'contra', 'corpo',
+				'costa', 'cozinha', 'criar', 'cruz', 'cujo', 'cultura', 'curso',
+				'dados', 'dança', 'dar', 'debate', 'decidir', 'dela', 'dele',
+				'dentro', 'depois', 'desde', 'desejar', 'dia', 'dica', 'dinheiro',
+				'direita', 'direito', 'disse', 'dizer', 'doce', 'dois', 'domingo',
+				'dona', 'dono', 'dormir', 'duvida', 'eco', 'educação', 'eleição',
+				'energia', 'ensino', 'entao', 'entre', 'enviar', 'época', 'equipe',
+				'erro', 'escola', 'escuta', 'esforço', 'espaço', 'esposa', 'estar',
+				'este', 'estilo', 'estrada', 'estudo', 'etapa', 'evento', 'exemplo',
+				'exercito', 'falar', 'familia', 'fase', 'fato', 'favor', 'fazer',
+				'fecho', 'feito', 'feliz', 'ferro', 'festa', 'filho', 'filme',
+				'final', 'fogo', 'folha', 'força', 'forma', 'forte', 'foto',
+				'fraco', 'frente', 'frio', 'fruto', 'fundo', 'galho', 'ganha',
+				'geral', 'governo', 'gosto', 'grama', 'grande', 'grave', 'gritar',
+				'grupo', 'guerra', 'guia', 'havia', 'hoje', 'homem', 'hora',
+				'hotel', 'humor', 'ideia', 'idade', 'igreja', 'igual', 'imagem',
+				'inicio', 'irmao', 'jardim', 'jeito', 'jogo', 'jovem', 'junto',
+				'largo', 'lavar', 'leite', 'leitor', 'lemma', 'letra', 'levar',
+				'liberdade', 'linha', 'lista', 'livro', 'local', 'logo', 'longe',
+				'lugar', 'lunar', 'macao', 'madeira', 'mae', 'maior', 'mais',
+				'mamar', 'manha', 'manso', 'marca', 'massa', 'matéria', 'matriz',
+				'menor', 'mesa', 'mesmo', 'meter', 'metro', 'meio', 'minha',
+				'minuto', 'moeda', 'momento', 'monte', 'moral', 'morte', 'motor',
+				'mundo', 'museu', 'musica', 'nacao', 'nadar', 'nasce', 'natural',
+				'negocio', 'negro', 'nivel', 'noite', 'nome', 'norte', 'novo',
+				'nuca', 'nunca', 'objeto', 'obra', 'olhar', 'ontem', 'ordem',
+				'orgao', 'origem', 'outro', 'pagar', 'pais', 'palavra', 'papel',
+				'parar', 'parte', 'partir', 'passar', 'passo', 'patria', 'pedra',
+				'pegar', 'peixe', 'pele', 'pensar', 'pequeno', 'perder', 'perto',
+				'pessoa', 'piano', 'pintar', 'plano', 'pobre', 'podar', 'poder',
+				'ponto', 'porca', 'porta', 'povo', 'praça', 'praia', 'prato',
+				'preço', 'primo', 'prova', 'quarto', 'quase', 'queda', 'quem',
+				'radio', 'rapaz', 'razao', 'real', 'regra', 'reino', 'resto',
+				'rico', 'rio', 'risco', 'rosto', 'rumo', 'saber', 'saida',
+				'sala', 'santo', 'sao', 'sede', 'seguir', 'senha', 'senhor',
+				'serio', 'serviço', 'silva', 'sobre', 'social', 'sol', 'sonho',
+				'suave', 'subir', 'sucesso', 'sul', 'tarde', 'teatro', 'tecla',
+				'tempo', 'ter', 'terra', 'texto', 'tipo', 'titulo', 'toda',
+				'todo', 'tomar', 'total', 'trade', 'trazer', 'tres', 'tumor',
+				'turno', 'ultimo', 'uniao', 'usar', 'valor', 'varios', 'velho',
+				'venda', 'verde', 'vez', 'vida', 'vila', 'vinte', 'virus',
+				'vista', 'viver', 'volume', 'voz', 'zebra'
 			];
 			
 			const validEmergencyWords = emergencyWords.filter(word => word.length === 5);
@@ -125,7 +152,7 @@
 			gameWords = validEmergencyWords;
 			targetWord = validEmergencyWords[Math.floor(Math.random() * validEmergencyWords.length)].toUpperCase();
 			
-			showMessage('No internet - using local dictionary', 3000);
+			showMessage('Modo local ativo', 2000);
 			
 			setTimeout(() => testWordValidation(), 1000);
 			
