@@ -7,124 +7,70 @@
 	let targetWord = "";
 	let gameOver = false;
 	let currentRow = 0;
+	let gameGuesses = [];
 
 	window.testConnectivity = async function() {
-		console.log('Testing connectivity...');
-		
 		const testUrl = 'https://api.github.com/zen';
 		try {
 			const response = await fetch(testUrl);
-			console.log('Connectivity OK - GitHub responds:', response.status);
 			const text = await response.text();
-			console.log('Response:', text);
 			return true;
 		} catch (error) {
-			console.error('Connectivity problem:', error);
 			return false;
 		}
 	}
 
 	window.testWordValidation = function() {
 		const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste', 'abcde'];
-		console.log('Testing word validation:');
 		testWords.forEach(word => {
 			const normalized = normalizeWord(word);
 			const isValid = isValidWord(word);
-			console.log(`"${word}" → "${normalized}" → ${isValid ? 'valid' : 'invalid'}`);
 		});
-		console.log(`Total words loaded: ${validWords ? validWords.size : 0}`);
-		console.log(`Word samples:`, Array.from(validWords || []).slice(0, 10));
 	}
 
 	async function loadWords() {
-		console.log('Loading words from API...');
-		
 		try {
 			const apis = [
-				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.codetabs.com/v1/proxy?quest=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://api.allorigins.win/raw?url=https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://corsproxy.io/?https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt',
-				'https://proxy.cors.sh/https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
+				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
 			];
 			
 			let text = '';
-			let apiUsed = '';
 			
-			for (let i = 0; i < apis.length; i++) {
-				try {
-					console.log(`Trying API ${i + 1}/${apis.length}: ${apis[i].substring(0, 60)}...`);
-					
-					const controller = new AbortController();
-					const timeoutId = setTimeout(() => {
-						controller.abort();
-						console.log(`Timeout on API ${i + 1}`);
-					}, 15000);
-					
-					const response = await fetch(apis[i], { 
-						signal: controller.signal,
-						method: 'GET',
-						headers: {
-							'Accept': 'text/plain',
-							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-						}
-					});
-					clearTimeout(timeoutId);
-					
-					console.log(`API ${i + 1} response status:`, response.status, response.statusText);
-					
-					if (!response.ok) {
-						throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-					}
-					
-					text = await response.text();
-					apiUsed = apis[i];
-					console.log(`Success with API ${i + 1}! Text received: ${text.length} characters`);
-					console.log(`First lines:`, text.substring(0, 200));
-					break;
-				} catch (apiError) {
-					console.error(`API ${i + 1} failed:`, apiError.name, '-', apiError.message);
-					if (i === apis.length - 1) {
-						throw new Error(`All ${apis.length} APIs failed`);
-					}
+			const response = await fetch(apis[0], { 
+				signal: AbortSignal.timeout(5000),
+				method: 'GET',
+				headers: {
+					'Accept': 'text/plain',
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
 				}
+			});
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
+			
+			text = await response.text();
 			
 			if (!text || text.length < 100) {
 				throw new Error('API response too small or empty');
 			}
 			
-			console.log('Processing words from API...');
-			
 			const allWords = text.split('\n')
 				.map(word => word.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
 				.filter(word => word.length === 5 && /^[a-z]+$/.test(word));
-			
-			console.log(`Filtered words: ${allWords.length} 5-letter words`);
 			
 			if (allWords.length === 0) {
 				throw new Error('No valid 5-letter words found in API');
 			}
 			
-			const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo'];
-			const foundTestWords = testWords.filter(word => allWords.includes(word));
-			console.log(`Test words found: ${foundTestWords.join(', ')}`);
-			
 			validWords = new Set(allWords);
 			gameWords = allWords;
-			
 			targetWord = gameWords[Math.floor(Math.random() * gameWords.length)].toUpperCase();
-			
-			console.log(`API loaded successfully! ${validWords.size} words available`);
-			console.log(`Target word selected: ${targetWord}`);
 			
 			setTimeout(() => testWordValidation(), 1000);
 			
 			return true;
 		} catch (error) {
-			console.error('Failed to load words from API:', error.message);
-			console.log('Using emergency dictionary (offline mode)...');
 			
 			const emergencyWords = [
 				'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande', 
@@ -142,29 +88,94 @@
 				'virus', 'vista', 'volume', 'zebra', 'bravo', 'breve', 'calma', 'carne', 'cheio',
 				'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo',
 				'beber', 'bicho', 'bolsa', 'borda', 'caixa', 'doido', 'durar', 'errar',
-				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte'
+				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte', 'abrir', 'abril',
+				'acima', 'acres', 'actor', 'actos', 'achar', 'agora', 'agudo', 'ajuda',
+				'ajudar', 'aldeia', 'alegre', 'alem', 'algo', 'aluno', 'altar', 'alto',
+				'amado', 'amar', 'amor', 'amplo', 'andar', 'animal', 'animo', 'anos',
+				'antigo', 'apoio', 'apos', 'aquele', 'aqui', 'area', 'arma', 'armas',
+				'arte', 'asa', 'asas', 'assim', 'ato', 'atraves', 'atriz', 'atual',
+				'audio', 'autor', 'aviao', 'baixa', 'banda', 'banha', 'barco', 'base',
+				'bater', 'beijo', 'bela', 'bem', 'bens', 'besta', 'bicho', 'bilhao',
+				'bloco', 'boca', 'bode', 'bola', 'bom', 'bomba', 'bonito', 'borda',
+				'braco', 'branco', 'brasil', 'bravo', 'breve', 'brilho', 'cabeca',
+				'cada', 'cair', 'calma', 'calor', 'cama', 'canja', 'canto', 'cao',
+				'carta', 'casa', 'casal', 'caso', 'causa', 'cedo', 'centro', 'cerca',
+				'certo', 'chao', 'chefe', 'chegar', 'cheiro', 'china', 'cinco', 'cinema',
+				'classe', 'clima', 'coisa', 'comer', 'como', 'conta', 'contra', 'corpo',
+				'costa', 'cozinha', 'criar', 'cruz', 'cujo', 'cultura', 'curso',
+				'dados', 'dança', 'dar', 'debate', 'decidir', 'dela', 'dele',
+				'dentro', 'depois', 'desde', 'desejar', 'dia', 'dica', 'dinheiro',
+				'direita', 'direito', 'disse', 'dizer', 'doce', 'dois', 'domingo',
+				'dona', 'dono', 'dormir', 'duvida', 'eco', 'educação', 'eleição',
+				'energia', 'ensino', 'entao', 'entre', 'enviar', 'época', 'equipe',
+				'erro', 'escola', 'escuta', 'esforço', 'espaço', 'esposa', 'estar',
+				'este', 'estilo', 'estrada', 'estudo', 'etapa', 'evento', 'exemplo',
+				'exercito', 'falar', 'familia', 'fase', 'fato', 'favor', 'fazer',
+				'fecho', 'feito', 'feliz', 'ferro', 'festa', 'filho', 'filme',
+				'final', 'fogo', 'folha', 'força', 'forma', 'forte', 'foto',
+				'fraco', 'frente', 'frio', 'fruto', 'fundo', 'galho', 'ganha',
+				'geral', 'governo', 'gosto', 'grama', 'grande', 'grave', 'gritar',
+				'grupo', 'guerra', 'guia', 'havia', 'hoje', 'homem', 'hora',
+				'hotel', 'humor', 'ideia', 'idade', 'igreja', 'igual', 'imagem',
+				'inicio', 'irmao', 'jardim', 'jeito', 'jogo', 'jovem', 'junto',
+				'largo', 'lavar', 'leite', 'leitor', 'lemma', 'letra', 'levar',
+				'liberdade', 'linha', 'lista', 'livro', 'local', 'logo', 'longe',
+				'lugar', 'lunar', 'macao', 'madeira', 'mae', 'maior', 'mais',
+				'mamar', 'manha', 'manso', 'marca', 'massa', 'matéria', 'matriz',
+				'menor', 'mesa', 'mesmo', 'meter', 'metro', 'meio', 'minha',
+				'minuto', 'moeda', 'momento', 'monte', 'moral', 'morte', 'motor',
+				'mundo', 'museu', 'musica', 'nacao', 'nadar', 'nasce', 'natural',
+				'negocio', 'negro', 'nivel', 'noite', 'nome', 'norte', 'novo',
+				'nuca', 'nunca', 'objeto', 'obra', 'olhar', 'ontem', 'ordem',
+				'orgao', 'origem', 'outro', 'pagar', 'pais', 'palavra', 'papel',
+				'parar', 'parte', 'partir', 'passar', 'passo', 'patria', 'pedra',
+				'pegar', 'peixe', 'pele', 'pensar', 'pequeno', 'perder', 'perto',
+				'pessoa', 'piano', 'pintar', 'plano', 'pobre', 'podar', 'poder',
+				'ponto', 'porca', 'porta', 'povo', 'praça', 'praia', 'prato',
+				'preço', 'primo', 'prova', 'quarto', 'quase', 'queda', 'quem',
+				'radio', 'rapaz', 'razao', 'real', 'regra', 'reino', 'resto',
+				'rico', 'rio', 'risco', 'rosto', 'rumo', 'saber', 'saida',
+				'sala', 'santo', 'sao', 'sede', 'seguir', 'senha', 'senhor',
+				'serio', 'serviço', 'silva', 'sobre', 'social', 'sol', 'sonho',
+				'suave', 'subir', 'sucesso', 'sul', 'tarde', 'teatro', 'tecla',
+				'tempo', 'ter', 'terra', 'texto', 'tipo', 'titulo', 'toda',
+				'todo', 'tomar', 'total', 'trade', 'trazer', 'tres', 'tumor',
+				'turno', 'ultimo', 'uniao', 'usar', 'valor', 'varios', 'velho',
+				'venda', 'verde', 'vez', 'vida', 'vila', 'vinte', 'virus',
+				'vista', 'viver', 'volume', 'voz', 'zebra'
 			];
 			
 			const validEmergencyWords = emergencyWords.filter(word => word.length === 5);
 			const invalidWords = emergencyWords.filter(word => word.length !== 5);
 			
-			if (invalidWords.length > 0) {
-				console.warn('Invalid emergency words (not 5 letters):', invalidWords);
-			}
-			
 			validWords = new Set(validEmergencyWords);
 			gameWords = validEmergencyWords;
 			targetWord = validEmergencyWords[Math.floor(Math.random() * validEmergencyWords.length)].toUpperCase();
 			
-			console.log(`Emergency mode activated! ${validEmergencyWords.length} words available`);
-			console.log(`Target word: ${targetWord}`);
-			
-			showMessage('No internet - using local dictionary', 3000);
+			showMessage('Modo local ativo', 2000);
 			
 			setTimeout(() => testWordValidation(), 1000);
 			
 			return true;
 		}
+	}
+
+	function saveGameToHistory(won, attempts) {
+		const gameData = {
+			targetWord: targetWord,
+			won: won,
+			attempts: attempts,
+			guesses: gameGuesses.map(guess => ({
+				word: guess.word,
+				result: guess.result
+			}))
+		};
+
+		const history = JSON.parse(localStorage.getItem('termads-history') || '[]');
+		gameData.id = Date.now();
+		gameData.date = new Date().toISOString();
+		history.unshift(gameData);
+		localStorage.setItem('termads-history', JSON.stringify(history));
 	}
 
 	function normalizeWord(word) {
@@ -221,13 +232,10 @@
 			const el = rowEls[r];
 			el.classList.remove("row-active", "row-inactive", "row-used");
 			if (r < currentRow) {
-				// previous rows considered used/locked
 				el.classList.add("row-used");
 			} else if (r === currentRow) {
-				// current active row
 				el.classList.add("row-active");
 			} else {
-				// future rows are inactive
 				el.classList.add("row-inactive");
 			}
 		}
@@ -287,7 +295,6 @@
 			const letter = word[i].toLowerCase();
 			const keyElement = document.querySelector(`.key[data-key="${letter}"]`);
 			if (keyElement) {
-				// Only update if current state is not better
 				const currentClass = keyElement.classList;
 				if (!currentClass.contains('correct') && results[i] === 'correct') {
 					keyElement.classList.remove('wrong-position', 'incorrect');
@@ -377,15 +384,12 @@
 	function handleEnter() {
 		if (gameOver) return;
 		
-		// If current row is full, check the word
 		const rowTiles = rows[currentRow];
 		if (rowTiles && rowFilled(rowTiles)) {
 			const word = getCurrentWord();
 			
-			// Check if word is valid
 			if (!isValidWord(word)) {
 				showMessage("Palavra não encontrada no dicionário!");
-				// Shake animation for invalid word
 				rowEls[currentRow].classList.add('shake-row');
 				setTimeout(() => {
 					rowEls[currentRow].classList.remove('shake-row');
@@ -395,33 +399,33 @@
 			
 			animateKey("enter");
 			
-			// Check against target word
 			const results = checkWord(word);
 			
-			// Animate row with results
-			animateRow(currentRow, results);
+			gameGuesses.push({
+				word: word.toUpperCase(),
+				result: results
+			});
 			
-			// Update keyboard
+			animateRow(currentRow, results);
 			updateKeyboard(word, results);
 			
-			// Check if won
 			if (word.toUpperCase() === targetWord) {
 				gameOver = true;
 				setTimeout(() => {
 					showMessage(`Parabéns! Você acertou em ${currentRow + 1} tentativas!`, 5000);
+					saveGameToHistory(true, currentRow + 1);
 				}, 1000);
 				return;
 			}
 			
-			// Move to next row or end game
 			if (currentRow < rows.length - 1) {
 				currentRow += 1;
 				updateRowStates();
 			} else {
-				// Game over
 				gameOver = true;
 				setTimeout(() => {
 					showMessage(`Fim de jogo! A palavra era: ${targetWord}`, 5000);
+					saveGameToHistory(false, 6);
 				}, 1000);
 			}
 		}
@@ -431,9 +435,7 @@
 		return /^[a-zA-Z]$/.test(k);
 	}
 
-	// Physical keyboard
 	window.addEventListener("keydown", (ev) => {
-		// Previne comportamento padrão para todas as teclas que usamos
 		const k = ev.key;
 		if (isLetterKey(k) || k === "Backspace" || k === "Enter") {
 			ev.preventDefault();
@@ -453,7 +455,6 @@
 		}
 	});
 
-	// On-screen keyboard
 	function handleKeyAction(dataKey) {
 		if (!dataKey) return;
 		const key = String(dataKey).toLowerCase();
@@ -466,7 +467,6 @@
 		const btn = e.target.closest(".key[data-key]");
 		if (!btn) return;
 		
-		// Previne o foco no botão e remove qualquer seleção
 		e.preventDefault();
 		btn.blur();
 		document.getSelection().removeAllRanges();
@@ -475,54 +475,43 @@
 		handleKeyAction(dataKey);
 	});
 
-	// Optional: clicking a tile only works in the active row (no row switching)
 	rows.forEach((tiles, rIdx) => {
 		tiles.forEach((tile) => {
 			tile.addEventListener("click", () => {
-				if (rIdx !== currentRow) return; // do nothing for inactive/used rows
-				// no-op for now; could place a caret/visual state
+				if (rIdx !== currentRow) return;
 			});
 		});
 	});
 
-	// Initialize game
 	async function initGame() {
-		console.log('Initializing game...');
+		gameGuesses = [];
+		gameOver = false;
+		currentRow = 0;
 		
 		try {
 			await loadWords();
 			
-			// Verify we have a valid target word
 			if (!targetWord || targetWord.length !== 5) {
 				throw new Error('Invalid target word generated');
 			}
-			
-			console.log('Game initialized successfully');
-			console.log('Target word:', targetWord);
-			console.log('Dictionary size:', validWords.size);
 			
 			updateRowStates();
 			showMessage("Bem-vindo ao Termads! Adivinhe a palavra de 5 letras.", 3000);
 			
 		} catch (error) {
-			console.error('Failed to initialize game:', error);
 			showMessage('Falha ao inicializar o jogo. Recarregue a página e verifique sua conexão.', 10000);
 		}
 	}
 
-	// Previne foco indesejado nos elementos
 	document.addEventListener("focusin", (e) => {
 		if (e.target.classList.contains("key")) {
 			e.target.blur();
 		}
 	});
 	
-	// Remove seleção quando clica em qualquer lugar
 	document.addEventListener("mousedown", () => {
 		document.getSelection().removeAllRanges();
 	});
 
-	// Start the game
 	initGame();
 })();
-
