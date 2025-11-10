@@ -1,45 +1,55 @@
 <?php 
+require '../db_functions.php';
 
 $erros = [];
-if(isset($_POST["email"],$_POST["senha"])){
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    if(isset($_POST["email"],$_POST["senha"])){
+        $conn = connect();
 
+        if(empty($_POST["email"])){
+            $erros["email"] = "Insira seu email!";
+        }
+        elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $erros["email"] = "Email inválido!";
+        }
+        else {
+            $email = tratarForm($_POST["email"], $conn);
+        }
 
-    if(empty($_POST["email"])){
-        $erros["email"] = "Insira seu email!";
-    }
-    elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-        $erros["email"] = "Email inválido!";
-    }
-    else {
-        $email = tratarForm($_POST["email"]);
-    }
+        if(empty($_POST["senha"])){
+            $erros["senha"] = "Insira sua senha!";
+        }
+        elseif (strlen($_POST["senha"]) < 7) {
+            $erros["senha"] = "Senha de no mínimo 8 caracteres!";
+        }
+        else {
+            $senha = tratarForm($_POST["senha"], $conn);
+        }
 
+        if (empty($erros)) {
+            $senhaHash = md5($senha);
 
-    if(empty($_POST["senha"])){
-        $erros["senha"] = "Insira sua senha!";
-    }
-    elseif (strlen($_POST["senha"]) < 7) {
-        $erros["senha"] = "Senha de no mínimo 8 caracteres!";
-    }
-    else {
-        $senha = tratarForm($_POST["senha"]);
-    }
+            $sql = "SELECT * FROM $table_users WHERE email = '$email' AND password = '$senhaHash';";
+            $result = mysqli_query($conn, $sql);
 
-
-    
+            if (mysqli_num_rows($result) === 1) {
+                close($conn);
+                header("Location: ../index.php");
+                exit();
+            } else {
+                $erros["login"] = "Email ou senha incorretos!";
+            }
+        }
+    }
 }
 
-
-function tratarForm($dado){
+function tratarForm($dado, $conn){
     $dado = trim($dado);
     $dado = htmlspecialchars($dado);
     $dado = stripslashes($dado);
+    $dado = mysqli_real_escape_string($conn, $dado);
     return $dado;
 }
-
-
-
-
 ?>
 
 <!DOCTYPE html>

@@ -21,7 +21,7 @@ if (mysqli_query($conn, $sql)) {
 }
 
 // Create users table if it doesn't exist
-$sql = "CREATE TABLE IF NOT EXISTS users (
+$sql = "CREATE TABLE IF NOT EXISTS $table_users (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -29,7 +29,7 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 if (mysqli_query($conn, $sql)) {
-    echo "Table 'users' created successfully or already exists.<br>";
+    echo "Table " . $table_users . " created successfully or already exists.<br>";
 } else {
     echo "Error creating table: " . mysqli_error($conn) . "<br>";
 }
