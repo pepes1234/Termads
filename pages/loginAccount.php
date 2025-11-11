@@ -75,7 +75,7 @@ function tratarForm($dado, $conn){
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/createAccount.css">
     <script src="https://kit.fontawesome.com/409ccfe72e.js" crossorigin="anonymous"></script>
-    <title>CreateAccount</title>
+    <title>Login</title>
 </head>
 <body>
     
@@ -96,11 +96,11 @@ function tratarForm($dado, $conn){
                     <input id="password" name="senha" type="password" placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } else { echo "Senha"; } ?>" required>
                 </label>    
 
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button type="submit" class="btn btn-primary">Entrar</button>
             </form>
               
-    <p class="description">Doesn't have an account?</p>
-    <button class="btn btn-secondary" onclick="location.href='createAccount.php'">Sign Up</button>
+    <p class="description">Não tem uma conta?</p>
+    <button class="btn btn-secondary" onclick="location.href='createAccount.php'">Criar Conta</button>
 
 
 

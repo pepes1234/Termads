@@ -2,7 +2,7 @@
 require 'db_functions.php';
 
 // Create connection
-$conn = connect();
+$conn = mysqli_connect($servername, $username, $password);
 
 // Create database if it doesn't exist
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
