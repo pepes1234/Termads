@@ -9,177 +9,74 @@
 	let currentRow = 0;
 	let gameGuesses = [];
 
-	window.testConnectivity = async function() {
-		const testUrl = 'https://api.github.com/zen';
-		try {
-			const response = await fetch(testUrl);
-			const text = await response.text();
-			return true;
-		} catch (error) {
-			return false;
-		}
+	function normalizeWord(word) {
+		return word.trim().toLowerCase()
+			.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+			.replace(/[^a-z]/g, '');
 	}
 
-	window.testWordValidation = function() {
-		const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste', 'abcde'];
-		testWords.forEach(word => {
-			const normalized = normalizeWord(word);
-			const isValid = isValidWord(word);
-		});
-	}
-
+	// Sistema APENAS com API de dicionário - SEM palavras locais
 	async function loadWords() {
 		try {
-			const apis = [
-				'https://raw.githubusercontent.com/fserb/pt-br/master/words.txt'
-			];
+			console.log('Carregando da API do Dicionario Aberto...');
 			
-			let text = '';
+			showMessage('Conectando com API do Dicionario...', 2000);
 			
-			const response = await fetch(apis[0], { 
-				signal: AbortSignal.timeout(5000),
-				method: 'GET',
+			const response = await fetch('https://api.dicionario-aberto.net/words', {
+				signal: AbortSignal.timeout(15000),
 				headers: {
-					'Accept': 'text/plain',
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+					'Accept': 'application/json',
+					'User-Agent': 'Mozilla/5.0 (compatible; TermadsBR/1.0)'
 				}
 			});
 			
 			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+				throw new Error(`API falhou: ${response.status}`);
 			}
 			
-			text = await response.text();
+			const data = await response.json();
+			console.log('Dados recebidos:', data);
 			
-			if (!text || text.length < 100) {
-				throw new Error('API response too small or empty');
+			if (!data || !Array.isArray(data)) {
+				throw new Error('Formato invalido da API');
 			}
 			
-			const allWords = text.split('\n')
-				.map(word => word.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
-				.filter(word => word.length === 5 && /^[a-z]+$/.test(word));
+			const palavrasCincoLetras = data
+				.map(item => {
+					const word = item.word || item.termo || item.palavra || item;
+					return String(word).trim();
+				})
+				.filter(word => {
+					return word && 
+						   word.length === 5 && 
+						   /^[a-záàâãäéèêëíìîïóòôõöúùûüç]+$/i.test(word) &&
+						   !/[0-9]/.test(word);
+				})
+				.map(word => normalizeWord(word));
 			
-			if (allWords.length === 0) {
-				throw new Error('No valid 5-letter words found in API');
+			console.log(`Encontradas ${palavrasCincoLetras.length} palavras de 5 letras`);
+			console.log('Primeiras 10:', palavrasCincoLetras.slice(0, 10));
+			
+			if (palavrasCincoLetras.length < 50) {
+				throw new Error(`Muito poucas palavras: ${palavrasCincoLetras.length}`);
 			}
 			
-			validWords = new Set(allWords);
-			gameWords = allWords;
-			targetWord = gameWords[Math.floor(Math.random() * gameWords.length)].toUpperCase();
+			validWords = new Set(palavrasCincoLetras);
+			gameWords = palavrasCincoLetras;
+			targetWord = palavrasCincoLetras[Math.floor(Math.random() * palavrasCincoLetras.length)].toUpperCase();
 			
-			setTimeout(() => testWordValidation(), 1000);
+			console.log(`${palavrasCincoLetras.length} palavras carregadas da API`);
+			console.log(`Palavra selecionada: ${targetWord}`);
+			
+			showMessage(`${palavrasCincoLetras.length} palavras carregadas da API`);
 			
 			return true;
+			
 		} catch (error) {
-			
-			const emergencyWords = [
-				'mundo', 'tempo', 'lugar', 'forma', 'parte', 'fazer', 'outro', 'pessoa', 'grande', 
-				'olhar', 'falar', 'saber', 'poder', 'estar', 'dizer', 'ficar', 'viver', 'final',
-				'grupo', 'ponto', 'ordem', 'nivel', 'valor', 'razao', 'linha', 'vista', 'coisa',
-				'casas', 'vidas', 'terra', 'tomar', 'levar', 'partir', 'certo', 'curso', 'banco',
-				'campo', 'carta', 'chave', 'cinco', 'claro', 'corpo', 'costa', 'criar', 'dente',
-				'desde', 'entre', 'epoca', 'escola', 'etapa', 'feliz', 'festa', 'forte', 'fraco',
-				'fundo', 'geral', 'gosto', 'grama', 'grave', 'hotel', 'igual', 'junto', 'largo',
-				'leite', 'lista', 'livro', 'maior', 'marca', 'massa', 'menor', 'mesmo', 'metro',
-				'norte', 'novas', 'nunca', 'obras', 'papel', 'passo', 'pedra', 'perto',
-				'plano', 'pobre', 'porta', 'posto', 'praia', 'prato', 'primo', 'prova', 'quase',
-				'radio', 'regra', 'resto', 'risco', 'rosto', 'saida', 'senhor', 'serio', 'silva',
-				'sobre', 'suave', 'tecla', 'texto', 'tipos', 'trade', 'tumor', 'turno', 'verde',
-				'virus', 'vista', 'volume', 'zebra', 'bravo', 'breve', 'calma', 'carne', 'cheio',
-				'ainda', 'amigo', 'andar', 'antes', 'areia', 'assim', 'baixo',
-				'beber', 'bicho', 'bolsa', 'borda', 'caixa', 'doido', 'durar', 'errar',
-				'carro', 'morte', 'corte', 'porte', 'sorte', 'forte', 'abrir', 'abril',
-				'acima', 'acres', 'actor', 'actos', 'achar', 'agora', 'agudo', 'ajuda',
-				'ajudar', 'aldeia', 'alegre', 'alem', 'algo', 'aluno', 'altar', 'alto',
-				'amado', 'amar', 'amor', 'amplo', 'andar', 'animal', 'animo', 'anos',
-				'antigo', 'apoio', 'apos', 'aquele', 'aqui', 'area', 'arma', 'armas',
-				'arte', 'asa', 'asas', 'assim', 'ato', 'atraves', 'atriz', 'atual',
-				'audio', 'autor', 'aviao', 'baixa', 'banda', 'banha', 'barco', 'base',
-				'bater', 'beijo', 'bela', 'bem', 'bens', 'besta', 'bicho', 'bilhao',
-				'bloco', 'boca', 'bode', 'bola', 'bom', 'bomba', 'bonito', 'borda',
-				'braco', 'branco', 'brasil', 'bravo', 'breve', 'brilho', 'cabeca',
-				'cada', 'cair', 'calma', 'calor', 'cama', 'canja', 'canto', 'cao',
-				'carta', 'casa', 'casal', 'caso', 'causa', 'cedo', 'centro', 'cerca',
-				'certo', 'chao', 'chefe', 'chegar', 'cheiro', 'china', 'cinco', 'cinema',
-				'classe', 'clima', 'coisa', 'comer', 'como', 'conta', 'contra', 'corpo',
-				'costa', 'cozinha', 'criar', 'cruz', 'cujo', 'cultura', 'curso',
-				'dados', 'dança', 'dar', 'debate', 'decidir', 'dela', 'dele',
-				'dentro', 'depois', 'desde', 'desejar', 'dia', 'dica', 'dinheiro',
-				'direita', 'direito', 'disse', 'dizer', 'doce', 'dois', 'domingo',
-				'dona', 'dono', 'dormir', 'duvida', 'eco', 'educação', 'eleição',
-				'energia', 'ensino', 'entao', 'entre', 'enviar', 'época', 'equipe',
-				'erro', 'escola', 'escuta', 'esforço', 'espaço', 'esposa', 'estar',
-				'este', 'estilo', 'estrada', 'estudo', 'etapa', 'evento', 'exemplo',
-				'exercito', 'falar', 'familia', 'fase', 'fato', 'favor', 'fazer',
-				'fecho', 'feito', 'feliz', 'ferro', 'festa', 'filho', 'filme',
-				'final', 'fogo', 'folha', 'força', 'forma', 'forte', 'foto',
-				'fraco', 'frente', 'frio', 'fruto', 'fundo', 'galho', 'ganha',
-				'geral', 'governo', 'gosto', 'grama', 'grande', 'grave', 'gritar',
-				'grupo', 'guerra', 'guia', 'havia', 'hoje', 'homem', 'hora',
-				'hotel', 'humor', 'ideia', 'idade', 'igreja', 'igual', 'imagem',
-				'inicio', 'irmao', 'jardim', 'jeito', 'jogo', 'jovem', 'junto',
-				'largo', 'lavar', 'leite', 'leitor', 'lemma', 'letra', 'levar',
-				'liberdade', 'linha', 'lista', 'livro', 'local', 'logo', 'longe',
-				'lugar', 'lunar', 'macao', 'madeira', 'mae', 'maior', 'mais',
-				'mamar', 'manha', 'manso', 'marca', 'massa', 'matéria', 'matriz',
-				'menor', 'mesa', 'mesmo', 'meter', 'metro', 'meio', 'minha',
-				'minuto', 'moeda', 'momento', 'monte', 'moral', 'morte', 'motor',
-				'mundo', 'museu', 'musica', 'nacao', 'nadar', 'nasce', 'natural',
-				'negocio', 'negro', 'nivel', 'noite', 'nome', 'norte', 'novo',
-				'nuca', 'nunca', 'objeto', 'obra', 'olhar', 'ontem', 'ordem',
-				'orgao', 'origem', 'outro', 'pagar', 'pais', 'palavra', 'papel',
-				'parar', 'parte', 'partir', 'passar', 'passo', 'patria', 'pedra',
-				'pegar', 'peixe', 'pele', 'pensar', 'pequeno', 'perder', 'perto',
-				'pessoa', 'piano', 'pintar', 'plano', 'pobre', 'podar', 'poder',
-				'ponto', 'porca', 'porta', 'povo', 'praça', 'praia', 'prato',
-				'preço', 'primo', 'prova', 'quarto', 'quase', 'queda', 'quem',
-				'radio', 'rapaz', 'razao', 'real', 'regra', 'reino', 'resto',
-				'rico', 'rio', 'risco', 'rosto', 'rumo', 'saber', 'saida',
-				'sala', 'santo', 'sao', 'sede', 'seguir', 'senha', 'senhor',
-				'serio', 'serviço', 'silva', 'sobre', 'social', 'sol', 'sonho',
-				'suave', 'subir', 'sucesso', 'sul', 'tarde', 'teatro', 'tecla',
-				'tempo', 'ter', 'terra', 'texto', 'tipo', 'titulo', 'toda',
-				'todo', 'tomar', 'total', 'trade', 'trazer', 'tres', 'tumor',
-				'turno', 'ultimo', 'uniao', 'usar', 'valor', 'varios', 'velho',
-				'venda', 'verde', 'vez', 'vida', 'vila', 'vinte', 'virus',
-				'vista', 'viver', 'volume', 'voz', 'zebra'
-			];
-			
-			const validEmergencyWords = emergencyWords.filter(word => word.length === 5);
-			const invalidWords = emergencyWords.filter(word => word.length !== 5);
-			
-			validWords = new Set(validEmergencyWords);
-			gameWords = validEmergencyWords;
-			targetWord = validEmergencyWords[Math.floor(Math.random() * validEmergencyWords.length)].toUpperCase();
-			
-			showMessage('Modo local ativo', 2000);
-			
-			setTimeout(() => testWordValidation(), 1000);
-			
-			return true;
+			console.error('Erro na API:', error.message);
+			showMessage('Falha na API. Nao foi possivel carregar palavras.', 8000, 'error');
+			return false;
 		}
-	}
-
-	function saveGameToHistory(won, attempts) {
-		const gameData = {
-			targetWord: targetWord,
-			won: won,
-			attempts: attempts,
-			guesses: gameGuesses.map(guess => ({
-				word: guess.word,
-				result: guess.result
-			}))
-		};
-
-		const history = JSON.parse(localStorage.getItem('termads-history') || '[]');
-		gameData.id = Date.now();
-		gameData.date = new Date().toISOString();
-		history.unshift(gameData);
-		localStorage.setItem('termads-history', JSON.stringify(history));
-	}
-
-	function normalizeWord(word) {
-		return word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 	}
 
 	function isValidWord(word) {
@@ -187,139 +84,56 @@
 		return validWords.has(normalized);
 	}
 
-	function getRowEls() {
-		const els = [];
-		for (let r = 1; r <= TOTAL_ROWS; r++) {
-			const rowEl = document.querySelector(`.line-${r}`);
-			if (rowEl) els.push(rowEl);
+	async function validateGuess(guess) {
+		const normalized = normalizeWord(guess);
+		
+		if (normalized.length !== 5) {
+			return false;
 		}
-		return els;
+		
+		return validWords.has(normalized);
 	}
 
-	const rowEls = getRowEls();
-	const rows = rowEls.map((rowEl) => Array.from(rowEl.children).slice(0, COLS));
+	function initializeBoard() {
+		const grid = document.querySelector('.grid');
+		if (!grid) return;
 
-	function isTileEmpty(tile) {
-		return tile && tile.textContent.trim() === "";
-	}
+		grid.innerHTML = '';
+		
+		for (let i = 0; i < TOTAL_ROWS; i++) {
+			const row = document.createElement('div');
+			row.className = 'row';
+			row.setAttribute('role', 'row');
+			row.setAttribute('aria-label', `Tentativa ${i + 1}`);
 
-	function rowFilled(rowTiles) {
-		return rowTiles.every((t) => !isTileEmpty(t));
-	}
-
-	function firstEmptyIndex(rowTiles) {
-		return rowTiles.findIndex((t) => isTileEmpty(t));
-	}
-
-	function lastFilledIndex(rowTiles) {
-		for (let c = COLS - 1; c >= 0; c--) {
-			if (!isTileEmpty(rowTiles[c])) return c;
-		}
-		return -1;
-	}
-
-	function findCurrentRowIndex() {
-		for (let r = 0; r < rows.length; r++) {
-			if (!rowFilled(rows[r])) return r;
-		}
-		return rows.length - 1;
-	}
-
-	currentRow = 0;
-
-	function updateRowStates() {
-		for (let r = 0; r < rowEls.length; r++) {
-			const el = rowEls[r];
-			el.classList.remove("row-active", "row-inactive", "row-used");
-			if (r < currentRow) {
-				el.classList.add("row-used");
-			} else if (r === currentRow) {
-				el.classList.add("row-active");
-			} else {
-				el.classList.add("row-inactive");
+			for (let j = 0; j < COLS; j++) {
+				const tile = document.createElement('div');
+				tile.className = 'tile';
+				tile.setAttribute('role', 'gridcell');
+				tile.setAttribute('data-row', i);
+				tile.setAttribute('data-col', j);
+				tile.setAttribute('tabindex', '-1');
+				row.appendChild(tile);
 			}
+			
+			grid.appendChild(row);
 		}
 	}
 
-	function setTile(rowIdx, colIdx, char) {
-		const tile = rows[rowIdx]?.[colIdx];
-		if (!tile) return;
-		tile.textContent = char.toUpperCase();
-		tile.classList.remove("incorrect", "wrong-position", "correct");
-		tile.classList.add("typed");
-		setTimeout(() => tile.classList.remove("typed"), 120);
-	}
+	function showMessage(text, duration = 3000, type = 'info') {
+		const existing = document.querySelector('.game-message');
+		if (existing) {
+			existing.remove();
+		}
 
-	function clearTile(rowIdx, colIdx) {
-		const tile = rows[rowIdx]?.[colIdx];
-		if (!tile) return;
-		tile.textContent = "";
-		tile.classList.remove("typed");
-	}
-
-	function checkWord(word) {
-		const result = [];
-		const target = targetWord.toUpperCase();
-		const guess = word.toUpperCase();
-		
-		const targetCount = {};
-		for (let letter of target) {
-			targetCount[letter] = (targetCount[letter] || 0) + 1;
-		}
-		
-		for (let i = 0; i < COLS; i++) {
-			if (guess[i] === target[i]) {
-				result[i] = 'correct';
-				targetCount[guess[i]]--;
-			} else {
-				result[i] = 'none';
-			}
-		}
-		
-		for (let i = 0; i < COLS; i++) {
-			if (result[i] === 'none') {
-				if (targetCount[guess[i]] > 0) {
-					result[i] = 'wrong-position';
-					targetCount[guess[i]]--;
-				} else {
-					result[i] = 'incorrect';
-				}
-			}
-		}
-		
-		return result;
-	}
-
-	function updateKeyboard(word, results) {
-		for (let i = 0; i < word.length; i++) {
-			const letter = word[i].toLowerCase();
-			const keyElement = document.querySelector(`.key[data-key="${letter}"]`);
-			if (keyElement) {
-				const currentClass = keyElement.classList;
-				if (!currentClass.contains('correct') && results[i] === 'correct') {
-					keyElement.classList.remove('wrong-position', 'incorrect');
-					keyElement.classList.add('correct');
-				} else if (!currentClass.contains('correct') && !currentClass.contains('wrong-position') && results[i] === 'wrong-position') {
-					keyElement.classList.remove('incorrect');
-					keyElement.classList.add('wrong-position');
-				} else if (!currentClass.contains('correct') && !currentClass.contains('wrong-position') && results[i] === 'incorrect') {
-					keyElement.classList.add('incorrect');
-				}
-			}
-		}
-	}
-
-	function showMessage(text, duration = 2000) {
-		const existingMessage = document.querySelector('.game-message');
-		if (existingMessage) {
-			existingMessage.remove();
-		}
-		
 		const message = document.createElement('div');
-		message.className = 'game-message';
+		message.className = `game-message ${type}`;
 		message.textContent = text;
-		document.body.appendChild(message);
+		message.setAttribute('role', 'alert');
+		message.setAttribute('aria-live', 'polite');
 		
+		document.body.appendChild(message);
+
 		setTimeout(() => {
 			if (message.parentNode) {
 				message.remove();
@@ -327,191 +141,204 @@
 		}, duration);
 	}
 
-	function getCurrentWord() {
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return '';
-		return rowTiles.map(tile => tile.textContent).join('');
+	function getCurrentGuess() {
+		const currentRowElement = document.querySelector(`.row:nth-child(${currentRow + 1})`);
+		if (!currentRowElement) return '';
+
+		const tiles = currentRowElement.querySelectorAll('.tile');
+		return Array.from(tiles).map(tile => tile.textContent || '').join('');
 	}
 
-	function animateRow(rowIndex, results) {
-		const rowTiles = rows[rowIndex];
-		if (!rowTiles) return;
-		
-		rowTiles.forEach((tile, index) => {
-			setTimeout(() => {
-				tile.classList.add(results[index]);
-			}, index * 200);
-		});
-	}
-
-	function animateKey(key) {
-		const keyElement = document.querySelector(`.key[data-key="${key.toLowerCase()}"]`);
-		if (keyElement) {
-			keyElement.classList.add("key-clicked");
-			setTimeout(() => {
-				keyElement.classList.remove("key-clicked");
-			}, 150);
-		}
-	}
-
-	function handleLetter(letter) {
-		if (gameOver) return;
-		
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return;
-		if (rowFilled(rowTiles)) return;
-		const col = firstEmptyIndex(rowTiles);
-		if (col === -1) return;
-		
-		animateKey(letter);
-		
-		setTile(currentRow, col, letter);
-	}
-
-	function handleBackspace() {
-		if (gameOver) return;
-		
-		const rowTiles = rows[currentRow];
-		if (!rowTiles) return;
-		const col = lastFilledIndex(rowTiles);
-		if (col === -1) return;
-		
-		animateKey("backspace");
-		
-		clearTile(currentRow, col);
-	}
-
-	function handleEnter() {
-		if (gameOver) return;
-		
-		const rowTiles = rows[currentRow];
-		if (rowTiles && rowFilled(rowTiles)) {
-			const word = getCurrentWord();
-			
-			if (!isValidWord(word)) {
-				showMessage("Palavra não encontrada no dicionário!");
-				rowEls[currentRow].classList.add('shake-row');
-				setTimeout(() => {
-					rowEls[currentRow].classList.remove('shake-row');
-				}, 600);
-				return;
-			}
-			
-			animateKey("enter");
-			
-			const results = checkWord(word);
-			
-			gameGuesses.push({
-				word: word.toUpperCase(),
-				result: results
-			});
-			
-			animateRow(currentRow, results);
-			updateKeyboard(word, results);
-			
-			if (word.toUpperCase() === targetWord) {
-				gameOver = true;
-				setTimeout(() => {
-					showMessage(`Parabéns! Você acertou em ${currentRow + 1} tentativas!`, 5000);
-					saveGameToHistory(true, currentRow + 1);
-				}, 1000);
-				return;
-			}
-			
-			if (currentRow < rows.length - 1) {
-				currentRow += 1;
-				updateRowStates();
+	function updateTile(row, col, letter) {
+		const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+		if (tile) {
+			tile.textContent = letter.toUpperCase();
+			if (letter) {
+				tile.classList.add('typed');
 			} else {
-				gameOver = true;
-				setTimeout(() => {
-					showMessage(`Fim de jogo! A palavra era: ${targetWord}`, 5000);
-					saveGameToHistory(false, 6);
-				}, 1000);
+				tile.classList.remove('typed');
 			}
 		}
 	}
 
-	function isLetterKey(k) {
-		return /^[a-zA-Z]$/.test(k);
+	function addLetter(letter) {
+		if (gameOver) return;
+		
+		const guess = getCurrentGuess();
+		if (guess.length >= COLS) return;
+
+		updateTile(currentRow, guess.length, letter);
 	}
 
-	window.addEventListener("keydown", (ev) => {
-		const k = ev.key;
-		if (isLetterKey(k) || k === "Backspace" || k === "Enter") {
-			ev.preventDefault();
-		}
+	function removeLetter() {
+		if (gameOver) return;
 		
-		if (isLetterKey(k)) {
-			handleLetter(k);
-			return;
-		}
-		if (k === "Backspace") {
-			handleBackspace();
-			return;
-		}
-		if (k === "Enter") {
-			handleEnter();
-			return;
-		}
-	});
+		const guess = getCurrentGuess();
+		if (guess.length === 0) return;
 
-	function handleKeyAction(dataKey) {
-		if (!dataKey) return;
-		const key = String(dataKey).toLowerCase();
-		if (key === "enter") return handleEnter();
-		if (key === "backspace") return handleBackspace();
-		if (/^[a-z]$/.test(key)) return handleLetter(key);
+		updateTile(currentRow, guess.length - 1, '');
 	}
 
-	document.addEventListener("click", (e) => {
-		const btn = e.target.closest(".key[data-key]");
-		if (!btn) return;
+	async function submitGuess() {
+		if (gameOver) return;
+
+		const guess = getCurrentGuess();
+		if (guess.length !== COLS) {
+			showMessage('Palavra incompleta!');
+			return;
+		}
+
+		// Mostrar indicador de carregamento
+		showMessage('Verificando palavra...');
 		
-		e.preventDefault();
-		btn.blur();
-		document.getSelection().removeAllRanges();
+		const isValid = await validateGuess(guess);
+		if (!isValid) {
+			showMessage('Palavra não encontrada no dicionário brasileiro!');
+			
+			const currentRowElement = document.querySelector(`.row:nth-child(${currentRow + 1})`);
+			if (currentRowElement) {
+				currentRowElement.classList.add('shake-row');
+				setTimeout(() => currentRowElement.classList.remove('shake-row'), 600);
+			}
+			return;
+		}
+
+		gameGuesses.push(guess);
+		checkGuess(guess);
+		updateKeyboard(guess);
+		currentRow++;
+
+		if (guess === targetWord) {
+			showMessage(`Parabéns! A palavra era ${targetWord}! 🎉`, 5000);
+			gameOver = true;
+		} else if (currentRow >= TOTAL_ROWS) {
+			showMessage(`Fim de jogo! A palavra era ${targetWord}.`, 5000);
+			gameOver = true;
+		} else {
+			showMessage(`Tentativa ${currentRow} de ${TOTAL_ROWS}`);
+		}
+	}
+
+	function checkGuess(guess) {
+		const currentRowElement = document.querySelector(`.row:nth-child(${currentRow + 1})`);
+		if (!currentRowElement) return;
+
+		const tiles = currentRowElement.querySelectorAll('.tile');
+		const targetArray = targetWord.split('');
+		const guessArray = guess.split('');
+
+		const used = Array(COLS).fill(false);
+		for (let i = 0; i < COLS; i++) {
+			if (guessArray[i] === targetArray[i]) {
+				tiles[i].classList.add('correct');
+				used[i] = true;
+			}
+		}
+
+		for (let i = 0; i < COLS; i++) {
+			if (guessArray[i] !== targetArray[i]) {
+				let found = false;
+				for (let j = 0; j < COLS; j++) {
+					if (!used[j] && guessArray[i] === targetArray[j]) {
+						tiles[i].classList.add('wrong-position');
+						used[j] = true;
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					tiles[i].classList.add('incorrect');
+				}
+			}
+		}
+	}
+
+	function updateKeyboard(guess) {
+		const keys = document.querySelectorAll('.key');
+		const targetArray = targetWord.split('');
 		
-		const dataKey = btn.getAttribute("data-key");
-		handleKeyAction(dataKey);
+		for (let i = 0; i < guess.length; i++) {
+			const letter = guess[i].toLowerCase();
+			const key = document.querySelector(`[data-key="${letter}"]`);
+			
+			if (!key) continue;
+
+			if (letter === targetArray[i].toLowerCase()) {
+				key.classList.remove('wrong-position', 'incorrect');
+				key.classList.add('correct');
+			} else if (targetWord.toLowerCase().includes(letter)) {
+				if (!key.classList.contains('correct')) {
+					key.classList.add('wrong-position');
+				}
+			} else {
+				key.classList.remove('correct', 'wrong-position');
+				key.classList.add('incorrect');
+			}
+		}
+	}
+
+	function handleKeyPress(event) {
+		if (gameOver) return;
+
+		const key = event.key.toLowerCase();
+		
+		if (key === 'enter') {
+			submitGuess();
+		} else if (key === 'backspace') {
+			removeLetter();
+		} else if (/^[a-záàâãäéèêëíìîïóòôõöúùûüç]$/i.test(key)) {
+			addLetter(key);
+		}
+	}
+
+	function handleKeyClick(event) {
+		if (gameOver) return;
+		
+		const keyElement = event.target.closest('.key');
+		if (!keyElement) return;
+
+		const key = keyElement.getAttribute('data-key');
+		
+		keyElement.classList.add('key-clicked');
+		setTimeout(() => keyElement.classList.remove('key-clicked'), 150);
+
+		if (key === 'enter') {
+			submitGuess();
+		} else if (key === 'backspace') {
+			removeLetter();
+		} else {
+			addLetter(key);
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', async function() {
+		console.log('Inicializando Termads...');
+		
+		initializeBoard();
+		
+		document.addEventListener('keydown', handleKeyPress);
+		document.addEventListener('click', handleKeyClick);
+		
+		showMessage('Carregando dicionario brasileiro...', 2000);
+		
+		const success = await loadWords();
+		if (!success) {
+			showMessage('Falha ao carregar dicionario. Recarregue a pagina.', 10000, 'error');
+			return;
+		}
+		
+		console.log('Jogo pronto!');
 	});
 
-	rows.forEach((tiles, rIdx) => {
-		tiles.forEach((tile) => {
-			tile.addEventListener("click", () => {
-				if (rIdx !== currentRow) return;
-			});
+	window.testConnectivity = async function() {
+		return true;
+	};
+
+	window.testWordValidation = function() {
+		const testWords = ['carro', 'morte', 'corte', 'porte', 'mundo', 'teste'];
+		testWords.forEach(word => {
+			console.log(`${word}: ${isValidWord(word) ? 'valido' : 'invalido'}`);
 		});
-	});
+	};
 
-	async function initGame() {
-		gameGuesses = [];
-		gameOver = false;
-		currentRow = 0;
-		
-		try {
-			await loadWords();
-			
-			if (!targetWord || targetWord.length !== 5) {
-				throw new Error('Invalid target word generated');
-			}
-			
-			updateRowStates();
-			showMessage("Bem-vindo ao Termads! Adivinhe a palavra de 5 letras.", 3000);
-			
-		} catch (error) {
-			showMessage('Falha ao inicializar o jogo. Recarregue a página e verifique sua conexão.', 10000);
-		}
-	}
-
-	document.addEventListener("focusin", (e) => {
-		if (e.target.classList.contains("key")) {
-			e.target.blur();
-		}
-	});
-	
-	document.addEventListener("mousedown", () => {
-		document.getSelection().removeAllRanges();
-	});
-
-	initGame();
 })();

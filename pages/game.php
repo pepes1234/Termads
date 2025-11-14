@@ -28,7 +28,7 @@ require "../force_authenticate.php";
             </svg>Perfil</a></li>
         </ul>
     </nav>
-    <div class="main-container">
+    <div class="game-container">
         <div class="header-section">
             <h1>Termads</h1>
         </div>
