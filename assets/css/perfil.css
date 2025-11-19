@@ -522,3 +522,40 @@ svg{
     height: 32px;
     margin-right: 12px;
 }
+.logout{
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: var(--color-text);
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.logout:hover{
+    background-color: rgba(192, 0, 0, 0.678);
+    transform: translateY(-2px);
+    
+}
+.back-button {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.back-button:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-hover);
+    transform: translateY(-1px);
+}

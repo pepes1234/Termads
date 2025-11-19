@@ -39,6 +39,7 @@ $userSenha = "********";
     </nav>
     <div class="main-container">
         <div class="header">
+            <a href="game.php" class="back-button">← Voltar</a>
             <h1 class="page-title">Seu Perfil</h1>
         </div>
 
@@ -56,6 +57,7 @@ $userSenha = "********";
                 <span class="stat-value" id="user-senha"><?php echo htmlspecialchars($userSenha); ?></span>
             </div>
         </div>
+        <button class="logout" onclick="location.href='logout.php'">Log Out</button>
     </div>
 
     <script src="../assets/js/historico.js"></script>
