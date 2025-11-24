@@ -75,46 +75,6 @@ body{
   margin-bottom:1rem;
 }
 
-.list-social-media{display:flex;
-  justify-content:center;
-  gap:1rem;
-  list-style:none;
-  margin:0.4rem 0 1rem
-}
-
-.item-social-media{
-  width:44px;height:44px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:transparent;
-  border:1px solid var(--card-border-weak);
-  transition: 0.25s ease;
-}
-
-.item-social-media a{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--color-text);
-  width:100%;
-  height:100%;
-  font-size:1.05rem
-}
-
-.item-social-media:hover{
-  transform:translateY(-4px);
-  transform: scale(1.10);
-  /* combine shadow presets with a subtle accent ring */
-  box-shadow: var(--shadow-md), 0 0 0 6px var(--accent-ring);
-  background:snow;
-}
-
-.item-social-media a:hover{
-  color:var(--color-bg);
-  transform: scale(1.15);
-}
 
 .description{
   color:var(--color-muted);
