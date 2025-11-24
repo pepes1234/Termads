@@ -30,16 +30,14 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: var(--bg-primary);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    user-select: none;
-    -webkit-user-select: none;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+    padding-top: 100px;
 }
+    
 
 
 .game-container {
@@ -537,8 +535,6 @@ nav{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-radius: 12px;
-    flex-shrink: 0;
     z-index: 999;
 }
 
