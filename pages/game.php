@@ -17,7 +17,7 @@ require "../force_authenticate.php";
     <title>Termads - Jogo de Palavras</title>
 </head>
 <body>
-    <nav>
+    <nav class="nav">
         <ul>
             <li><a href="game.php">Jogar</a></li>
             <li><a href="#">Ligas</a></li>
@@ -25,18 +25,18 @@ require "../force_authenticate.php";
             <li><a href="historico.php">Histórico</a></li>
         </ul>
         <ul>
-            <li><a href=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <li><a href="perfil.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
             <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>Perfil</a></li>
+            </svg><?= htmlspecialchars($user_name) ?></a></li>
         </ul>
     </nav>
     <div class="game-container">
-        <div class="header-section">
-            <h1>Termads</h1>
-        </div>
         
         <section class="game-board" aria-label="Tabuleiro do jogo">
+            <div class="header-section">
+                <h1>Termads</h1>
+            </div>
             <div class="grid" role="grid" aria-label="Grid de tentativas">
                 <div class="row line-1" role="row" aria-label="Tentativa 1">
                     <div class="tile" role="gridcell" data-row="0" data-col="0" tabindex="-1"></div>

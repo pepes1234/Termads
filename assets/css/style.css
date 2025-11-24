@@ -4,10 +4,16 @@
     --border-width: clamp(0.08rem, 0.25vw, 0.18rem);
     --key-height: clamp(2.8rem, 8vh, 4.5rem);
     
+<<<<<<< HEAD
     --font-title: clamp(1.2rem, 4vw, 3rem);
     --font-tile: clamp(1.2rem, 4.5vw, 2.5rem);
     --font-key: clamp(0.7rem, 2.8vw, 1.4rem);
     
+=======
+    --font-title: clamp(1.5rem, 2vw, 2.5rem);
+    --font-tile: clamp(1.4rem, 3.5vw, 2.2rem);
+    --font-key: clamp(0.9rem, 2.2vw, 1.3rem);
+>>>>>>> a689aae5b3a17fac378b3b8ed42ec34a69f1b592
     --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
     --bg-tertiary: #2a2a2a;
@@ -34,18 +40,32 @@ body {
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
+<<<<<<< HEAD
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     user-select: none;
     -webkit-user-select: none;
+=======
+    padding: 2rem 1rem;
+    line-height: 1.6;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    
+    padding-top: 80px; 
+>>>>>>> a689aae5b3a17fac378b3b8ed42ec34a69f1b592
 }
+
 
 .game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+<<<<<<< HEAD
     justify-content: center;
     flex: 1;
     width: 100%;
@@ -54,6 +74,13 @@ body {
     padding: clamp(0.3rem, 2vh, 1.2rem);
     gap: clamp(0.3rem, 1.5vh, 1.2rem);
     box-sizing: border-box;
+=======
+    justify-content: space-between;
+    height: 70vh;
+    max-width: 40rem;
+    padding: clamp(0.5rem, 2vh, 1rem);
+    gap: clamp(0.5rem, 2vh, 1rem);
+>>>>>>> a689aae5b3a17fac378b3b8ed42ec34a69f1b592
 }
 
 header {
@@ -75,28 +102,9 @@ header {
     text-align: center;
 }
 
-.history-button {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    padding: 0.5rem 1rem;
-    background: var(--color-bg-secondary);
-    color: var(--color-text);
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    border: 1px solid var(--color-border);
-    transition: all 0.2s ease;
-}
-
-.history-button:hover {
-    background: var(--color-bg-tertiary);
-    transform: translateY(-1px);
-}
 
 h1 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Seg᠘８᠘８I', sans-serif;
     font-size: var(--font-title);
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -209,11 +217,17 @@ h1 {
     gap: clamp(0.3rem, 1vh, 0.6rem);
     flex-shrink: 0;
     width: 100%;
+<<<<<<< HEAD
     max-width: min(95vw, 32rem);
     margin: 0 auto;
     padding: clamp(0.2rem, 1vh, 0.5rem);
     align-items: center;
     justify-content: center;
+=======
+    max-width: 40rem;
+    padding-bottom: 1rem;
+    margin-bottom: 40px;
+>>>>>>> a689aae5b3a17fac378b3b8ed42ec34a69f1b592
 }
 
 .kbd-row {
@@ -545,16 +559,24 @@ li{
     font-size: clamp(1rem, 2.5vw, 1.2rem);
 }
 nav{
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     background-color: var(--bg-secondary);
     padding: 0.5rem 0;
-    margin-bottom: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+<<<<<<< HEAD
     border-radius: 12px;
     flex-shrink: 0;
+=======
+    z-index: 999;
+>>>>>>> a689aae5b3a17fac378b3b8ed42ec34a69f1b592
 }
+
+
 a{
     text-decoration: none;
     color: var(--text-primary);
