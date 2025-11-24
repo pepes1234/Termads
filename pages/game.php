@@ -32,11 +32,13 @@ require "../force_authenticate.php";
         </ul>
     </nav>
     <div class="game-container">
-        
-        <section class="game-board" aria-label="Tabuleiro do jogo">
+        <header>
             <div class="header-section">
                 <h1>Termads</h1>
             </div>
+        </header>
+        
+        <section class="game-board" aria-label="Tabuleiro do jogo">
             <div class="grid" role="grid" aria-label="Grid de tentativas">
                 <div class="row line-1" role="row" aria-label="Tentativa 1">
                     <div class="tile" role="gridcell" data-row="0" data-col="0" tabindex="-1"></div>

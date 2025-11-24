@@ -1,7 +1,8 @@
 :root {
-    --tile-size: clamp(2rem, 6vw, 3.5rem);
-    --gap: clamp(0.1rem, 0.5vw, 0.3rem);
-    --border-width: clamp(0.05rem, 0.15vw, 0.12rem);
+    --tile-size: clamp(1rem, 2.5vw, 1.8rem);
+    --gap: clamp(0.25rem, 1vw, 0.5rem);
+    --gap-horizontal: 0;
+    --border-width: clamp(0.5px, 0.05vw, 1px);
     --key-height: clamp(2rem, 6vh, 3.5rem);
     
     --font-title: clamp(1rem, 3vw, 2.2rem);
@@ -32,13 +33,14 @@ body {
     font-family: Arial, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: 0;
     user-select: none;
     -webkit-user-select: none;
+    overflow: hidden;
 }
 
 
@@ -46,19 +48,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     flex: 1;
     width: 100%;
     max-width: min(95vw, 42rem);
     margin: 0 auto;
-    padding: clamp(2rem, 8vh, 4rem) clamp(0.3rem, 1vw, 1rem) clamp(0.3rem, 1vw, 1rem);
-    gap: clamp(0.2rem, 0.8vh, 0.8rem);
+    padding: clamp(0.5rem, 1vh, 1rem);
     box-sizing: border-box;
+    height: calc(100vh - clamp(2rem, 4vh, 3rem));
 }
 
 header {
     flex-shrink: 0;
-    margin-top: 0;
+    margin-top: clamp(4rem, 8vh, 6rem);
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
 }
 
 .header-section {
@@ -67,7 +69,6 @@ header {
     justify-content: space-between;
     width: 100%;
     max-width: 500px;
-    margin-bottom: clamp(0.3rem, 0.8vh, 0.8rem);
 }
 
 .header-section h1 {
@@ -86,22 +87,26 @@ h1 {
 }
 
 .game-board {
-    flex-shrink: 0;
-    margin-top: clamp(0.2rem, 0.5vh, 0.5rem);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: clamp(0.5rem, 1vh, 1rem) 0;
 }
 
 .grid {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    gap: clamp(0.15rem, 0.8vw, 0.4rem);
+    gap: var(--gap);
     width: 100%;
     max-width: min(95vw, 25rem);
     margin: 0 auto;
 }
 
 .row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    justify-content: center;
     gap: var(--gap);
 }
 
@@ -193,10 +198,11 @@ h1 {
     flex-shrink: 0;
     width: 100%;
     max-width: min(95vw, 32rem);
-    margin: clamp(0.3rem, 0.8vh, 0.8rem) auto 0;
+    margin: 0 auto;
     padding: clamp(0.2rem, 1vh, 0.5rem);
     align-items: center;
     justify-content: center;
+    margin-bottom: clamp(0.5rem, 1vh, 1rem);
 }
 
 .kbd-row {
