@@ -43,3 +43,5 @@ git commit -m "Mensagem das alterações"
 Start-Process "index.html"
 
 IA utilizada para gerar emergency words
+
+ia para arrumar uns merge conflit doido
