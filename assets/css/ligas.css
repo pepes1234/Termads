@@ -21,6 +21,8 @@
   --card-surface: rgba(255,255,255,0.06);
   --card-border-weak: rgba(255,255,255,0.06);
   --card-border-xweak: rgba(255,255,255,0.03);
+   --color-error-text: rgb(231, 231, 231);
+  --color-error-box: rgb(179, 11, 11);
 
   /* accents and buttons */
   --color-accent: linear-gradient(135deg,#f6d365 0%,#fda085 100%);
@@ -302,4 +304,31 @@ svg{
   color:var(--color-muted);
   font-size:var(--font-size-body);
   margin:0.6rem 0 0.9rem
+}
+.erro{
+  border-radius: 8px;
+  background: var(--color-error-box);
+  padding: 4px 10px;
+  width: 100%;
+  color: var(--color-error-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h3 {
+  font-size: var(--font-size-error);
+}
+input-erro {
+    /* Define a cor da borda para a cor de erro */
+    border-color: var(--color-error-box);
+
+    /* Adiciona um "brilho" vermelho suave para destacar o erro,
+       similar ao brilho azul que você já tem para :focus-within */
+    box-shadow: 0 0 0 4px rgba(179, 11, 11, 0.25);
+}
+/* Coloque isso no seu createAccount.css, acima da classe .erro */
+
+/* Nova classe para a borda vermelha do input */
+.label-input.input-erro {
+    border: 1px solid var(--color-error-box);
 }

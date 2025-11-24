@@ -1,7 +1,45 @@
 <?php
 require '../force_authenticate.php';
+require '../db_functions.php';
 
 
+$erros = [];
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    if(isset($_POST["nome"],$_POST["descricao"],$_POST["keyword"])){
+        $conn = connect();
+        $nomeLiga = $_POST["nome"];
+        $descricaoLiga = $_POST["descricao"];
+        $keywordLiga = $_POST["keyword"];
+
+        if(empty($_POST["nome"])){
+            $erros["nome"] = "Insira o nome da Liga";
+        } else {
+            $nomeLiga = tratarForm($_POST["nome"], $conn);
+        }
+
+        if (empty($_POST["descricao"])) {
+            $erros["descricao"] = "Insira a descrição da Liga";
+        } else {
+            $descricaoLiga = tratarForm($_POST["descricao"], $conn);
+        }
+
+        if (empty($_POST["keyword"])) {
+            $erros["keyword"] = "Insira sua palavra-chave!";
+        } else {
+            $keywordLiga = tratarForm($_POST["keyword"], $conn);
+        }
+
+
+        close($conn);  
+    }
+}
+function tratarForm($dado, $conn) {
+    $dado = trim($dado);
+    $dado = htmlspecialchars($dado);
+    $dado = stripslashes($dado);
+    $dado = mysqli_real_escape_string($conn, $dado);
+    return $dado;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -35,16 +73,16 @@ require '../force_authenticate.php';
             <h1 class="page-title">Ligas</h1>
         </div>
         <form class="form" action="#" method="post" novalidate>
-            <label class="label-input" for="name">
-                <input id="name" name="nome" type="text" placeholder="Nome da Liga" required>
+            <label class="label-input <?php if(isset($erros["nome"])){ echo 'input-erro'; } ?>" for="name">
+                <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome da Liga"; } ?>" required>
             </label>
 
-            <label class="label-input" for="description">
-                <input id="description" name="descricao" type="text" placeholder="Descrição" required>
+            <label class="label-input <?php if(isset($erros["descricao"])){ echo 'input-erro'; } ?>" for="description">
+                <input id="description" name="descricao" type="text" placeholder="<?php if(isset($erros["descricao"])){ echo $erros["descricao"] ; } else { echo "Descrição"; } ?>" required>
             </label>
 
-            <label class="label-input " for="keyword">
-                <input id="keyword" name="keyword" type="text" placeholder="Palavra-chave" required>
+            <label class="label-input <?php if(isset($erros["keyword"])){ echo 'input-erro'; } ?>" for="keyword">
+                <input id="keyword" name="keyword" type="text" placeholder="<?php if(isset($erros["keyword"])){ echo $erros["keyword"] ; } else { echo "Palavra-chave"; } ?>" required>
             </label>    
 
             <button type="submit" class="btn btn-primary">Criar</button>

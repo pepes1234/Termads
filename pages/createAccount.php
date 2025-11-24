@@ -96,7 +96,7 @@ function tratarForm($dado, $conn) {
         <form class="form" action="#" method="post" novalidate>
             <label class="label-input <?php if(isset($erros["nome"])){ echo 'input-erro'; } ?>" for="name">
                 <i class="fa-solid fa-user icon-modify" aria-hidden="true"></i>
-                <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome"; } ?>" required>
+                <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome"; } ?> " required>
             </label>
 
             <label class="label-input <?php if(isset($erros["email"])){ echo 'input-erro'; } ?>" for="email">
