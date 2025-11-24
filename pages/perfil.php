@@ -1,10 +1,7 @@
 <?php 
 require '../db_credentials.php';
-require '../authenticate.php';
-if (!$login) {
-    header("Location: ./loginAccount.php");
-    exit();
-}
+require '../force_authenticate.php';
+
 $nomeUsuario = $user_name;
 $userEmail = $user_email;
 $userSenha = "********"; 
