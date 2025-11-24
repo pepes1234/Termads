@@ -145,7 +145,27 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.classList.remove('typed');
         }, 100);
         
-        moveCursor(1);
+        // Procura a próxima célula vazia para mover o cursor
+        let nextEmptyCol = -1;
+        for (let i = currentCol + 1; i < wordLength; i++) {
+            if (!cells[i].textContent.trim()) {
+                nextEmptyCol = i;
+                break;
+            }
+        }
+        
+        // Se encontrou célula vazia, move para ela; senão, move normalmente
+        if (nextEmptyCol !== -1) {
+            currentCol = nextEmptyCol;
+        } else {
+            // Se não há mais células vazias, move para a próxima posição (comportamento padrão)
+            const newCol = currentCol + 1;
+            if (newCol < wordLength) {
+                currentCol = newCol;
+            }
+        }
+        
+        updateCursorVisual();
     }
 
     function updateCursorVisual() {
