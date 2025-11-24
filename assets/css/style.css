@@ -1,12 +1,12 @@
 :root {
-    --tile-size: clamp(2.8rem, 6vw, 4rem);
-    --gap: clamp(0.2rem, 0.5vw, 0.35rem);
-    --border-width: clamp(0.1rem, 0.2vw, 0.15rem);
-    --key-height: clamp(3.2rem, 7vh, 4.2rem);
+    --tile-size: clamp(2.5rem, 8vw, 4.5rem);
+    --gap: clamp(0.15rem, 0.8vw, 0.4rem);
+    --border-width: clamp(0.08rem, 0.25vw, 0.18rem);
+    --key-height: clamp(2.8rem, 8vh, 4.5rem);
     
-    --font-title: clamp(1.5rem, 2vw, 2.5rem);
-    --font-tile: clamp(1.4rem, 3.5vw, 2.2rem);
-    --font-key: clamp(0.9rem, 2.2vw, 1.3rem);
+    --font-title: clamp(1.2rem, 4vw, 3rem);
+    --font-tile: clamp(1.2rem, 4.5vw, 2.5rem);
+    --font-key: clamp(0.7rem, 2.8vw, 1.4rem);
     
     --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
@@ -33,12 +33,11 @@ body {
     font-family: Arial, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     user-select: none;
     -webkit-user-select: none;
 }
@@ -47,11 +46,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 100vh;
-    max-width: 40rem;
-    padding: clamp(0.5rem, 2vh, 1rem);
-    gap: clamp(0.5rem, 2vh, 1rem);
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    max-width: min(95vw, 42rem);
+    margin: 0 auto;
+    padding: clamp(0.3rem, 2vh, 1.2rem);
+    gap: clamp(0.3rem, 1.5vh, 1.2rem);
+    box-sizing: border-box;
 }
 
 header {
@@ -108,7 +110,10 @@ h1 {
 .grid {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    gap: clamp(0.25rem, 0.6vw, 0.4rem);
+    gap: clamp(0.15rem, 0.8vw, 0.4rem);
+    width: 100%;
+    max-width: min(95vw, 25rem);
+    margin: 0 auto;
 }
 
 .row {
@@ -136,6 +141,27 @@ h1 {
 .tile:hover {
     border-color: var(--border-active);
     transform: scale(1.05);
+    cursor: pointer;
+}
+
+.tile:focus {
+    outline: none;
+    border-color: transparent;
+}
+
+.tile:focus-visible {
+    outline: none;
+}
+
+.tile.cursor-active {
+    border-color: var(--text-primary);
+    border-width: 2px;
+    box-shadow: 0 0 8px rgba(224, 224, 224, 0.3);
+}
+
+.row-active .tile.cursor-active {
+    border-color: var(--text-primary);
+    background: rgba(224, 224, 224, 0.05);
 }
 
 .tile.correct {
@@ -163,16 +189,31 @@ h1 {
 
 .row-inactive .tile,
 .row-used .tile {
-    opacity: 0.5;
+    opacity: 0.6;
     pointer-events: none;
+    background: var(--bg-primary);
+    border-color: var(--border-default);
+    color: var(--text-disabled);
+}
+
+.row-future .tile {
+    opacity: 0.4;
+    background: var(--bg-primary);
+    border-color: var(--text-disabled);
+    color: var(--text-disabled);
 }
 
 .keyboard {
-    display: grid;
-    gap: clamp(0.2rem, 0.6vw, 0.4rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.3rem, 1vh, 0.6rem);
     flex-shrink: 0;
     width: 100%;
-    max-width: 40rem;
+    max-width: min(95vw, 32rem);
+    margin: 0 auto;
+    padding: clamp(0.2rem, 1vh, 0.5rem);
+    align-items: center;
+    justify-content: center;
 }
 
 .kbd-row {
@@ -228,17 +269,22 @@ h1 {
     color: white;
 }
 
-.key.correct {
+.key.correct,
+.key[data-state="correct"] {
     background: var(--color-correct);
     border-color: var(--color-correct);
 }
 
-.key.wrong-position {
+.key.wrong-position,
+.key.present,
+.key[data-state="present"] {
     background: var(--color-partial);
     border-color: var(--color-partial);
 }
 
-.key.incorrect {
+.key.incorrect,
+.key.absent,
+.key[data-state="absent"] {
     background: var(--color-wrong);
     border-color: var(--color-wrong);
     color: var(--text-secondary);
@@ -281,8 +327,57 @@ h1 {
     }
 }
 
+@keyframes flip {
+    0% {
+        transform: rotateX(0deg);
+    }
+    50% {
+        transform: rotateX(-90deg);
+    }
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
+@keyframes flipIn {
+    0% {
+        transform: rotateX(-90deg);
+        background: var(--bg-tertiary);
+        border-color: var(--border-default);
+        color: var(--text-primary);
+    }
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
 .tile.typed {
     animation: pop 0.1s ease-in-out;
+}
+
+.tile.flip {
+    animation: flip 0.6s ease-in-out forwards;
+}
+
+.tile[data-state="correct"],
+.tile.correct {
+    background: var(--color-correct);
+    border-color: var(--color-correct);
+    color: white;
+}
+
+.tile[data-state="present"],
+.tile.wrong-position {
+    background: var(--color-partial);
+    border-color: var(--color-partial);
+    color: white;
+}
+
+.tile[data-state="absent"],
+.tile.incorrect {
+    background: var(--color-wrong);
+    border-color: var(--color-wrong);
+    color: var(--text-secondary);
 }
 
 .row.shake-row {
@@ -291,7 +386,7 @@ h1 {
 
 .game-message {
     position: fixed;
-    top: 20%;
+    top: clamp(4.5rem, 9vh, 6.5rem);
     left: 50%;
     transform: translateX(-50%);
     background: var(--bg-secondary);
@@ -310,68 +405,112 @@ h1 {
 
 @media (max-width: 480px) {
     :root {
-        --tile-size: 2.5rem;
-        --gap: 0.15rem;
-        --font-tile: 1.2rem;
-        --key-height: 2.8rem;
-        --font-key: 0.8rem;
-        --font-title: 1.3rem;
+        --tile-size: clamp(2.2rem, 12vw, 3rem);
+        --gap: clamp(0.1rem, 0.5vw, 0.2rem);
+        --font-tile: clamp(1rem, 5vw, 1.5rem);
+        --key-height: clamp(2.5rem, 9vh, 3.5rem);
+        --font-key: clamp(0.6rem, 3vw, 1rem);
+        --font-title: clamp(1rem, 5vw, 1.8rem);
     }
     
     .game-container {
-        padding: 0.3rem;
-        gap: 0.1rem;
+        padding: clamp(0.2rem, 1vh, 0.8rem);
+        gap: clamp(0.2rem, 1vh, 0.8rem);
+        min-height: 100svh;
     }
     
     .grid {
-        gap: 0.05rem;
+        gap: clamp(0.08rem, 0.3vw, 0.15rem);
+        max-width: min(98vw, 22rem);
     }
     
     .kbd-row {
-        gap: 0.05rem;
+        gap: clamp(0.08rem, 0.3vw, 0.15rem);
     }
     
     .key--action {
-        min-width: 3.5rem;
-        font-size: 0.7rem;
+        min-width: clamp(3rem, 15vw, 4.5rem);
+        font-size: clamp(0.5rem, 2.5vw, 0.9rem);
+        padding: 0 clamp(0.3rem, 1vw, 0.6rem);
+    }
+    
+    nav {
+        padding: 0.3rem 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    nav ul li {
+        margin: 0 clamp(0.2rem, 2vw, 0.8rem);
+        font-size: clamp(0.8rem, 3vw, 1.2rem);
+    }
+    
+    .game-message {
+        top: clamp(3.5rem, 9vh, 5.5rem);
+        padding: clamp(0.6rem, 1.5vw, 1rem) clamp(1rem, 2.5vw, 1.5rem);
+        font-size: clamp(0.8rem, 1.8vw, 1rem);
+        max-width: 95%;
     }
 }
 
-@media (max-width: 280px) {
+@media (max-width: 320px) {
     :root {
-        --tile-size: 2.2rem;
-        --font-tile: 1rem;
-        --key-height: 2.2rem;
-        --font-key: 0.6rem;
-        --font-title: 1.1rem;
+        --tile-size: clamp(1.8rem, 14vw, 2.5rem);
+        --font-tile: clamp(0.9rem, 6vw, 1.3rem);
+        --key-height: clamp(2rem, 8vh, 3rem);
+        --font-key: clamp(0.5rem, 3.5vw, 0.8rem);
+        --font-title: clamp(0.9rem, 6vw, 1.5rem);
+    }
+    
+    .game-container {
+        padding: clamp(0.1rem, 0.8vh, 0.5rem);
+        gap: clamp(0.1rem, 0.8vh, 0.5rem);
     }
     
     .key--action {
-        min-width: 2.5rem;
-        font-size: 0.5rem;
+        min-width: clamp(2rem, 18vw, 3.5rem);
+        font-size: clamp(0.4rem, 2.8vw, 0.7rem);
+        padding: 0 clamp(0.2rem, 0.8vw, 0.4rem);
+    }
+    
+    .grid {
+        max-width: min(98vw, 18rem);
+    }
+    
+    nav ul li {
+        margin: 0 clamp(0.1rem, 1.5vw, 0.5rem);
+        font-size: clamp(0.7rem, 4vw, 1rem);
+        padding: 2px 4px;
     }
 }
 
 @media (max-height: 600px) {
     :root {
-        --tile-size: 2.3rem;
-        --key-height: 2.6rem;
-        --font-tile: 1.2rem;
-        --font-key: 0.8rem;
-        --font-title: 1.2rem;
+        --tile-size: clamp(2rem, 6vh, 3rem);
+        --key-height: clamp(2.2rem, 6vh, 3.2rem);
+        --font-tile: clamp(1rem, 3vh, 1.5rem);
+        --font-key: clamp(0.7rem, 2vh, 1rem);
+        --font-title: clamp(1rem, 3vh, 1.5rem);
     }
     
     .game-container {
-        padding: 0.2rem;
-        gap: 0.2rem;
+        padding: clamp(0.1rem, 1vh, 0.5rem);
+        gap: clamp(0.1rem, 0.8vh, 0.4rem);
+        min-height: 100vh;
     }
     
     .grid {
-        gap: 0.1rem;
+        gap: clamp(0.08rem, 0.5vh, 0.2rem);
+        margin: clamp(0.2rem, 1vh, 0.5rem) 0;
     }
     
     .keyboard {
-        gap: 0.1rem;
+        gap: clamp(0.1rem, 0.5vh, 0.3rem);
+        padding: clamp(0.1rem, 0.5vh, 0.3rem);
+    }
+    
+    nav {
+        padding: clamp(0.2rem, 1vh, 0.4rem) 0;
+        margin-bottom: clamp(0.2rem, 1vh, 0.4rem);
     }
 }
 
@@ -391,41 +530,43 @@ h1 {
     }
 }
 ul{
-    list-style:none;
+    list-style: none;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 8px;
+    margin: 0;
 }
 li{
     margin: 0 12px;
     padding: 4px 8px;
     transition: background-color 0.3s;
-    font-size: larger;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
 }
 nav{
     width: 100%;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--bg-secondary);
     padding: 0.5rem 0;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border-radius: 12px;
+    flex-shrink: 0;
 }
 a{
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     font-size: 1.4rem;
 }
 a:hover{
-    color: var(--color-border-hover);
+    color: var(--border-active);
 }
 svg{
-    color: var(--color-text);
+    color: var(--text-primary);
     width: 32px;
     height: 32px;
     margin-right: 12px;

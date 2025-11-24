@@ -5,8 +5,11 @@ require "../force_authenticate.php";
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="Termads - Jogo de palavras estilo Wordle em português">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
@@ -117,6 +120,6 @@ require "../force_authenticate.php";
             </div>
         </section>
     </div>
-    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/main.js?v=<?php echo time() . '.' . rand(1000, 9999); ?>"></script>
 </body>
 </html>
