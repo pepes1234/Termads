@@ -132,6 +132,136 @@ function leave_league($user_id) {
     }
 }
 
+// Record a game played by the user and update rankings accordingly
+// Returns ['success' => true, 'game_id' => int] on success
+// Returns ['success' => false, 'error_key' => string, 'error' => string] on failure
+function record_game($user_id, $score, $won, $attempts_count, $attempts_array = null, $target_word = null, $league_id = null) {
+    $conn = connect();
+    if (!$conn) return ['success' => false, 'error_key' => 'general', 'error' => 'Erro de conexão com o banco de dados'];
+
+    // If league_id is not provided, get it from user's current league
+    if ($league_id === null) {
+        $sql = "SELECT league_id FROM users WHERE id = " . intval($user_id) . " LIMIT 1";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $league_id = $row['league_id'] ? intval($row['league_id']) : null;
+            if ($league_id === 0) $league_id = null;
+        } else {
+            close($conn);
+            return ['success' => false, 'error_key' => 'general', 'error' => 'Erro ao obter liga do usuário'];
+        }
+    }
+
+    $attempts_json = $attempts_array ? json_encode($attempts_array, JSON_UNESCAPED_UNICODE) : null;
+    $week_key = get_week_key();
+
+    $target_word_sql = $target_word !== null ? "'" . mysqli_real_escape_string($conn, $target_word) . "'" : "NULL";
+    $attempts_json_sql = $attempts_json !== null ? "'" . mysqli_real_escape_string($conn, $attempts_json) . "'" : "NULL";
+    $league_id_sql = $league_id !== null ? intval($league_id) : "NULL";
+
+    // Transaction (atomic operation)
+    mysqli_begin_transaction($conn);
+    try {
+        // Insert into games table
+        $sql = "INSERT INTO games (user_id, league_id, target_word, attempts_count, won, score, attempts_json) VALUES ("
+             . intval($user_id) . ", "
+             . $league_id_sql . ", "
+             . $target_word_sql . ", "
+             . intval($attempts_count) . ", "
+             . (int)$won . ", "
+             . intval($score) . ", "
+             . $attempts_json_sql . ")";
+        if (!mysqli_query($conn, $sql)) {
+            throw new Exception('Erro ao registrar o jogo: ' . mysqli_error($conn));
+        }
+        $game_id = mysqli_insert_id($conn);
+
+        // Update global rankings
+        $sql = "INSERT INTO global_rankings (user_id, total_points, games_played) VALUES ("
+             . intval($user_id) . ", "
+             . intval($score) . ", 1)
+             ON DUPLICATE KEY UPDATE
+             total_points = total_points + " . intval($score) . ",
+             games_played = games_played + 1";
+        if (!mysqli_query($conn, $sql)) {
+            throw new Exception('Erro ao atualizar ranking global: ' . mysqli_error($conn));
+        }
+
+        // Update weekly rankings
+        $week_key_sql = mysqli_real_escape_string($conn, $week_key);
+        $sql = "INSERT INTO weekly_rankings (week_key, user_id, total_points, games_played) VALUES ("
+             . "'" . $week_key_sql . "', "
+             . intval($user_id) . ", "
+             . intval($score) . ", 1)
+             ON DUPLICATE KEY UPDATE
+             total_points = total_points + " . intval($score) . ",
+             games_played = games_played + 1";
+        if (!mysqli_query($conn, $sql)) {
+            throw new Exception('Erro ao atualizar ranking semanal: ' . mysqli_error($conn));
+        }
+
+        // If in a league, update league rankings
+        if ($league_id !== null) {
+            $sql = "INSERT INTO league_rankings (league_id, user_id, total_points, games_played) VALUES ("
+                 . intval($league_id) . ", "
+                 . intval($user_id) . ", "
+                 . intval($score) . ", 1)
+                 ON DUPLICATE KEY UPDATE
+                 total_points = total_points + " . intval($score) . ",
+                 games_played = games_played + 1";
+            if (!mysqli_query($conn, $sql)) {
+                throw new Exception('Erro ao atualizar ranking da liga: ' . mysqli_error($conn));
+            }
+
+            $sql = "INSERT INTO league_weekly_rankings (league_id, week_key, user_id, total_points, games_played) VALUES ("
+                 . intval($league_id) . ", "
+                 . "'" . $week_key_sql . "', "
+                 . intval($user_id) . ", "
+                 . intval($score) . ", 1)
+                 ON DUPLICATE KEY UPDATE
+                 total_points = total_points + " . intval($score) . ",
+                 games_played = games_played + 1";
+            if (!mysqli_query($conn, $sql)) {
+                throw new Exception('Erro ao atualizar ranking semanal da liga: ' . mysqli_error($conn));
+            }
+        }
+
+        mysqli_commit($conn);
+        close($conn);
+        return ['success' => true, 'game_id' => $game_id];
+    } catch (Exception $e) {
+        mysqli_rollback($conn);
+        $err = $e->getMessage();
+        close($conn);
+        return ['success' => false, 'error_key' => 'general', 'error' => $err];
+    }
+}
+
+// Get user game history
+// Returns an array of games (id, target_word, attempts_count, won, score, attempts_list, created_at, league_id) on success
+function get_user_history($user_id, $limit = 50) {
+    $conn = connect();
+    if (!$conn) return [];
+
+    $sql = "SELECT id, target_word, attempts_count, won, score, attempts_json, created_at, league_id
+            FROM games
+            WHERE user_id = " . intval($user_id) . "
+            ORDER BY created_at DESC
+            LIMIT " . intval($limit);
+    $result = mysqli_query($conn, $sql);
+    $out = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $row['attempts_list'] = $row['attempts_json'] ? json_decode($row['attempts_json'], true) : [];
+            unset($row['attempts_json']);
+            $out[] = $row;
+        }
+    }
+    close($conn);
+    return $out;
+}
+
 // Close the connection with the database
 function close($conn) {
     mysqli_close($conn);
