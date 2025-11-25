@@ -2,45 +2,47 @@
 require '../force_authenticate.php';
 require '../db_functions.php';
 
-
 $erros = [];
+$success = null;
+
+// tenta pegar o user_id pelo force_authenticate.php
+$user_id = $user_id ?? $_SESSION['user_id'] ?? null;
+
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-    if(isset($_POST["nome"],$_POST["descricao"],$_POST["keyword"])){
-        $conn = connect();
-        $nomeLiga = $_POST["nome"];
-        $descricaoLiga = $_POST["descricao"];
-        $keywordLiga = $_POST["keyword"];
+    $action = $_POST["action"] ?? "";
 
-        if(empty($_POST["nome"])){
-            $erros["nome"] = "Insira o nome da Liga";
+    if(!$user_id){
+        $erros["general"] = "Usuário não autenticado.";
+    } elseif($action === "create"){
+        $nomeLiga = trim($_POST["nome"] ?? "");
+        $descricaoLiga = trim($_POST["descricao"] ?? "");
+        $keywordLiga = strtoupper(trim($_POST["keyword_create"] ?? ""));
+
+        $result = create_league($nomeLiga, $user_id, $keywordLiga, $descricaoLiga);
+        if(!empty($result['success'])){
+            // auto-join
+            $joinRes = join_league($user_id, $keywordLiga);
+            $league_id = $result['league_id'] ?? $joinRes['league_id'] ?? null;
+            header("Location: liga.php?league_id=" . intval($league_id));
+            exit();
         } else {
-            $nomeLiga = tratarForm($_POST["nome"], $conn);
+            $erros[$result['error_key'] ?? 'general'] = $result['error'] ?? 'Erro ao criar a liga.';
         }
+    } elseif($action === "join"){
+        $keywordLiga = strtoupper(trim($_POST["keyword_join"] ?? ""));
 
-        if (empty($_POST["descricao"])) {
-            $erros["descricao"] = "Insira a descrição da Liga";
+        $result = join_league($user_id, $keywordLiga);
+        if(!empty($result['success'])){
+            $league_id = $result['league_id'] ?? null;
+            header("Location: liga.php?league_id=" . intval($league_id));
+            exit();
         } else {
-            $descricaoLiga = tratarForm($_POST["descricao"], $conn);
+            $erros[$result['error_key'] ?? 'general'] = $result['error'] ?? 'Erro ao entrar na liga.';
         }
-
-        if (empty($_POST["keyword"])) {
-            $erros["keyword"] = "Insira sua palavra-chave!";
-        } else {
-            $keywordLiga = tratarForm($_POST["keyword"], $conn);
-        }
-
-
-        close($conn);  
     }
 }
-function tratarForm($dado, $conn) {
-    $dado = trim($dado);
-    $dado = htmlspecialchars($dado);
-    $dado = stripslashes($dado);
-    $dado = mysqli_real_escape_string($conn, $dado);
-    return $dado;
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -72,28 +74,43 @@ function tratarForm($dado, $conn) {
             <a href="game.php" class="back-button">← Voltar</a>
             <h1 class="page-title">Ligas</h1>
         </div>
+        <?php if (!empty($erros['general'])): ?>
+            <div class="error-message"><?= htmlspecialchars($erros['general']) ?></div>
+        <?php endif; ?>
         <form class="form" action="#" method="post" novalidate>
+            <input type="hidden" name="action" value="create">    
+
             <label class="label-input <?php if(isset($erros["nome"])){ echo 'input-erro'; } ?>" for="name">
-                <input id="name" name="nome" type="text" placeholder="<?php if(isset($erros["nome"])){ echo $erros["nome"] ; } else { echo "Nome da Liga"; } ?>" required>
+                <input id="name" name="nome" type="text"
+                    value="<?= isset($_POST['nome']) ? htmlspecialchars($_POST['nome']) : '' ?>"
+                    placeholder="<?= isset($erros["nome"]) ? $erros["nome"] : "Nome da Liga" ?>" required>
             </label>
 
-            <label class="label-input <?php if(isset($erros["descricao"])){ echo 'input-erro'; } ?>" for="description">
-                <input id="description" name="descricao" type="text" placeholder="<?php if(isset($erros["descricao"])){ echo $erros["descricao"] ; } else { echo "Descrição"; } ?>" required>
+            <label class="label-input" for="description">
+                <input id="description" name="descricao" type="text" placeholder="Descrição (opcional)"
+                    value="<?= isset($_POST['descricao']) ? htmlspecialchars($_POST['descricao']) : '' ?>">
             </label>
 
-            <label class="label-input <?php if(isset($erros["keyword"])){ echo 'input-erro'; } ?>" for="keyword">
-                <input id="keyword" name="keyword" type="text" placeholder="<?php if(isset($erros["keyword"])){ echo $erros["keyword"] ; } else { echo "Palavra-chave"; } ?>" required>
+            <label class="label-input <?php if(isset($erros["keyword"])){ echo 'input-erro'; } ?>" for="keyword_create">
+                <input id="keyword_create" name="keyword_create" type="text"
+                    value="<?= isset($_POST['keyword_create']) ? htmlspecialchars($_POST['keyword_create']) : '' ?>"
+                    placeholder="<?= isset($erros["keyword"]) ? $erros["keyword"] : 'Palavra-chave (3-8 chars)' ?>" required>
             </label>    
 
             <button type="submit" class="btn btn-primary">Criar</button>
         </form>
+
         <form class="form" action="#" method="post" novalidate>
-            <p class="description">ou entre em uma Liga usando uma palavra-chave </p>
-            <label class="label-input" for="keyword">
-                <input id="keyword" name="keyword" type="text" placeholder="Palavra-chave" required>
-            </label>   
+            <input type="hidden" name="action" value="join">
+            <p class="description">Ou entre em uma Liga usando uma palavra-chave </p>
+            <label class="label-input <?php if(isset($erros["joinKeyword"])){ echo 'input-erro'; } ?>" for="keyword_join">
+                <input id="keyword_join" name="keyword_join" type="text"
+                    value="<?= isset($_POST['keyword_join']) ? htmlspecialchars($_POST['keyword_join']) : '' ?>"
+                    placeholder="<?= isset($erros["joinKeyword"]) ? $erros["joinKeyword"] : 'Palavra-chave' ?>" required>
+            </label>
 
             <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
     </div>
 
     <script src="../assets/js/historico.js"></script>
