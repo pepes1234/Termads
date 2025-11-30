@@ -262,6 +262,25 @@ function get_user_history($user_id, $limit = 50) {
     return $out;
 }
 
+// Function to get the league ID of a user
+function get_user_league_id($user_id) {
+    $conn = connect();
+    if (!$conn) {
+        return null;
+    }
+
+    $sql = "SELECT league_id FROM users WHERE id = " . intval($user_id) . " LIMIT 1";
+    $result = mysqli_query($conn, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        close($conn);
+        return $row['league_id'];
+    } else {
+        close($conn);
+        return null;
+    }
+}
+
 // Close the connection with the database
 function close($conn) {
     mysqli_close($conn);
