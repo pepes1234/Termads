@@ -16,7 +16,7 @@ require '../force_authenticate.php';
     <nav class="nav">
         <ul>
             <li><a href="game.php">Jogar</a></li>
-            <li><a href="#">Ligas</a></li>
+            <li><a href="ligaController.php">Ligas</a></li>
             <li><a href="#">Classificação</a></li>
             <li><a href="historico.php">Histórico</a></li>
         </ul>

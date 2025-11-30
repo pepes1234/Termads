@@ -67,12 +67,12 @@ close($conn);
     <nav class="nav">
         <ul>
             <li><a href="game.php">Jogar</a></li>
-            <li><a href="ligas.php">Ligas</a></li>
+            <li><a href="ligaController.php">Ligas</a></li>
             <li><a href="historico.php">Histórico</a></li>
         </ul>
     </nav>
     <main class="main-container">
-        <a href="ligas.php" class="back-button">← Voltar</a>
+        <a href="game.php" class="back-button">← Voltar</a>
         <h1>Liga: <?= htmlspecialchars($league['name']) ?></h1>
         <?php if (!empty($league['description'])): ?>
             <p><?= nl2br(htmlspecialchars($league['description'])) ?></p>
