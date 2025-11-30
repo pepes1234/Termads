@@ -1,8 +1,9 @@
 <?php
 // Endpoint to save a game result
-require '../force_authenticate.php';
-require '../db_functions.php';
-header('Content-Type: application/json');
+
+require '../../force_authenticate.php';
+require '../../db_functions.php';
+header('Content-Type: application/json; charset=utf-8');
 
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
