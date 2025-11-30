@@ -59,7 +59,7 @@ require '../force_authenticate.php';
 
             <div class="no-games" id="no-games" style="display: none;">
                 <p>Nenhuma partida registrada ainda.</p>
-                <a href="../index.html" class="play-button">Jogar Agora</a>
+                <a href="./game.php" class="play-button">Jogar Agora</a>
             </div>
         </div>
     </div>
