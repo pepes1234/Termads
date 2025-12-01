@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let targetWordOriginal = '';
     let currentRow = 0;
     let currentCol = 0;
+    let attemptsHistory = [];
+    const LEAGUE_ID = window.CURRENT_LEAGUE_ID ?? null;
     const maxRows = 6;
     const wordLength = 5;
 
@@ -262,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const guessNormalized = normalizeWord(guess);
         const originalGuess = findOriginalWord(guessNormalized);
+        attemptsHistory.push(originalGuess);
         
         const originalGuessArray = originalGuess.toUpperCase().split('');
         cells.forEach((cell, index) => {
@@ -305,6 +308,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (normalizeWord(guess) === normalizeWord(targetWord)) {
             setTimeout(() => {
                 showMessage(`Parabéns! Você acertou: ${targetWordOriginal}`);
+                const attempts = attemptsHistory.length;
+                const score = Math.max(0, 150 - (attempts - 1) * 20);
+                sendGameResult(score, 1, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);
             }, wordLength * 100 + 500);
         } else {
             currentRow++;
@@ -316,8 +322,53 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentRow >= maxRows) {
                 setTimeout(() => {
                     showMessage(`Fim de jogo! A palavra era: ${targetWordOriginal}`);
+                    const attempts = attemptsHistory.length || maxRows;
+                    const score = 0;
+                    sendGameResult(score, 0, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);
                 }, wordLength * 100 + 500);
             }
+        }
+    }
+
+    async function sendGameResult(score, won, attemptsCount, attemptsList, targetWord, leagueId = null) {
+        try {
+            const payload = {
+                score: Number(score),
+                won: Number(won) ? 1 : 0,
+                attempts_count: Number(attemptsCount),
+                attempts_list: attemptsList || [],
+                target_word: targetWord,
+                league_id: leagueId ? Number(leagueId) : null
+            };
+
+            const res = await fetch("/Termads/assets/api/save_game.php", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const ct = res.headers.get("Content-Type") || "";
+            const text = await res.text();
+            if (!ct.includes("application/json")) {
+                console.error("Resposta inesperada do servidor:", text);
+                return { success: false, error: text };
+            }
+
+            const json = JSON.parse(text);
+            if (json && json.success) {
+                console.log("Resultado do jogo enviado com sucesso.");
+                return { success: true , game_id: json.game_id };
+            } else {
+                console.error("Falha ao enviar resultado do jogo:", json?.error || json);
+                return { success: false, error: json?.error || "Erro desconhecido" };
+            }
+        } catch (err) {
+            console.error("Erro ao enviar resultado do jogo:", err);
+            alert("Erro de erro ao salvar o jogo.");
+            return { success: false, error: err.message || err};
         }
     }
 

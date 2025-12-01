@@ -16,7 +16,7 @@ require '../force_authenticate.php';
     <nav class="nav">
         <ul>
             <li><a href="game.php">Jogar</a></li>
-            <li><a href="#">Ligas</a></li>
+            <li><a href="ligaController.php">Ligas</a></li>
             <li><a href="#">Classificação</a></li>
             <li><a href="historico.php">Histórico</a></li>
         </ul>
@@ -59,7 +59,7 @@ require '../force_authenticate.php';
 
             <div class="no-games" id="no-games" style="display: none;">
                 <p>Nenhuma partida registrada ainda.</p>
-                <a href="../index.html" class="play-button">Jogar Agora</a>
+                <a href="./game.php" class="play-button">Jogar Agora</a>
             </div>
         </div>
     </div>
