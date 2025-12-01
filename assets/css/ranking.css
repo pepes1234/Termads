@@ -1,0 +1,404 @@
+body {
+    overflow-x: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.ranking-container {
+    min-height: 100vh;
+    padding-top: clamp(3.5rem, 8vh, 5rem);
+    padding-bottom: clamp(2rem, 4vh, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 3vh, 2rem);
+    width: 85vw !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding-left: clamp(1rem, 2vw, 2rem) !important;
+    padding-right: clamp(1rem, 2vw, 2rem) !important;
+    overflow-y: auto;
+    max-height: 100vh;
+    box-sizing: border-box !important;
+}
+
+.ranking-header {
+    position: relative !important;
+    margin-bottom: clamp(1rem, 3vh, 2rem);
+    width: 100% !important;
+}
+
+.ranking-header h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    white-space: nowrap;
+}
+
+.header-subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-secondary);
+    margin: clamp(0.3rem, 1vh, 0.5rem) 0 0 0;
+    font-weight: 500;
+}
+
+.ranking-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(0.5rem, 1.5vw, 1rem);
+    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.ranking-tabs {
+    display: flex;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
+    background: var(--bg-secondary);
+    padding: clamp(0.2rem, 0.5vh, 0.3rem);
+    border-radius: clamp(0.4rem, 0.8vw, 0.6rem);
+    border: 1px solid var(--border-default);
+}
+
+.ranking-tab {
+    padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(0.8rem, 2vw, 1.2rem);
+    background: none;
+    border: none;
+    border-radius: clamp(0.3rem, 0.6vw, 0.4rem);
+    color: var(--text-secondary);
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.ranking-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ranking-tab.active {
+    background: var(--color-correct);
+    color: white;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.ranking-info {
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.ranking-content {
+    position: relative;
+    min-height: 30vh;
+}
+
+.ranking-table-container {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.ranking-table-container.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.table-wrapper {
+    background: var(--bg-secondary);
+    border-radius: clamp(0.5rem, 1vw, 0.8rem);
+    border: 1px solid var(--border-default);
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 60vh;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+.ranking-table {
+    width: 100% !important;
+    min-width: 700px !important;
+    border-collapse: collapse;
+    font-size: clamp(0.8rem, 1.9vw, 0.95rem);
+    table-layout: fixed !important;
+}
+
+.ranking-table thead {
+    background: var(--bg-primary);
+    border-bottom: 2px solid var(--border-default);
+}
+
+.ranking-table th {
+    padding: clamp(0.8rem, 2vh, 1.2rem) clamp(0.6rem, 1.5vw, 1rem);
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rank-col {
+    width: 15%;
+    text-align: center !important;
+}
+
+.player-col {
+    width: 35%;
+}
+
+.points-col {
+    width: 25%;
+    text-align: right !important;
+}
+
+.league-col {
+    width: 25%;
+    text-align: center !important;
+}
+
+.ranking-row {
+    border-bottom: 1px solid var(--border-default);
+    transition: background-color 0.2s ease;
+}
+
+.ranking-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.ranking-row.current-user {
+    background: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid var(--color-correct);
+}
+
+.ranking-row.current-user:hover {
+    background: rgba(40, 167, 69, 0.15);
+}
+
+.ranking-table td {
+    padding: clamp(0.7rem, 1.8vh, 1rem) clamp(0.6rem, 1.5vw, 1rem);
+    vertical-align: middle;
+}
+
+.rank-cell {
+    text-align: center;
+}
+
+.rank-number {
+    font-weight: 700;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--text-primary);
+}
+
+.player-cell {
+    font-weight: 600;
+}
+
+.player-name {
+    color: var(--text-primary);
+    font-size: clamp(0.8rem, 1.9vw, 0.95rem);
+}
+
+.points-cell {
+    text-align: right;
+}
+
+.points-value {
+    font-weight: 700;
+    color: var(--color-correct);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.league-cell {
+    text-align: center;
+    color: var(--text-primary);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 600;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.no-league {
+    color: var(--text-disabled);
+    font-style: italic;
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+}
+
+.empty-state {
+    background: none !important;
+    border: none !important;
+}
+
+.empty-state:hover {
+    background: none !important;
+}
+
+.empty-message {
+    text-align: center;
+    padding: clamp(2rem, 6vh, 4rem) clamp(1rem, 3vw, 2rem);
+    color: var(--text-disabled);
+}
+
+.empty-icon {
+    font-size: clamp(2rem, 5vw, 3rem);
+    display: block;
+    margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+}
+
+.empty-message p {
+    font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+    font-weight: 500;
+    margin: 0;
+}
+
+.nav-active {
+    color: var(--color-correct) !important;
+    font-weight: 700 !important;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: clamp(1rem, 2vh, 1.5rem);
+    flex-wrap: wrap;
+    gap: clamp(0.5rem, 1vh, 1rem);
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.3rem, 0.8vw, 0.5rem);
+}
+
+.pagination-btn {
+    padding: clamp(0.4rem, 1vh, 0.6rem) clamp(0.6rem, 1.5vw, 0.8rem);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    border-radius: clamp(0.3rem, 0.6vw, 0.4rem);
+    cursor: pointer;
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: clamp(2rem, 4vw, 2.5rem);
+    text-align: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--bg-primary);
+    border-color: var(--border-active);
+    color: var(--text-primary);
+    transform: scale(1.02);
+}
+
+.pagination-btn.active {
+    background: var(--color-correct);
+    border-color: var(--color-correct);
+    color: white;
+    font-weight: 700;
+}
+
+.pagination-btn:disabled {
+    background: var(--bg-primary);
+    border-color: var(--border-default);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.pagination-info {
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.pagination-ellipsis {
+    padding: clamp(0.4rem, 1vh, 0.6rem);
+    color: var(--text-disabled);
+    font-weight: 500;
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+}
+
+@media (max-width: 480px) {
+    .ranking-container {
+        width: 95vw;
+    }
+    
+    .ranking-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .ranking-tabs {
+        justify-content: center;
+    }
+    
+    .ranking-info {
+        text-align: center;
+    }
+    
+    .ranking-table {
+        font-size: 0.75rem;
+    }
+    
+    .ranking-table th,
+    .ranking-table td {
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .player-col {
+        width: 40%;
+    }
+    
+    .rank-col {
+        width: 12%;
+    }
+    
+    .points-col,
+    .league-col {
+        width: 24%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .ranking-container {
+        width: 90vw;
+    }
+    
+    .ranking-table {
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .ranking-container {
+        width: 85vw !important;
+        max-width: none !important;
+    }
+    
+    .ranking-header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .header-subtitle {
+        font-size: 1rem;
+    }
+    
+    .ranking-table {
+        font-size: 0.95rem;
+        min-width: 800px !important;
+    }
+}
