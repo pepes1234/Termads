@@ -1,7 +1,7 @@
 <?php
 /* Database credentials */
-$servername = "localhost:3307";
+$servername = "localhost";
 $username = "root";
-$password = getenv('DB_PASSWORD') ?? "";
+$password = "";
 $dbname = "termads_db";
 $table_users = "users";
