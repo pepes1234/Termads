@@ -60,4 +60,34 @@ O uso de IA foi permitido para as seguintes finalidades:
 - *Referência no Código:*
     Isso foi aplicado no arquivo db_create_tables.php nos sql a partir da linha 41.
 
+
+### Interação 3
+
+- *Data:* 01/12/2025
+- *Etapa do Projeto:* Final - Criação do README.md
+- *Ferramenta de IA Utilizada:* Gemini 3 PRO
+- *Objetivo da Consulta:* Nunca havíamos criado um arquivo README em markdown.
+
+- *Prompt(s) Utilizado(s):*
+    1. "Olá, preciso criar um arquivo em markdown com as seguintes informações: o que é o projeto - É um projeto desenvolvido para ser projeto final da matéria de Desenvolvimento Web do curso TADS da UFPR. Feito por Rodrigo Yuji, Eduardo Pressutto, Lucas Pepes e Arthur Rangel. O projeto é um jogo de digitação, assim como solicitado, onde os usuários tem 6 tentativas para acertar a palavra escolhida aleatoriamente pelo nosso sistema. Dentro do jogo, é possível criar ligas para os usuários competirem entre si, além do usuário automaticamente já participar do ranking total do jogo, em um sistema de pontuação também criado. Além disso você também pode ver seu histórico de partidas, entre outras informações. Por fim, contamos com um banco de dados, para lidar com todas as contas de jogadores e quaisquer outras informações. Portanto, para um usuário acessar ao jogo, é preciso que ele possua uma conta e realize login com ela. 
+
+Contamos com as seguintes páginas: 
+- Jogar
+- Ligas
+- Classificação
+- Histórico
+- Perfil
+
+O projeto foi desenvolvido em PHP, CSS e JS.
+
+Antes de rodar o projeto, é preciso alterar as informações do arquivo db_credentials.php para as credenciais do SEU banco de dados. Após isso, rode o arquivo db_create_tables.php e, para melhor experiência, rode em seguida o arquivo insert_sample_data.php - para que as tabelas sejam populadas. Após isso, crie sua própria conta e aproveite!. - A partir destas informações, como você pode me ajudar?"
+
+- *Resumo da Resposta da IA:* 
+    A IA criou, não entedemos o porquê, metade do arquivo markdown baseado nas informações dadas. 
+
+- *Análise e Aplicação:*
+    Utilizamos o arquivo em markdown para finalizar o resto do README, baseado na gramática oferecida pela IA. Assim, finalizamos o arquivo README com o resto das informações.
+- *Referência no Código:*
+    Isso foi aplicado no arquivo README.md.
+
 ---
