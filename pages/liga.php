@@ -68,6 +68,7 @@ close($conn);
         <ul>
             <li><a href="game.php">Jogar</a></li>
             <li><a href="ligaController.php">Ligas</a></li>
+            <li><a href="ranking.php">Classificação</a></li>
             <li><a href="historico.php">Histórico</a></li>
         </ul>
     </nav>
