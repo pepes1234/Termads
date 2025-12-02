@@ -390,6 +390,24 @@ h1 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.play-again-message-btn {
+    margin-top: clamp(0.8rem, 2vh, 1rem);
+    padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(1rem, 2.5vw, 1.5rem);
+    background: var(--color-correct);
+    color: white;
+    border: none;
+    border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.play-again-message-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(106, 170, 100, 0.4);
+}
+
 @media (max-width: 480px) {
     :root {
         --tile-size: clamp(2.2rem, 12vw, 3rem);
@@ -552,8 +570,13 @@ nav{
     right: clamp(0.8rem, 2vw, 1.2rem);
     display: flex;
     flex-direction: column;
-    gap: clamp(0.4rem, 1vh, 0.6rem);
+    gap: clamp(0.8rem, 1.5vh, 1rem);
     z-index: 998;
+}
+
+.control-buttons {
+    display: flex;
+    gap: clamp(0.4rem, 1vw, 0.6rem);
 }
 
 .control-btn {
@@ -567,12 +590,18 @@ nav{
     font-weight: 600;
     transition: all 0.2s ease;
     white-space: nowrap;
+    display: block;
 }
 
 .control-btn:hover {
     background: var(--bg-primary);
     border-color: var(--border-active);
     transform: scale(1.02);
+}
+
+#resetBtn {
+    background: var(--color-partial);
+    border-color: var(--color-partial);
 }
 
 .toggle-controls {

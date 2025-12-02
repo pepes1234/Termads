@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCursorVisual();
     }
 
-    function showMessage(message) {
+    function showMessage(message, showPlayAgain = false) {
         const existingMessage = document.querySelector('.game-message');
         if (existingMessage) {
             existingMessage.remove();
@@ -222,13 +222,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageElement = document.createElement('div');
         messageElement.className = 'game-message';
         messageElement.textContent = message;
+        
+        if (showPlayAgain) {
+            const playAgainBtn = document.createElement('button');
+            playAgainBtn.textContent = 'Jogar Novamente';
+            playAgainBtn.className = 'play-again-message-btn';
+            playAgainBtn.onclick = function() {
+                location.reload();
+            };
+            messageElement.appendChild(document.createElement('br'));
+            messageElement.appendChild(playAgainBtn);
+        }
+        
         document.body.appendChild(messageElement);
 
-        setTimeout(() => {
-            if (messageElement.parentNode) {
-                messageElement.remove();
-            }
-        }, 2000);
+        if (!showPlayAgain) {
+            setTimeout(() => {
+                if (messageElement.parentNode) {
+                    messageElement.remove();
+                }
+            }, 2000);
+        }
     }
 
     function shakeRow() {
@@ -321,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (currentRow >= maxRows) {
                 setTimeout(() => {
-                    showMessage(`Fim de jogo! A palavra era: ${targetWordOriginal}`);
+                    showMessage(`Fim de jogo! A palavra era: ${targetWordOriginal}`, true);
                     const attempts = attemptsHistory.length || maxRows;
                     const score = 0;
                     sendGameResult(score, 0, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);
@@ -438,6 +452,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.addEventListener('keydown', handleKeyPress);
         document.addEventListener('click', handleKeyClick);
+        
+        const resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                location.reload();
+            });
+        }
     }
 
     initGame();

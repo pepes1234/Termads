@@ -8,7 +8,6 @@ $success = null;
 $user_id = $user_id ?? $_SESSION['user_id'] ?? null;
 
 if ($user_id) {
-if ($user_id) {
     $conn = connect();
     $sql = "SELECT league_id FROM users WHERE id = " . intval($user_id);
     $result = mysqli_query($conn, $sql);
