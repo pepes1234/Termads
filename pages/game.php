@@ -33,7 +33,10 @@ require "../force_authenticate.php";
     </nav>
     
     <div class="game-controls">
-        <button id="playAgainBtn" class="control-btn">Jogar Novamente</button>
+        <div class="control-buttons">
+            <button id="playAgainBtn" class="control-btn">Jogar Novamente</button>
+            <button id="resetBtn" class="control-btn">Reset</button>
+        </div>
         <div class="toggle-controls">
             <div class="control-group">
                 <label class="toggle-container">

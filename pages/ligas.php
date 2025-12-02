@@ -5,8 +5,22 @@ require '../db_functions.php';
 $erros = [];
 $success = null;
 
-// tenta pegar o user_id pelo force_authenticate.php
 $user_id = $user_id ?? $_SESSION['user_id'] ?? null;
+
+if ($user_id) {
+if ($user_id) {
+    $conn = connect();
+    $sql = "SELECT league_id FROM users WHERE id = " . intval($user_id);
+    $result = mysqli_query($conn, $sql);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        if (!empty($row['league_id'])) {
+            close($conn);
+            header("Location: liga.php?league_id=" . intval($row['league_id']));
+            exit();
+        }
+    }
+    close($conn);
+}
 
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $action = $_POST["action"] ?? "";
@@ -20,7 +34,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
         $result = create_league($nomeLiga, $user_id, $keywordLiga, $descricaoLiga);
         if(!empty($result['success'])){
-            // auto-join
             $joinRes = join_league($user_id, $keywordLiga);
             $league_id = $result['league_id'] ?? $joinRes['league_id'] ?? null;
             header("Location: liga.php?league_id=" . intval($league_id));
@@ -58,8 +71,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     <nav class="nav">
         <ul>
             <li><a href="game.php">Jogar</a></li>
-            <li><a href="ligaController.php">Ligas</a></li>
-            <li><a href="#">Classificação</a></li>
+            <li><a href="ligas.php" class="nav-active">Ligas</a></li>
+            <li><a href="ranking.php">Classificação</a></li>
             <li><a href="historico.php">Histórico</a></li>
         </ul>
         <ul>
