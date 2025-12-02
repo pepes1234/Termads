@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (normalizeWord(guess) === normalizeWord(targetWord)) {
             setTimeout(() => {
-                showMessage(`Parabéns! Você acertou: ${targetWordOriginal}`);
+                showMessage(`Parabéns! Você acertou: ${targetWordOriginal}`, true);
                 const attempts = attemptsHistory.length;
                 const score = Math.max(0, 150 - (attempts - 1) * 20);
                 sendGameResult(score, 1, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);

@@ -390,12 +390,14 @@ body {
     color: white;
 }
 
+.attempt-tile.present,
 .attempt-tile.wrong-position {
     background: var(--color-wrongpos);
     border-color: var(--color-wrongpos);
     color: white;
 }
 
+.attempt-tile.absent,
 .attempt-tile.incorrect {
     background: var(--color-incorrect);
     border-color: var(--color-incorrect);

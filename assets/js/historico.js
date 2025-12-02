@@ -63,28 +63,30 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // TODO: falar com o lucas se tem uma função parecida no main.js para reaproveitar
     function computeGuessResult(guessWord, targetWord) {
-        const g = (guessWord || '').toUpperCase().split('');
-        const t = (targetWord || '').toUpperCase().split('');
-        const result = Array(Math.max(g.length, 5)).fill('incorrect');
+        function normalizeWord(word) {
+            return word.toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
 
-        const remaining = {};
-        for (let i = 0; i < t.length; i++) {
-            if (i < g.length && g[i] === t[i]) {
+        const g = normalizeWord(guessWord || '').toUpperCase().split('');
+        const t = normalizeWord(targetWord || '').toUpperCase().split('');
+        const result = new Array(Math.max(g.length, 5)).fill('absent');
+
+        const targetArray = [...t];
+        
+        for (let i = 0; i < g.length; i++) {
+            if (g[i] === t[i]) {
                 result[i] = 'correct';
-            } else {
-                remaining[t[i]] = (remaining[t[i]] || 0) + 1;
+                targetArray[i] = null;
             }
         }
 
-        // Second pass: wrong-position if letter exists in remaining
         for (let i = 0; i < g.length; i++) {
-            if (result[i] === 'correct') continue;
-            const ch = g[i];
-            if (remaining[ch] > 0) {
-                result[i] = 'wrong-position';
-                remaining[ch]--;
-            } else {
-                result[i] = 'incorrect';
+            if (result[i] === 'absent' && targetArray.includes(g[i])) {
+                result[i] = 'present';
+                const index = targetArray.indexOf(g[i]);
+                targetArray[index] = null;
             }
         }
 
