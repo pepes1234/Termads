@@ -729,3 +729,7 @@ svg{
     height: 32px;
     margin-right: 12px;
 }
+.nav-active {
+    color: var(--color-correct) !important;
+    font-weight: 700 !important;
+}
