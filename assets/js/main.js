@@ -52,8 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
             targetWord = wordList[randomIndex].toUpperCase();
             targetWordOriginal = originalWordList[randomIndex].toUpperCase();
             
-            console.log(targetWordOriginal);
-			console.log(targetWord);
             
             return true;
         } catch (error) {

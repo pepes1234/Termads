@@ -19,7 +19,7 @@ require "../force_authenticate.php";
 <body>
     <nav class="nav">
         <ul>
-            <li><a href="game.php">Jogar</a></li>
+            <li><a href="game.php" class="nav-active">Jogar</a></li>
             <li><a href="ligas.php">Ligas</a></li>
             <li><a href="ranking.php">Classificação</a></li>
             <li><a href="historico.php">Histórico</a></li>

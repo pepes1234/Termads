@@ -18,7 +18,7 @@ require '../force_authenticate.php';
             <li><a href="game.php">Jogar</a></li>
             <li><a href="ligas.php">Ligas</a></li>
             <li><a href="ranking.php">Classificação</a></li>
-            <li><a href="historico.php">Histórico</a></li>
+            <li><a href="historico.php" class="nav-active">Histórico</a></li>
         </ul>
         <ul>
             <li><a href="perfil.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
