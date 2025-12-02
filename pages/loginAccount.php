@@ -86,15 +86,23 @@ function tratarForm($dado, $conn){
             <form class="form" action="#" method="post" novalidate>
                
 
-                <label class="label-input <?php if(isset($erros["email"])){ echo 'input-erro'; } ?>" for="email">
+                <label class="label-input <?php if(isset($erros["email"]) || isset($erros["login"])){ echo 'input-erro'; } ?>" for="email">
                     <i class="fa-solid fa-envelope icon-modify" aria-hidden="true"></i>
-                    <input id="email" name="email" type="email" placeholder="<?php if(isset($erros["email"])){ echo $erros["email"] ; } else { echo "Email"; } ?>" required>
+                    <input id="email" name="email" type="email" 
+                    placeholder="<?php if(isset($erros["email"])){ echo $erros["email"] ; } 
+                    elseif(isset($erros["login"])){ echo $erros["login"] ; }
+                    else { echo "Email"; } ?>" 
+                    required>
                 </label>
 
-                <label class="label-input <?php if(isset($erros["senha"])){ echo 'input-erro'; } ?>" for="password">
+                <label class="label-input <?php if(isset($erros["senha"]) || isset($erros["login"])){ echo 'input-erro'; } ?>" for="password">
                     <i class="fa-solid fa-lock icon-modify" aria-hidden="true"></i>
-                    <input id="password" name="senha" type="password" placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } else { echo "Senha"; } ?>" required>
-                </label>    
+                    <input id="password" name="senha" type="password" 
+                    placeholder="<?php if(isset($erros["senha"])){ echo $erros["senha"] ; } 
+                    elseif(isset($erros["login"])){ echo $erros["login"] ; }
+                    else { echo "Senha"; } ?>" 
+                    required>
+                </label>
 
                 <button type="submit" class="btn btn-primary">Entrar</button>
             </form>
