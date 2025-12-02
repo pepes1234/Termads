@@ -22,34 +22,42 @@ O uso de IA foi permitido para as seguintes finalidades:
 ### Interação 1
 
 - **Data:** 20/10/2025
-- **Etapa do Projeto:** 1 - Compressão de Arquivos
-- **Ferramenta de IA Utilizada:** Gemini Advanced
-- **Objetivo da Consulta:** Eu estava com dificuldades para entender como gerenciar o dicionário do algoritmo LZW quando ele atinge o tamanho máximo. Precisava de uma estratégia para lidar com isso.
+- **Etapa do Projeto:** 1 - Compressão de Responsividade
+- **Ferramenta de IA Utilizada:** GPT-5
+- **Objetivo da Consulta:** Eu estava com dificuldades para entender como criar e utilizar resposatividade de telas.
 
 - **Prompt(s) Utilizado(s):**
-  1. "No algoritmo de compressão LZW, o que acontece quando o dicionário atinge o tamanho máximo? Quais são as estratégias mais comuns para lidar com isso?"
-  2. "Pode me dar um exemplo em Python de como implementar a estratégia de 'resetar o dicionário' no LZW?"
+  1. "Como utilizar clamp para realizar responsividade de tela, dê exemplos."
 
 - **Resumo da Resposta da IA:**
-  A IA explicou três estratégias: 1) parar de adicionar novas entradas, 2) resetar o dicionário para o estado inicial, e 3) usar uma política de descarte, como LRU (Least Recently Used), que é mais complexa. A IA forneceu um pseudocódigo para a estratégia de reset, que parecia a mais simples e eficaz para este projeto.
+  A IA explicou essa estratégia de responsividade e depois deu exemplos de códigos usando clamp e como deixar mais organizado utilizando variáveis.
 
 - **Análise e Aplicação:**
-  A resposta da IA foi extremamente útil para clarear as opções. Optei por implementar a estratégia de resetar o dicionário. O código fornecido pela IA não foi usado diretamente, pois estava muito simplificado e não se encaixava na minha arquitetura de classes. No entanto, a lógica de verificar o tamanho do dicionário e invocar uma função `reset_dictionary()` foi a base para a minha implementação. Isso me poupou tempo de pesquisa em artigos e livros.
+  A resposta da IA foi extremamente útil para clarear a melhor forma de responsividade e deixar o código muito mais organizado e de fácil visualização.
 
 - **Referência no Código:**
-  A lógica inspirada por esta interação foi implementada no arquivo `compressor/lzw.py`, especificamente na função `compress()`, por volta da linha 85.
+  A lógica inspirada por esta interação foi implementada no arquivo `createAccount.css` e também em outros arquivos css porém em menor quantidade.
 
 ---
 
 ### Interação 2
 
-- **Data:** ...
-- **Etapa do Projeto:** ...
-- **Ferramenta de IA Utilizada:** ...
-- **Objetivo da Consulta:** ...
-- **Prompt(s) Utilizado(s):** ...
-- **Resumo da Resposta da IA:** ...
-- **Análise e Aplicação:** ...
-- **Referência no Código:** ...
+- *Data:* 24/11/2025
+- *Etapa do Projeto:* 3 - Sistema de ranking e ligas
+- *Ferramenta de IA Utilizada:* Copilot PRO
+- *Objetivo da Consulta:* Estávamos em dúvida de como organizar as tabelas SQL para criar o sistema de ranking. Precisávamos de ideias de como isso poderia ser feito.
+
+- *Prompt(s) Utilizado(s):*
+    1. "Boa noite, estou fazendo um trabalho da faculdade, nele preciso fazer um jogo e ter nele um sistema de ranking geral e semanal e um sistema de ligas. Poderia me ajudar a pensar em como organizar isso nas tabelas do sql (estou usando o sqli no php) e como ficaria mais ou menos a estrutura do código? Utilize como contexto os arquivos desse projeto."
+    2. "Queria fazer de um jeito que o usuário pudesse estar só em uma liga ou em nenhuma. Além disso gostaria de salvar na tabela de games as palavras que o usuário tentou para mostrar no histórico."
+
+- *Resumo da Resposta da IA:* 
+    A IA explicou quantas tabelas seriam necessárias, quais atributos talvez seriam necessários e duas maneiras de trabalhar com os rankings: a primeira maneira seria sem materializar as tabelas e a segunda seria as materializando. A IA ofereceu também o SQL que poderia ser utilizado para criá-las.
+
+- *Análise e Aplicação:*
+    Achamos a resposta da IA muito útil, pois deixou muito mais visível como organizar as tabelas, preferimos a opção de materializar as tabelas, por causa do estilo do projeto. O SQL disponibilizado por ela foi utilizado, mas alterado, colocamos os atributos que realmente queríamos e achávamos necessários.
+
+- *Referência no Código:*
+    Isso foi aplicado no arquivo db_create_tables.php nos sql a partir da linha 41.
 
 ---
