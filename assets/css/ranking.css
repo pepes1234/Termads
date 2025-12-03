@@ -1,12 +1,95 @@
-body {
-    overflow-x: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
+/* Variáveis CSS */
+:root {
+    --tile-size: clamp(1rem, 2.5vw, 1.8rem);
+    --gap: clamp(0.25rem, 1vw, 0.5rem);
+    --border-width: clamp(0.5px, 0.05vw, 1px);
+    --key-height: clamp(2rem, 6vh, 3.5rem);
+    --font-title: clamp(1rem, 3vw, 2.2rem);
+    --font-tile: clamp(1rem, 3.5vw, 2rem);
+    --font-key: clamp(0.6rem, 2vw, 1.1rem);
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2a2a2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #9ca3af;
+    --text-disabled: #555555;
+    --border-default: #3a3a3a;
+    --border-active: #5a5a5a;
+    --color-correct: #6aaa64;
+    --color-partial: #c9b458;
+    --color-wrong: #3a3a3a;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos da navegação */
+ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 0;
+}
+li{
+    margin: 0 12px;
+    padding: 4px 8px;
+    transition: background-color 0.3s;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-secondary);
+    padding: clamp(0.2rem, 0.6vh, 0.4rem) 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 12px;
+    flex-shrink: 0;
+    z-index: 999;
+}
+a{
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+}
+a:hover{
+    color: var(--border-active);
+}
+svg{
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+}
+.nav-active {
+    color: var(--color-correct) !important;
+    font-weight: 700 !important;
+}
+
+/* Estilos do ranking */
 .ranking-container {
     min-height: 100vh;
-    padding-top: clamp(3.5rem, 8vh, 5rem);
+    padding-top: clamp(5rem, 10vh, 7rem);
     padding-bottom: clamp(2rem, 4vh, 3rem);
     display: flex;
     flex-direction: column;

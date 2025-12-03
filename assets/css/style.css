@@ -1,413 +1,303 @@
 :root {
-    --tile-size: clamp(1rem, 2.5vw, 1.8rem);
-    --gap: clamp(0.25rem, 1vw, 0.5rem);
-    --border-width: clamp(0.5px, 0.05vw, 1px);
-    --key-height: clamp(2rem, 6vh, 3.5rem);
-    --font-title: clamp(1rem, 3vw, 2.2rem);
-    --font-tile: clamp(1rem, 3.5vw, 2rem);
-    --font-key: clamp(0.6rem, 2vw, 1.1rem);
-    --bg-primary: #121212;
-    --bg-secondary: #1e1e1e;
-    --bg-tertiary: #2a2a2a;
-    --text-primary: #e0e0e0;
-    --text-secondary: #9ca3af;
-    --text-disabled: #555555;
-    --border-default: #3a3a3a;
-    --border-active: #5a5a5a;
-    --color-correct: #6aaa64;
-    --color-partial: #c9b458;
-    --color-wrong: #3a3a3a;
+    --tile-size: clamp(3rem, 4vw, 4.5rem); 
+    --gap: clamp(0.3rem, 1vw, 0.5rem); 
+    --border-width: clamp(0.5px, 0.05vw, 1px); 
+    --key-height: clamp(2.5rem, 6vh, 4rem); 
+    --font-title: clamp(1.5rem, 3vw, 2.5rem); 
+    --font-tile: clamp(1.5rem, 3.5vw, 2.5rem); 
+    --font-key: clamp(0.8rem, 2vw, 1.2rem); 
+    --bg-primary: #121212; 
+    --bg-secondary: #1e1e1e; 
+    --bg-tertiary: #2a2a2a; 
+    --text-primary: #e0e0e0; 
+    --text-secondary: #9ca3af; 
+    --text-disabled: #555555; 
+    --border-default: #3a3a3a; 
+    --border-active: #5a5a5a; 
+    --color-correct: #6aaa64; 
+    --color-partial: #c9b458; 
+    --color-wrong: #3a3a3a; 
+    --shadow-cursor: rgba(224, 224, 224, 0.3); 
+    --bg-cursor-active: rgba(224, 224, 224, 0.05); 
+    --shadow-message: rgba(0, 0, 0, 0.3); 
+    --shadow-button-hover: rgba(106, 170, 100, 0.4); 
+    --bg-control-group: rgba(255, 255, 255, 0.02); 
+    --border-control-group: rgba(255, 255, 255, 0.05); 
 }
-
 *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
 }
-
 body {
-    font-family: Arial, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family: Arial, sans-serif; 
+    background: var(--bg-primary); 
+    color: var(--text-primary); 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
     margin: 0;
     padding: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    overflow: hidden;
+    user-select: none; 
+    -webkit-user-select: none; 
+    overflow: hidden; 
 }
-
 .game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    width: 100%;
-    max-width: min(95vw, 42rem);
-    margin: 0 auto;
-    padding: clamp(0.5rem, 1vh, 1rem);
-    box-sizing: border-box;
-    height: calc(100vh - clamp(2rem, 4vh, 3rem));
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    flex: 1; 
+    width: 100%; 
+    max-width: min(95vw, 42rem); 
+    margin: 0 auto; 
+    padding: clamp(0.5rem, 1vh, 1rem); 
+    box-sizing: border-box; 
+    height: calc(100vh - clamp(2rem, 4vh, 3rem)); 
 }
-
 header {
-    flex-shrink: 0;
-    margin-top: clamp(4rem, 8vh, 6rem);
-    margin-bottom: clamp(1rem, 2vh, 1.5rem);
+    flex-shrink: 0; 
+    margin-top: clamp(4rem, 8vh, 6rem); 
+    margin-bottom: clamp(1rem, 2vh, 1.5rem); 
 }
-
-.header-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 500px;
-}
-
-.header-section h1 {
-    margin: 0;
-    flex: 1;
-    text-align: center;
-}
-
 h1 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Seg᠘８᠘８I', sans-serif;
-    font-size: var(--font-title);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+    font-size: var(--font-title); 
+    font-weight: 800; 
     text-align: center;
 }
-
 .game-board {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: clamp(0.5rem, 2vh, 2rem); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
     width: 100%;
-    margin: clamp(0.5rem, 1vh, 1rem) 0;
+    margin: clamp(0.5rem, 1vh, 1rem) 0; 
 }
-
 .grid {
-    display: grid;
-    grid-template-rows: repeat(6, 1fr);
-    gap: var(--gap);
+    display: grid; 
+    grid-template-rows: repeat(6, 1fr); 
+    gap: var(--gap); 
     width: 100%;
-    max-width: min(95vw, 25rem);
-    margin: 0 auto;
+    max-width: min(95vw, 25rem); 
+    margin: 0 auto; 
 }
-
 .row {
-    display: flex;
-    justify-content: center;
-    gap: var(--gap);
+    display: flex; 
+    justify-content: center; 
+    gap: var(--gap); 
 }
-
 .tile {
-    width: var(--tile-size);
-    height: var(--tile-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-secondary);
-    border: var(--border-width) solid var(--border-default);
-    border-radius: clamp(0.2rem, 0.5vw, 0.4rem);
-    font-size: var(--font-tile);
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    width: var(--tile-size); 
+    height: var(--tile-size); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: var(--bg-secondary); 
+    border: var(--border-width) solid var(--border-default); 
+    border-radius: clamp(0.2rem, 0.5vw, 0.4rem); 
+    font-size: var(--font-tile); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
 }
-
 .tile:hover {
-    border-color: var(--border-active);
-    transform: scale(1.05);
+    border-color: var(--border-active); 
+    transform: scale(1.05); 
     cursor: pointer;
 }
-
-.tile:focus {
-    outline: none;
-    border-color: transparent;
-}
-
-.tile:focus-visible {
-    outline: none;
-}
-
 .tile.cursor-active {
-    border-color: var(--text-primary);
-    border-width: 2px;
-    box-shadow: 0 0 8px rgba(224, 224, 224, 0.3);
+    border-color: var(--text-primary); 
+    border-width: 2px; 
+    box-shadow: 0 0 8px var(--shadow-cursor); 
 }
-
 .row-active .tile.cursor-active {
-    border-color: var(--text-primary);
-    background: rgba(224, 224, 224, 0.05);
+    border-color: var(--text-primary); 
+    background: var(--bg-cursor-active); 
 }
-
-.tile.correct {
-    background: var(--color-correct);
-    border-color: var(--color-correct);
-    color: white;
-}
-
-.tile.wrong-position {
-    background: var(--color-partial);
-    border-color: var(--color-partial);
-    color: white;
-}
-
-.tile.incorrect {
-    background: var(--color-wrong);
-    border-color: var(--color-wrong);
-    color: var(--text-secondary);
-}
-
 .row-active .tile {
-    border-color: var(--border-active);
-    opacity: 1;
+    border-color: var(--border-active); 
+    opacity: 1; 
 }
-
-.row-active .tile:not(.cursor-active) {
-    opacity: 0.5;
-    transform: none;
-}
-
-.row-inactive .tile,
 .row-used .tile {
-    opacity: 0.6;
-    pointer-events: none;
-    background: var(--bg-primary);
-    border-color: var(--border-default);
-    color: var(--text-disabled);
+    opacity: 0.6; 
+    pointer-events: none; 
+    background: var(--bg-primary); 
+    border-color: var(--border-default); 
+    color: var(--text-disabled); 
 }
-
 .row-future .tile {
-    opacity: 0.4;
-    background: var(--bg-primary);
-    border-color: var(--text-disabled);
-    color: var(--text-disabled);
+    opacity: 0.4; 
+    background: var(--bg-primary); 
+    border-color: var(--text-disabled); 
+    color: var(--text-disabled); 
 }
-
 .keyboard {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.3rem, 1vh, 0.6rem);
-    flex-shrink: 0;
+    display: flex; 
+    flex-direction: column; 
+    gap: clamp(0.3rem, 1vh, 0.6rem); 
+    flex-shrink: 0; 
     width: 100%;
-    max-width: min(95vw, 32rem);
-    margin: 0 auto;
-    padding: clamp(0.2rem, 1vh, 0.5rem);
-    align-items: center;
-    justify-content: center;
-    margin-bottom: clamp(0.5rem, 1vh, 1rem);
+    max-width: min(95vw, 32rem); 
+    margin: 0 auto; 
+    padding: clamp(0.2rem, 1vh, 0.5rem); 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: clamp(0.5rem, 1vh, 1rem); 
 }
-
 .kbd-row {
-    display: flex;
-    justify-content: center;
-    gap: clamp(0.2rem, 0.6vw, 0.3rem);
+    display: flex; 
+    justify-content: center; 
+    gap: clamp(0.2rem, 0.6vw, 0.3rem); 
 }
-
 .key {
-    min-width: clamp(2.8rem, 6.5vw, 3.8rem);
-    height: var(--key-height);
-    padding: 0 clamp(0.5rem, 1.2vw, 0.9rem);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-default);
-    border-radius: clamp(0.2rem, 0.4vw, 0.4rem);
-    color: var(--text-primary);
-    font-size: var(--font-key);
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.1s ease;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
+    min-width: clamp(2.8rem, 6.5vw, 3.8rem); 
+    height: var(--key-height); 
+    padding: 0 clamp(0.5rem, 1.2vw, 0.9rem); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: var(--bg-tertiary); 
+    border: 1px solid var(--border-default); 
+    border-radius: clamp(0.2rem, 0.4vw, 0.4rem); 
+    color: var(--text-primary); 
+    font-size: var(--font-key); 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    user-select: none; 
+    transition: all 0.1s ease; 
+    outline: none; 
 }
-
 .key:hover {
-    background: var(--bg-secondary);
-    border-color: var(--border-active);
+    background: var(--bg-secondary); 
+    border-color: var(--border-active); 
 }
-
 .key:active {
-    transform: scale(0.95);
+    transform: scale(0.95); 
 }
-
 .key--action {
-    min-width: clamp(4rem, 9vw, 5rem);
-    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    min-width: clamp(4rem, 9vw, 5rem); 
+    font-size: clamp(0.8rem, 2vw, 1.2rem); 
 }
-
-.key-clicked {
-    background: var(--border-active) !important;
-    border-color: var(--text-primary) !important;
-    transform: scale(0.95);
-}
-
 .key.correct,
 .key.wrong-position,
 .key.incorrect {
     color: white;
 }
-
+/* aqui começo a usar data-state em vez de só utilizar a classe pq achei mais elegante
+mas fiquei c preguiça de terminar o resto */
 .key.correct,
 .key[data-state="correct"] {
-    background: var(--color-correct);
-    border-color: var(--color-correct);
+    background: var(--color-correct); 
+    border-color: var(--color-correct); 
 }
-
 .key.wrong-position,
 .key.present,
 .key[data-state="present"] {
-    background: var(--color-partial);
-    border-color: var(--color-partial);
+    background: var(--color-partial); 
+    border-color: var(--color-partial); 
 }
-
-.key.incorrect,
 .key.absent,
 .key[data-state="absent"] {
-    background: var(--color-wrong);
-    border-color: var(--color-wrong);
-    color: var(--text-secondary);
-    opacity: 0.3;
-    transform: scale(0.95);
-    transition: all 0.3s ease;
-    cursor: not-allowed;
+    background: var(--color-wrong); 
+    border-color: var(--color-wrong); 
+    color: var(--text-secondary); 
+    opacity: 0.3; 
+    transform: scale(0.95); 
+    transition: all 0.3s ease; 
+    cursor: not-allowed; 
 }
-
-.key.disabled {
-    background: var(--bg-secondary);
-    color: var(--text-disabled);
-    opacity: 0.2;
-    transform: scale(0.9);
-    transition: all 0.3s ease;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
 @keyframes pop {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    0%, 100% { transform: scale(1); } 
+    50% { transform: scale(1.1); } 
 }
-
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-    20%, 40%, 60%, 80% { transform: translateX(8px); }
+    0%, 100% { transform: translateX(0); } 
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); } 
+    20%, 40%, 60%, 80% { transform: translateX(8px); } 
 }
-
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+    from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 1; 
+        transform: translateY(0); 
     }
 }
-
 @keyframes flip {
     0% {
-        transform: rotateX(0deg);
+        transform: rotateX(0deg); 
     }
     50% {
-        transform: rotateX(-90deg);
+        transform: rotateX(-90deg); 
     }
     100% {
-        transform: rotateX(0deg);
+        transform: rotateX(0deg); 
     }
 }
-
-@keyframes flipIn {
-    0% {
-        transform: rotateX(-90deg);
-        background: var(--bg-tertiary);
-        border-color: var(--border-default);
-        color: var(--text-primary);
-    }
-    100% {
-        transform: rotateX(0deg);
-    }
-}
-
 .tile.typed {
-    animation: pop 0.1s ease-in-out;
+    animation: pop 0.1s ease-in-out; 
 }
-
 .tile.flip {
-    animation: flip 0.6s ease-in-out forwards;
+    animation: flip 0.6s ease-in-out forwards; 
 }
-
-.tile[data-state="correct"],
-.tile.correct {
+.tile[data-state="correct"]{
     background: var(--color-correct);
     border-color: var(--color-correct);
     color: white;
 }
-
-.tile[data-state="present"],
-.tile.wrong-position {
+.tile[data-state="present"]{
     background: var(--color-partial);
     border-color: var(--color-partial);
     color: white;
 }
-
-.tile[data-state="absent"],
-.tile.incorrect {
+.tile[data-state="absent"]{
     background: var(--color-wrong);
     border-color: var(--color-wrong);
     color: var(--text-secondary);
 }
-
 .row.shake-row {
-    animation: shake 0.6s ease-in-out;
+    animation: shake 0.6s ease-in-out; 
 }
-
 .game-message {
-    position: fixed;
-    top: clamp(4.5rem, 9vh, 6.5rem);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.2rem, 3vw, 2rem);
-    border-radius: clamp(0.5rem, 1vw, 0.8rem);
-    border: 2px solid var(--border-active);
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    font-weight: 600;
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
-    text-align: center;
-    max-width: 90%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: fixed; 
+    top: clamp(4.5rem, 9vh, 6.5rem); 
+    left: 0; 
+    right: 0; 
+    margin: 0 auto; 
+    width: fit-content; 
+    background: var(--bg-secondary); 
+    color: var(--text-primary); 
+    padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.2rem, 3vw, 2rem); 
+    border-radius: clamp(0.5rem, 1vw, 0.8rem); 
+    border: 2px solid var(--border-active); 
+    font-size: clamp(0.9rem, 2vw, 1.1rem); 
+    font-weight: 600; 
+    z-index: 1000; 
+    animation: slideIn 0.3s ease-out forwards; 
+    text-align: center; 
+    max-width: 90%; 
+    box-shadow: 0 4px 12px var(--shadow-message); 
 }
-
 .play-again-message-btn {
-    margin-top: clamp(0.8rem, 2vh, 1rem);
-    padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(1rem, 2.5vw, 1.5rem);
-    background: var(--color-correct);
-    color: white;
-    border: none;
-    border-radius: clamp(0.3rem, 0.6vw, 0.5rem);
-    font-size: clamp(0.85rem, 2vw, 1rem);
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    margin-top: clamp(0.8rem, 2vh, 1rem); 
+    padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(1rem, 2.5vw, 1.5rem); 
+    background: var(--color-correct); 
+    color: white; 
+    border: none; 
+    border-radius: clamp(0.3rem, 0.6vw, 0.5rem); 
+    font-size: clamp(0.85rem, 2vw, 1rem); 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
 }
-
 .play-again-message-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(106, 170, 100, 0.4);
+    transform: scale(1.05); 
+    box-shadow: 0 4px 8px var(--shadow-button-hover); 
 }
-
 @media (max-width: 480px) {
     :root {
         --tile-size: clamp(2.2rem, 12vw, 3rem);
@@ -417,38 +307,31 @@ h1 {
         --font-key: clamp(0.6rem, 3vw, 1rem);
         --font-title: clamp(1rem, 5vw, 1.8rem);
     }
-    
     .game-container {
         padding: clamp(0.2rem, 1vh, 0.8rem);
         gap: clamp(0.2rem, 1vh, 0.8rem);
         min-height: 100svh;
     }
-    
     .grid {
         gap: clamp(0.08rem, 0.3vw, 0.15rem);
         max-width: min(98vw, 22rem);
     }
-    
     .kbd-row {
         gap: clamp(0.08rem, 0.3vw, 0.15rem);
     }
-    
     .key--action {
         min-width: clamp(3rem, 15vw, 4.5rem);
         font-size: clamp(0.5rem, 2.5vw, 0.9rem);
         padding: 0 clamp(0.3rem, 1vw, 0.6rem);
     }
-    
     nav {
         padding: 0.3rem 0;
         margin-bottom: 0.5rem;
     }
-    
     nav ul li {
         margin: 0 clamp(0.2rem, 2vw, 0.8rem);
         font-size: clamp(0.8rem, 3vw, 1.2rem);
     }
-    
     .game-message {
         top: clamp(3.5rem, 9vh, 5.5rem);
         padding: clamp(0.6rem, 1.5vw, 1rem) clamp(1rem, 2.5vw, 1.5rem);
@@ -456,7 +339,6 @@ h1 {
         max-width: 95%;
     }
 }
-
 @media (max-width: 320px) {
     :root {
         --tile-size: clamp(1.8rem, 14vw, 2.5rem);
@@ -465,67 +347,56 @@ h1 {
         --font-key: clamp(0.5rem, 3.5vw, 0.8rem);
         --font-title: clamp(0.9rem, 6vw, 1.5rem);
     }
-    
     .game-container {
         padding: clamp(0.1rem, 0.8vh, 0.5rem);
         gap: clamp(0.1rem, 0.8vh, 0.5rem);
     }
-    
     .key--action {
         min-width: clamp(2rem, 18vw, 3.5rem);
         font-size: clamp(0.4rem, 2.8vw, 0.7rem);
         padding: 0 clamp(0.2rem, 0.8vw, 0.4rem);
     }
-    
     .grid {
         max-width: min(98vw, 18rem);
     }
-    
     nav ul li {
         margin: 0 clamp(0.1rem, 1.5vw, 0.5rem);
         font-size: clamp(0.7rem, 4vw, 1rem);
         padding: 2px 4px;
     }
 }
-
 @media (max-height: 600px) {
     :root {
-        --tile-size: clamp(2rem, 6vh, 3rem);
-        --key-height: clamp(2.2rem, 6vh, 3.2rem);
-        --font-tile: clamp(1rem, 3vh, 1.5rem);
-        --font-key: clamp(0.7rem, 2vh, 1rem);
-        --font-title: clamp(1rem, 3vh, 1.5rem);
+        --tile-size: clamp(2.5rem, 8vh, 3.5rem);
+        --key-height: clamp(2.5rem, 7vh, 3.5rem);
+        --font-tile: clamp(1.2rem, 4vh, 1.8rem);
+        --font-key: clamp(0.8rem, 2.5vh, 1.1rem);
+        --font-title: clamp(1.2rem, 3.5vh, 1.8rem);
     }
-    
     .game-container {
         padding: clamp(0.1rem, 1vh, 0.5rem);
         gap: clamp(0.1rem, 0.8vh, 0.4rem);
         min-height: 100vh;
     }
-    
     .grid {
         gap: clamp(0.08rem, 0.5vh, 0.2rem);
         margin: clamp(0.2rem, 1vh, 0.5rem) 0;
     }
-    
     .keyboard {
         gap: clamp(0.1rem, 0.5vh, 0.3rem);
         padding: clamp(0.1rem, 0.5vh, 0.3rem);
     }
-    
     nav {
         padding: clamp(0.2rem, 1vh, 0.4rem) 0;
         margin-bottom: clamp(0.2rem, 1vh, 0.4rem);
     }
 }
-
 @media (min-width: 1200px) {
     .game-container {
         width: min(95%, 35rem);
         max-height: 90vh;
     }
 }
-
 @media (min-height: 800px) {
     :root {
         --tile-size: clamp(3.2rem, 5vw, 4.2rem);
@@ -535,201 +406,149 @@ h1 {
     }
 }
 ul{
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    list-style: none; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center; 
     padding: 8px;
     margin: 0;
 }
 li{
-    margin: 0 12px;
-    padding: 4px 8px;
-    transition: background-color 0.3s;
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    margin: 0 12px; 
+    padding: 4px 8px; 
+    transition: background-color 0.3s; 
+    font-size: clamp(1rem, 2.5vw, 1.2rem); 
 }
 nav{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--bg-secondary);
-    padding: clamp(0.2rem, 0.6vh, 0.4rem) 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-radius: 12px;
-    flex-shrink: 0;
-    z-index: 999;
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    background-color: var(--bg-secondary); 
+    padding: clamp(0.2rem, 0.6vh, 0.4rem) 0; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    border-radius: 12px; 
+    flex-shrink: 0; 
+    z-index: 999; 
 }
-
-.game-controls {
-    position: fixed;
-    top: clamp(0.8rem, 2vh, 1.2rem);
-    right: clamp(0.8rem, 2vw, 1.2rem);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.8rem, 1.5vh, 1rem);
-    z-index: 998;
-}
-
-.control-buttons {
-    display: flex;
-    gap: clamp(0.4rem, 1vw, 0.6rem);
-}
-
-.control-btn {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-default);
-    color: var(--text-primary);
-    padding: clamp(0.4rem, 1vh, 0.6rem) clamp(0.6rem, 1.5vw, 0.8rem);
-    border-radius: clamp(0.3rem, 0.5vw, 0.4rem);
-    cursor: pointer;
-    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
-    font-weight: 600;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    display: block;
-}
-
-.control-btn:hover {
-    background: var(--bg-primary);
-    border-color: var(--border-active);
-    transform: scale(1.02);
-}
-
-#resetBtn {
-    background: var(--color-partial);
-    border-color: var(--color-partial);
-}
-
 .toggle-controls {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.3rem, 0.8vh, 0.4rem);
+    position: fixed; 
+    top: clamp(4rem, 8vh, 5rem); 
+    right: clamp(0.8rem, 2vw, 1.2rem); 
+    display: flex; 
+    flex-direction: column; 
+    gap: clamp(0.3rem, 0.8vh, 0.4rem); 
+    z-index: 998; 
 }
-
 .control-group {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.2rem, 0.5vh, 0.3rem);
-    padding: clamp(0.3rem, 0.7vh, 0.4rem);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: clamp(0.2rem, 0.4vw, 0.3rem);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; 
+    flex-direction: column; 
+    gap: clamp(0.2rem, 0.5vh, 0.3rem); 
+    padding: clamp(0.3rem, 0.7vh, 0.4rem); 
+    background: var(--bg-control-group); 
+    border-radius: clamp(0.2rem, 0.4vw, 0.3rem); 
+    border: 1px solid var(--border-control-group); 
 }
-
 .toggle-container {
-    display: flex;
-    align-items: center;
-    gap: clamp(0.3rem, 0.8vw, 0.4rem);
-    cursor: pointer;
-    font-size: clamp(0.65rem, 1.6vw, 0.8rem);
-    color: var(--text-secondary);
+    display: flex; 
+    align-items: center; 
+    gap: clamp(0.3rem, 0.8vw, 0.4rem); 
+    cursor: pointer; 
+    font-size: clamp(0.65rem, 1.6vw, 0.8rem); 
+    color: var(--text-secondary); 
 }
-
 .toggle-container input[type="checkbox"] {
-    display: none;
+    display: none; 
 }
-
 .toggle-slider {
-    width: clamp(2.2rem, 4vw, 2.6rem);
-    height: clamp(1.1rem, 2vh, 1.3rem);
-    background: var(--bg-primary);
-    border: 1px solid var(--border-default);
-    border-radius: clamp(0.6rem, 1vh, 0.7rem);
-    position: relative;
-    transition: all 0.3s ease;
+    width: clamp(2.2rem, 4vw, 2.6rem); 
+    height: clamp(1.1rem, 2vh, 1.3rem); 
+    background: var(--bg-primary); 
+    border: 1px solid var(--border-default); 
+    border-radius: clamp(0.6rem, 1vh, 0.7rem); 
+    position: relative; 
+    transition: all 0.3s ease; 
 }
-
 .toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: clamp(0.8rem, 1.6vw, 1rem);
-    height: clamp(0.8rem, 1.6vh, 1rem);
-    background: var(--text-disabled);
-    border-radius: 50%;
-    top: 50%;
-    left: clamp(0.15rem, 0.3vw, 0.2rem);
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
+    content: ''; 
+    position: absolute; 
+    width: clamp(0.8rem, 1.6vw, 1rem); 
+    height: clamp(0.8rem, 1.6vh, 1rem); 
+    background: var(--text-disabled); 
+    border-radius: 50%; 
+    top: 50%; 
+    left: clamp(0.15rem, 0.3vw, 0.2rem); 
+    transform: translateY(-50%); 
+    transition: all 0.3s ease; 
 }
-
 .toggle-container input[type="checkbox"]:checked + .toggle-slider {
-    background: var(--color-correct);
-    border-color: var(--color-correct);
+    background: var(--color-correct); 
+    border-color: var(--color-correct); 
 }
-
 .toggle-container input[type="checkbox"]:checked + .toggle-slider::before {
-    transform: translateY(-50%) translateX(clamp(1rem, 2vw, 1.2rem));
+    transform: translateY(-50%) translateX(clamp(1rem, 2vw, 1.2rem)); 
 }
-
 .toggle-label {
-    font-weight: 500;
-    user-select: none;
+    font-weight: 500; 
+    user-select: none; 
 }
-
 .delay-input-container {
-    display: flex;
-    align-items: center;
-    gap: clamp(0.3rem, 0.8vw, 0.4rem);
+    display: flex; 
+    align-items: center; 
+    gap: clamp(0.3rem, 0.8vw, 0.4rem); 
 }
-
 .delay-label {
-    font-size: clamp(0.6rem, 1.4vw, 0.75rem);
-    color: var(--text-secondary);
-    font-weight: 500;
-    user-select: none;
-    min-width: max-content;
+    font-size: clamp(0.6rem, 1.4vw, 0.75rem); 
+    color: var(--text-secondary); 
+    font-weight: 500; 
+    user-select: none; 
+    min-width: max-content; 
 }
-
 .delay-input {
-    width: clamp(2.5rem, 5vw, 3.5rem);
-    height: clamp(1.4rem, 2.8vh, 1.6rem);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-default);
-    border-radius: clamp(0.2rem, 0.4vw, 0.3rem);
-    color: var(--text-primary);
-    font-size: clamp(0.6rem, 1.4vw, 0.75rem);
-    text-align: center;
-    padding: 0 clamp(0.2rem, 0.5vw, 0.3rem);
-    transition: all 0.2s ease;
+    width: clamp(2.5rem, 5vw, 3.5rem); 
+    height: clamp(1.4rem, 2.8vh, 1.6rem); 
+    background: var(--bg-secondary); 
+    border: 1px solid var(--border-default); 
+    border-radius: clamp(0.2rem, 0.4vw, 0.3rem); 
+    color: var(--text-primary); 
+    font-size: clamp(0.6rem, 1.4vw, 0.75rem); 
+    text-align: center; 
+    padding: 0 clamp(0.2rem, 0.5vw, 0.3rem); 
+    transition: all 0.2s ease; 
 }
-
 .delay-unit {
-    font-size: clamp(0.6rem, 1.4vw, 0.75rem);
-    color: var(--text-secondary);
-    font-weight: 500;
+    font-size: clamp(0.6rem, 1.4vw, 0.75rem); 
+    color: var(--text-secondary); 
+    font-weight: 500; 
 }
-
 .delay-input:focus {
-    outline: none;
-    border-color: var(--border-active);
-    background: var(--bg-primary);
+    outline: none; 
+    border-color: var(--border-active); 
+    background: var(--bg-primary); 
 }
-
 .delay-input:hover {
-    border-color: var(--border-active);
+    border-color: var(--border-active); 
 }
-
 a{
-    text-decoration: none;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    font-size: 1.4rem;
+    text-decoration: none; 
+    color: var(--text-primary); 
+    display: flex; 
+    align-items: center; 
+    font-size: 1.4rem; 
 }
 a:hover{
-    color: var(--border-active);
+    color: var(--border-active); 
 }
 svg{
-    color: var(--text-primary);
-    width: 32px;
-    height: 32px;
-    margin-right: 12px;
+    color: var(--text-primary); 
+    width: 32px; 
+    height: 32px; 
+    margin-right: 12px; 
 }
 .nav-active {
-    color: var(--color-correct) !important;
-    font-weight: 700 !important;
+    color: var(--color-correct) !important; 
+    font-weight: 700 !important; 
 }

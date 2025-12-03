@@ -21,7 +21,7 @@ O uso de IA foi permitido para as seguintes finalidades:
 
 ### Interação 1
 
-- **Data:** 20/10/2025
+- **Data:** 6/11/2025
 - **Etapa do Projeto:** 1 - Compressão de Responsividade
 - **Ferramenta de IA Utilizada:** GPT-5
 - **Objetivo da Consulta:** Eu estava com dificuldades para entender como criar e utilizar resposatividade de telas.
@@ -112,3 +112,23 @@ Antes de rodar o projeto, é preciso alterar as informações do arquivo db_cred
     Isso foi aplicado no arquivo README.md.
 
 ---
+
+### Interação 4
+
+- **Data:** 24/11/2025
+- **Etapa do Projeto:** Trocar acentuação no jogo
+- **Ferramenta de IA Utilizada:** Copilot PRO
+- **Objetivo da Consulta:** Precisava acentuar as palavras conforme a palavra original independente
+do que o usuario escolher, por questão estética
+
+- **Prompt(s) Utilizado(s):**
+  1. "estou desenvolvendo um jogo de palavras semelhante ao termo que puxa de um documento as palavras, no termo original as palavras são acentuadas corretamente ao usuario inserir, gostaria de fazer igual, como posso fazer?"
+
+- **Resumo da Resposta da IA:** 
+  Explicou que daria pra fazer isso transformando em UNICODE e me enviou 1 exemplo.
+
+- **Análise e Aplicação:**
+  Apliquei em conjunto a ela, tive alguns receios pelo modo ela utilizou pois ela carrega todas as palavras na página e consulta em 1 array, porém foi o único jeito que encontrei.
+
+- **Referência no Código:**
+  aplicado na main.js nas funções normalizeWord.

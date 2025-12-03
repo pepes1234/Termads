@@ -9,7 +9,7 @@ require "../force_authenticate.php";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/termads/assets/css/style.css?v=<?php echo time(); ?>"> <!-- quebra de cache -->
+    <link rel="stylesheet" href="/termads/assets/css/style.css">
     <title>Termads - Jogo de Palavras</title>
 </head>
 <body>
@@ -28,35 +28,29 @@ require "../force_authenticate.php";
         </ul>
     </nav>
     
-    <div class="game-controls">
-        <div class="control-buttons">
-            <button id="playAgainBtn" class="control-btn">Jogar Novamente</button>
-            <button id="resetBtn" class="control-btn">Reset</button>
-        </div>
-        <div class="toggle-controls">
-            <div class="control-group">
-                <label class="toggle-container">
-                    <input type="checkbox" id="autoResetWin">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Auto-reset ao ganhar</span>
-                </label>
-                <div class="delay-input-container">
-                    <label for="delayWinInput" class="delay-label">Delay vitória:</label>
-                    <input type="number" id="delayWinInput" class="delay-input" min="0.1" max="10" step="0.1" value="1">
-                    <span class="delay-unit">s</span>
-                </div>
+    <div class="toggle-controls">
+        <div class="control-group">
+            <label class="toggle-container">
+                <input type="checkbox" id="autoResetWin">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Auto-reset ao ganhar</span>
+            </label>
+            <div class="delay-input-container">
+                <label for="delayWinInput" class="delay-label">Delay vitória:</label>
+                <input type="number" id="delayWinInput" class="delay-input" min="0.1" max="10" step="0.1" value="1">
+                <span class="delay-unit">s</span>
             </div>
-            <div class="control-group">
-                <label class="toggle-container">
-                    <input type="checkbox" id="autoResetLose">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Auto-reset ao perder</span>
-                </label>
-                <div class="delay-input-container">
-                    <label for="delayLoseInput" class="delay-label">Delay derrota:</label>
-                    <input type="number" id="delayLoseInput" class="delay-input" min="0.1" max="10" step="0.1" value="1">
-                    <span class="delay-unit">s</span>
-                </div>
+        </div>
+        <div class="control-group">
+            <label class="toggle-container">
+                <input type="checkbox" id="autoResetLose">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Auto-reset ao perder</span>
+            </label>
+            <div class="delay-input-container">
+                <label for="delayLoseInput" class="delay-label">Delay derrota:</label>
+                <input type="number" id="delayLoseInput" class="delay-input" min="0.1" max="10" step="0.1" value="1">
+                <span class="delay-unit">s</span>
             </div>
         </div>
     </div>
@@ -67,44 +61,44 @@ require "../force_authenticate.php";
             </div>
         </header>
         
-        <section class="game-board">
+        <div class="game-board">
             <div class="grid">
-                <div class="row line-1">
-                    <div class="tile" data-row="0" data-col="0"></div>
+                <div class="row">
+                    <div class="tile" data-row="0" data-col="0"></div> <!-- esse data-* é uma forma de criar 1 atributo perso do HTML -->
                     <div class="tile" data-row="0" data-col="1"></div>
                     <div class="tile" data-row="0" data-col="2"></div>
                     <div class="tile" data-row="0" data-col="3"></div>
                     <div class="tile" data-row="0" data-col="4"></div>
                 </div>
-                <div class="row line-2">
+                <div class="row">
                     <div class="tile" data-row="1" data-col="0"></div>
                     <div class="tile" data-row="1" data-col="1"></div>
                     <div class="tile" data-row="1" data-col="2"></div>
                     <div class="tile" data-row="1" data-col="3"></div>
                     <div class="tile" data-row="1" data-col="4"></div>
                 </div>
-                <div class="row line-3">
+                <div class="row">
                     <div class="tile" data-row="2" data-col="0"></div>
                     <div class="tile" data-row="2" data-col="1"></div>
                     <div class="tile" data-row="2" data-col="2"></div>
                     <div class="tile" data-row="2" data-col="3"></div>
                     <div class="tile" data-row="2" data-col="4"></div>
                 </div>
-                <div class="row line-4">
+                <div class="row">
                     <div class="tile" data-row="3" data-col="0"></div>
                     <div class="tile" data-row="3" data-col="1"></div>
                     <div class="tile" data-row="3" data-col="2"></div>
                     <div class="tile" data-row="3" data-col="3"></div>
                     <div class="tile" data-row="3" data-col="4"></div>
                 </div>
-                <div class="row line-5">
+                <div class="row">
                     <div class="tile" data-row="4" data-col="0"></div>
                     <div class="tile" data-row="4" data-col="1"></div>
                     <div class="tile" data-row="4" data-col="2"></div>
                     <div class="tile" data-row="4" data-col="3"></div>
                     <div class="tile" data-row="4" data-col="4"></div>
                 </div>
-                <div class="row line-6">
+                <div class="row">
                     <div class="tile" data-row="5" data-col="0"></div>
                     <div class="tile" data-row="5" data-col="1"></div>
                     <div class="tile" data-row="5" data-col="2"></div>
@@ -112,9 +106,9 @@ require "../force_authenticate.php";
                     <div class="tile" data-row="5" data-col="4"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="keyboard">
+        <div class="keyboard">
             <div class="kbd-row">
                 <button class="key" data-key="q">Q</button>
                 <button class="key" data-key="w">W</button>
@@ -149,8 +143,8 @@ require "../force_authenticate.php";
                 <button class="key" data-key="m">M</button>
                 <button class="key key--action" data-key="backspace">BACK</button>
             </div>
-        </section>
+        </div>
     </div>
-    <script src="/termads/assets/js/main.js?v=<?php echo time() . '.' . rand(1000, 9999); ?>"></script>
+    <script src="/termads/assets/js/main.js"></script>
 </body>
 </html>

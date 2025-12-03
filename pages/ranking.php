@@ -77,15 +77,10 @@ close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="Termads - Ranking de jogadores">
-    <meta name="theme-color" content="#121212">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/termads/assets/css/style.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="/termads/assets/css/ranking.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/termads/assets/css/ranking.css">
     <title>Termads - Ranking</title>
 </head>
 <body>
