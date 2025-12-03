@@ -325,6 +325,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const attempts = attemptsHistory.length;
                 const score = Math.max(0, 150 - (attempts - 1) * 20);
                 sendGameResult(score, 1, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);
+                
+                const settings = loadAutoResetSettings();
+                if (settings.autoResetWin) {
+                    setTimeout(() => {
+                        location.reload();
+                    }, settings.delayWin * 1000);
+                }
             }, wordLength * 100 + 500);
         } else {
             currentRow++;
@@ -339,6 +346,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     const attempts = attemptsHistory.length || maxRows;
                     const score = 0;
                     sendGameResult(score, 0, attempts, attemptsHistory, targetWordOriginal, LEAGUE_ID);
+                    
+                    const settings = loadAutoResetSettings();
+                    if (settings.autoResetLose) {
+                        setTimeout(() => {
+                            location.reload();
+                        }, settings.delayLose * 1000);
+                    }
                 }, wordLength * 100 + 500);
             }
         }
@@ -442,6 +456,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function loadAutoResetSettings() {
+        const autoResetWin = localStorage.getItem('autoResetWin') === 'true';
+        const autoResetLose = localStorage.getItem('autoResetLose') === 'true';
+        const delayWin = parseFloat(localStorage.getItem('delayWin')) || 1;
+        const delayLose = parseFloat(localStorage.getItem('delayLose')) || 1;
+
+        const autoResetWinCheckbox = document.getElementById('autoResetWin');
+        const autoResetLoseCheckbox = document.getElementById('autoResetLose');
+        const delayWinInput = document.getElementById('delayWinInput');
+        const delayLoseInput = document.getElementById('delayLoseInput');
+
+        if (autoResetWinCheckbox) autoResetWinCheckbox.checked = autoResetWin;
+        if (autoResetLoseCheckbox) autoResetLoseCheckbox.checked = autoResetLose;
+        if (delayWinInput) delayWinInput.value = delayWin;
+        if (delayLoseInput) delayLoseInput.value = delayLose;
+
+        return { autoResetWin, autoResetLose, delayWin, delayLose };
+    }
+
+    function saveAutoResetSettings() {
+        const autoResetWinCheckbox = document.getElementById('autoResetWin');
+        const autoResetLoseCheckbox = document.getElementById('autoResetLose');
+        const delayWinInput = document.getElementById('delayWinInput');
+        const delayLoseInput = document.getElementById('delayLoseInput');
+
+        if (autoResetWinCheckbox) {
+            localStorage.setItem('autoResetWin', autoResetWinCheckbox.checked);
+        }
+        if (autoResetLoseCheckbox) {
+            localStorage.setItem('autoResetLose', autoResetLoseCheckbox.checked);
+        }
+        if (delayWinInput) {
+            localStorage.setItem('delayWin', delayWinInput.value);
+        }
+        if (delayLoseInput) {
+            localStorage.setItem('delayLose', delayLoseInput.value);
+        }
+    }
+
     async function initGame() {
         initBoard();
         
@@ -458,6 +511,33 @@ document.addEventListener('DOMContentLoaded', function() {
             resetBtn.addEventListener('click', function() {
                 location.reload();
             });
+        }
+
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        if (playAgainBtn) {
+            playAgainBtn.addEventListener('click', function() {
+                location.reload();
+            });
+        }
+
+        loadAutoResetSettings();
+
+        const autoResetWinCheckbox = document.getElementById('autoResetWin');
+        const autoResetLoseCheckbox = document.getElementById('autoResetLose');
+        const delayWinInput = document.getElementById('delayWinInput');
+        const delayLoseInput = document.getElementById('delayLoseInput');
+
+        if (autoResetWinCheckbox) {
+            autoResetWinCheckbox.addEventListener('change', saveAutoResetSettings);
+        }
+        if (autoResetLoseCheckbox) {
+            autoResetLoseCheckbox.addEventListener('change', saveAutoResetSettings);
+        }
+        if (delayWinInput) {
+            delayWinInput.addEventListener('change', saveAutoResetSettings);
+        }
+        if (delayLoseInput) {
+            delayLoseInput.addEventListener('change', saveAutoResetSettings);
         }
     }
 
