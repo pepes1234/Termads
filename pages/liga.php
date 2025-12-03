@@ -94,6 +94,7 @@ $buffer = ob_get_clean();
         <header class="ranking-header">
             <h1><?= htmlspecialchars($league['name']) ?></h1>
         </header>
+        <br>
         <?php if (!empty($league['description'])): ?>
             <p class="header-subtitle"><?= nl2br(htmlspecialchars($league['description'])) ?></p>
         <?php endif; ?>
